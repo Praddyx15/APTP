@@ -1,0 +1,66 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      # - alertmanager:9093
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+    - targets: ['localhost:9090']
+  
+  - job_name: 'core-platform-service'
+    scrape_interval: 10s
+    static_configs:
+    - targets: ['core-platform-service:9100']
+  
+  - job_name: 'data-acquisition-service'
+    scrape_interval: 10s
+    static_configs:
+    - targets: ['data-acquisition-service:9101']
+  
+  - job_name: 'etr-service'
+    scrape_interval: 10s
+    static_configs:
+    - targets: ['etr-service:9103']
+  
+  - job_name: 'ai-analytics-service'
+    scrape_interval: 10s
+    static_configs:
+    - targets: ['ai-analytics-service:9104']
+  
+  - job_name: 'document-service'
+    scrape_interval: 10s
+    static_configs:
+    - targets: ['document-service:9105']
+  
+  - job_name: 'syllabus-generator-service'
+    scrape_interval: 10s
+    static_configs:
+    - targets: ['syllabus-generator-service:9106']
+  
+  - job_name: 'assessment-service'
+    scrape_interval: 10s
+    static_configs:
+    - targets: ['assessment-service:9107']
+  
+  - job_name: 'api-gateway'
+    scrape_interval: 10s
+    static_configs:
+    - targets: ['api-gateway:9108']
+  
+  - job_name: 'node-exporter'
+    static_configs:
+    - targets: ['node-exporter:9100']
+  
+  - job_name: 'postgres-exporter'
+    static_configs:
+    - targets: ['postgres-exporter:9187']

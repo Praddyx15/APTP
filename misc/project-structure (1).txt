@@ -1,0 +1,9 @@
+# Advanced Pilot Training Platform - Backend Structure
+mkdir -p advanced-pilot-training-platform/backend/{core,document,syllabus,assessment,user-management,scheduler,analytics,compliance,collaboration,visualization,integration,security}/include
+mkdir -p advanced-pilot-training-platform/backend/{core,document,syllabus,assessment,user-management,scheduler,analytics,compliance,collaboration,visualization,integration,security}/src
+mkdir -p advanced-pilot-training-platform/backend/{core,document,syllabus,assessment,user-management,scheduler,analytics,compliance,collaboration,visualization,integration,security}/test
+mkdir -p advanced-pilot-training-platform/backend/ai-modules/{document-understanding,performance-prediction,automation-workflows,research-assistant}
+mkdir -p advanced-pilot-training-platform/backend/api
+mkdir -p advanced-pilot-training-platform/backend/docs
+mkdir -p advanced-pilot-training-platform/backend/scripts
+mkdir -p advanced-pilot-training-platform/backend/config

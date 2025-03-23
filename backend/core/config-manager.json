@@ -1,0 +1,206 @@
+#pragma once
+
+#include <json/json.h>
+#include <unordered_map>
+#include <string>
+#include <mutex>
+#include <functional>
+#include <vector>
+#include <memory>
+#include <any>
+
+namespace apt::core {
+
+/**
+ * @class ConfigurationManager
+ * @brief Singleton class for managing application configuration
+ * 
+ * This class provides a type-safe access to configuration settings from multiple sources
+ * (environment variables, config files, database) with change notification support.
+ */
+class ConfigurationManager {
+public:
+    /**
+     * @brief Get the singleton instance
+     * @return Reference to the singleton instance
+     */
+    static ConfigurationManager& getInstance();
+
+    /**
+     * @brief Load configuration from file
+     * @param configFile Path to the configuration file (JSON format)
+     * @return True if loaded successfully, false otherwise
+     */
+    bool loadFromFile(const std::string& configFile);
+
+    /**
+     * @brief Load configuration from environment variables
+     * @param prefix Optional prefix for environment variables to consider
+     * @return Number of configuration values loaded from environment
+     */
+    int loadFromEnvironment(const std::string& prefix = "APT_");
+
+    /**
+     * @brief Load configuration from database
+     * @param connectionString Database connection string
+     * @param tableName Table name containing configuration
+     * @return Number of configuration values loaded from database
+     */
+    int loadFromDatabase(const std::string& connectionString, const std::string& tableName = "configuration");
+
+    /**
+     * @brief Get string configuration value
+     * @param key Configuration key
+     * @param defaultValue Default value if key not found
+     * @return The configuration value as string
+     */
+    std::string getString(const std::string& key, const std::string& defaultValue = "") const;
+
+    /**
+     * @brief Get integer configuration value
+     * @param key Configuration key
+     * @param defaultValue Default value if key not found
+     * @return The configuration value as integer
+     */
+    int getInt(const std::string& key, int defaultValue = 0) const;
+
+    /**
+     * @brief Get double configuration value
+     * @param key Configuration key
+     * @param defaultValue Default value if key not found
+     * @return The configuration value as double
+     */
+    double getDouble(const std::string& key, double defaultValue = 0.0) const;
+
+    /**
+     * @brief Get boolean configuration value
+     * @param key Configuration key
+     * @param defaultValue Default value if key not found
+     * @return The configuration value as boolean
+     */
+    bool getBool(const std::string& key, bool defaultValue = false) const;
+
+    /**
+     * @brief Get JSON configuration value
+     * @param key Configuration key
+     * @param defaultValue Default value if key not found
+     * @return The configuration value as JSON object
+     */
+    Json::Value getJson(const std::string& key, const Json::Value& defaultValue = Json::Value()) const;
+
+    /**
+     * @brief Set configuration value
+     * @param key Configuration key
+     * @param value Value to set
+     */
+    template<typename T>
+    void setValue(const std::string& key, const T& value) {
+        std::lock_guard<std::mutex> lock(mtx_);
+        
+        // Convert value to JSON
+        Json::Value jsonValue;
+        if constexpr (std::is_same_v<T, std::string>) {
+            jsonValue = value;
+        } else if constexpr (std::is_integral_v<T>) {
+            jsonValue = static_cast<Json::Int64>(value);
+        } else if constexpr (std::is_floating_point_v<T>) {
+            jsonValue = static_cast<double>(value);
+        } else if constexpr (std::is_same_v<T, bool>) {
+            jsonValue = value;
+        } else if constexpr (std::is_same_v<T, Json::Value>) {
+            jsonValue = value;
+        } else {
+            jsonValue = Json::Value(Json::stringValue);
+            jsonValue = std::to_string(value);
+        }
+        
+        // Check if value is changed
+        bool valueChanged = true;
+        if (config_.isMember(key)) {
+            if (config_[key] == jsonValue) {
+                valueChanged = false;
+            }
+        }
+        
+        // Update config
+        config_[key] = jsonValue;
+        
+        // Notify listeners if value changed
+        if (valueChanged) {
+            notifyListeners(key, jsonValue);
+        }
+    }
+
+    /**
+     * @brief Register for configuration change notifications
+     * @param key Configuration key to watch (empty string for all keys)
+     * @param callback Function to call when configuration changes
+     * @return Listener ID that can be used to unregister
+     */
+    int registerChangeListener(const std::string& key, std::function<void(const std::string&, const Json::Value&)> callback);
+
+    /**
+     * @brief Unregister configuration change listener
+     * @param listenerId Listener ID returned from registerChangeListener
+     * @return True if listener was found and removed, false otherwise
+     */
+    bool unregisterChangeListener(int listenerId);
+
+    /**
+     * @brief Get all configuration keys
+     * @return Vector of configuration keys
+     */
+    std::vector<std::string> getAllKeys() const;
+
+    /**
+     * @brief Check if configuration contains a key
+     * @param key Configuration key to check
+     * @return True if key exists, false otherwise
+     */
+    bool hasKey(const std::string& key) const;
+
+    /**
+     * @brief Save current configuration to file
+     * @param configFile Path to save configuration to
+     * @return True if saved successfully, false otherwise
+     */
+    bool saveToFile(const std::string& configFile) const;
+
+    // Delete copy and move constructors/assignment operators
+    ConfigurationManager(const ConfigurationManager&) = delete;
+    ConfigurationManager& operator=(const ConfigurationManager&) = delete;
+    ConfigurationManager(ConfigurationManager&&) = delete;
+    ConfigurationManager& operator=(ConfigurationManager&&) = delete;
+
+private:
+    // Private constructor for singleton
+    ConfigurationManager();
+    
+    // Private destructor for singleton
+    ~ConfigurationManager() = default;
+
+    /**
+     * @brief Notify registered listeners of configuration change
+     * @param key Changed configuration key
+     * @param value New configuration value
+     */
+    void notifyListeners(const std::string& key, const Json::Value& value);
+
+    // Configuration storage
+    Json::Value config_;
+    
+    // Mutex for thread safety
+    mutable std::mutex mtx_;
+    
+    // Change listener storage
+    struct Listener {
+        int id;
+        std::string key;
+        std::function<void(const std::string&, const Json::Value&)> callback;
+    };
+    
+    std::vector<Listener> listeners_;
+    int nextListenerId_ = 1;
+};
+
+} // namespace apt::core

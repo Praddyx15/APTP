@@ -1,0 +1,300 @@
+version: '3.8'
+
+services:
+  # Core Platform Service
+  core-platform-service:
+    build:
+      context: ./core-platform-service
+      dockerfile: Dockerfile
+    container_name: core-platform-service
+    ports:
+      - "50051:50051"  # gRPC port
+      - "9100:9100"    # Metrics port
+    environment:
+      - CPS_SERVER_HOST=0.0.0.0
+      - CPS_SERVER_PORT=50051
+      - CPS_METRICS_HOST=0.0.0.0
+      - CPS_METRICS_PORT=9100
+      - CPS_AUTH_JWT_SECRET=${JWT_SECRET:-default_secret_key_change_in_production}
+    volumes:
+      - ./core-platform-service/config:/app/config
+      - ./core-platform-service/logs:/app/logs
+    networks:
+      - platform-network
+    depends_on:
+      - prometheus
+      - postgres
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9100/metrics"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Data Acquisition Service
+  data-acquisition-service:
+    build:
+      context: ./data-acquisition-service
+      dockerfile: Dockerfile
+    container_name: data-acquisition-service
+    ports:
+      - "50052:50052"  # gRPC port
+    environment:
+      - DAS_SERVER_HOST=0.0.0.0
+      - DAS_SERVER_PORT=50052
+      - DAS_DATA_DIR=/app/data
+    volumes:
+      - ./data-acquisition-service/config:/app/config
+      - ./data-acquisition-service/data:/app/data
+    networks:
+      - platform-network
+    depends_on:
+      - core-platform-service
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "50052"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # ETR Service
+  etr-service:
+    build:
+      context: ./etr-service
+      dockerfile: Dockerfile
+    container_name: etr-service
+    ports:
+      - "50053:50053"  # gRPC port
+    environment:
+      - ETR_SERVER_HOST=0.0.0.0
+      - ETR_SERVER_PORT=50053
+    volumes:
+      - ./etr-service/config:/app/config
+      - ./etr-service/data:/app/data
+    networks:
+      - platform-network
+    depends_on:
+      - core-platform-service
+      - postgres
+    restart: unless-stopped
+
+  # AI Analytics Service
+  ai-analytics-service:
+    build:
+      context: ./ai-analytics-service
+      dockerfile: Dockerfile
+    container_name: ai-analytics-service
+    ports:
+      - "50054:50054"  # gRPC port
+    environment:
+      - AIAS_SERVER_HOST=0.0.0.0
+      - AIAS_SERVER_PORT=50054
+    volumes:
+      - ./ai-analytics-service/config:/app/config
+      - ./ai-analytics-service/models:/app/models
+      - ./ai-analytics-service/data:/app/data
+    networks:
+      - platform-network
+    depends_on:
+      - core-platform-service
+      - data-acquisition-service
+      - postgres
+    restart: unless-stopped
+
+  # Document Service
+  document-service:
+    build:
+      context: ./document-service
+      dockerfile: Dockerfile
+    container_name: document-service
+    ports:
+      - "50055:50055"  # gRPC port
+    environment:
+      - DS_SERVER_HOST=0.0.0.0
+      - DS_SERVER_PORT=50055
+    volumes:
+      - ./document-service/config:/app/config
+      - ./document-service/documents:/app/documents
+    networks:
+      - platform-network
+    depends_on:
+      - core-platform-service
+      - postgres
+    restart: unless-stopped
+
+  # Syllabus Generator Service
+  syllabus-generator-service:
+    build:
+      context: ./syllabus-generator-service
+      dockerfile: Dockerfile
+    container_name: syllabus-generator-service
+    ports:
+      - "50056:50056"  # gRPC port
+    environment:
+      - SGS_SERVER_HOST=0.0.0.0
+      - SGS_SERVER_PORT=50056
+    volumes:
+      - ./syllabus-generator-service/config:/app/config
+      - ./syllabus-generator-service/data:/app/data
+    networks:
+      - platform-network
+    depends_on:
+      - core-platform-service
+      - document-service
+      - postgres
+    restart: unless-stopped
+
+  # Assessment Service
+  assessment-service:
+    build:
+      context: ./assessment-service
+      dockerfile: Dockerfile
+    container_name: assessment-service
+    ports:
+      - "50057:50057"  # gRPC port
+    environment:
+      - AS_SERVER_HOST=0.0.0.0
+      - AS_SERVER_PORT=50057
+    volumes:
+      - ./assessment-service/config:/app/config
+      - ./assessment-service/data:/app/data
+    networks:
+      - platform-network
+    depends_on:
+      - core-platform-service
+      - postgres
+    restart: unless-stopped
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:80"  # Expose on port 3000
+    environment:
+      - API_URL=http://api-gateway:8080
+    networks:
+      - platform-network
+    depends_on:
+      - api-gateway
+    restart: unless-stopped
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "8080:8080"  # API Gateway port
+    environment:
+      - CPS_URL=core-platform-service:50051
+      - DAS_URL=data-acquisition-service:50052
+      - ETR_URL=etr-service:50053
+      - AIAS_URL=ai-analytics-service:50054
+      - DS_URL=document-service:50055
+      - SGS_URL=syllabus-generator-service:50056
+      - AS_URL=assessment-service:50057
+    networks:
+      - platform-network
+    depends_on:
+      - core-platform-service
+      - data-acquisition-service
+      - etr-service
+      - ai-analytics-service
+      - document-service
+      - syllabus-generator-service
+      - assessment-service
+    restart: unless-stopped
+
+  # Prometheus for monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.console.libraries=/etc/prometheus/console_libraries
+      - --web.console.templates=/etc/prometheus/consoles
+      - --web.enable-lifecycle
+    networks:
+      - platform-network
+    restart: unless-stopped
+
+  # Grafana for visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - platform-network
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  # PostgreSQL database
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-training_platform}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    networks:
+      - platform-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # pgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL:-admin@example.com}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-admin}
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - platform-network
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  platform-network:
+    driver: bridge
+
+volumes:
+  prometheus-data:
+  grafana-data:
+  postgres-data:
+  pgadmin-data:

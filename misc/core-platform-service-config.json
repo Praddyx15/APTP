@@ -1,0 +1,79 @@
+{
+    "server": {
+        "host": "0.0.0.0",
+        "port": 50051
+    },
+    "auth": {
+        "jwt_secret": "default_secret_key_change_in_production",
+        "token_expiry_seconds": 3600,
+        "refresh_expiry_seconds": 86400,
+        "certificate_path": ""
+    },
+    "metrics": {
+        "host": "0.0.0.0",
+        "port": 9100,
+        "push_gateway": false,
+        "push_address": "localhost",
+        "push_port": 9091,
+        "push_interval_seconds": 15
+    },
+    "logging": {
+        "level": "info",
+        "console": true,
+        "file": true,
+        "file_path": "logs/core-platform-service.log",
+        "max_file_size": 10485760,
+        "max_files": 5
+    },
+    "services": {
+        "data_acquisition_service": {
+            "host": "data-acquisition-service",
+            "port": 50052
+        },
+        "etr_service": {
+            "host": "etr-service",
+            "port": 50053
+        },
+        "ai_analytics_service": {
+            "host": "ai-analytics-service",
+            "port": 50054
+        },
+        "document_service": {
+            "host": "document-service",
+            "port": 50055
+        },
+        "syllabus_generator_service": {
+            "host": "syllabus-generator-service",
+            "port": 50056
+        },
+        "assessment_service": {
+            "host": "assessment-service",
+            "port": 50057
+        }
+    },
+    "security": {
+        "tls_enabled": false,
+        "cert_file": "",
+        "key_file": "",
+        "ca_file": "",
+        "rate_limit": {
+            "enabled": true,
+            "requests_per_minute": 60
+        },
+        "cors": {
+            "enabled": true,
+            "allowed_origins": ["*"],
+            "allowed_methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allowed_headers": ["Content-Type", "Authorization"],
+            "exposed_headers": [],
+            "allow_credentials": false,
+            "max_age": 86400
+        }
+    },
+    "performance": {
+        "thread_pool_size": 4,
+        "max_concurrent_requests": 100,
+        "timeout_ms": 5000,
+        "keep_alive_ms": 30000
+    }
+}

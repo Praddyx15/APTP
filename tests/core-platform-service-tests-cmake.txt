@@ -1,0 +1,55 @@
+cmake_minimum_required(VERSION 3.20)
+
+# Find GTest
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+
+# Auth service tests
+add_executable(auth_service_test auth_service_test.cpp)
+target_link_libraries(auth_service_test
+    PRIVATE
+    ${GTEST_BOTH_LIBRARIES}
+    GTest::gmock
+    core_platform_lib
+    pthread
+)
+
+# Config service tests
+add_executable(config_service_test config_service_test.cpp)
+target_link_libraries(config_service_test
+    PRIVATE
+    ${GTEST_BOTH_LIBRARIES}
+    GTest::gmock
+    core_platform_lib
+    pthread
+)
+
+# Messaging service tests
+add_executable(messaging_service_test messaging_service_test.cpp)
+target_link_libraries(messaging_service_test
+    PRIVATE
+    ${GTEST_BOTH_LIBRARIES}
+    GTest::gmock
+    core_platform_lib
+    pthread
+)
+
+# API tests
+add_executable(api_test api_test.cpp)
+target_link_libraries(api_test
+    PRIVATE
+    ${GTEST_BOTH_LIBRARIES}
+    GTest::gmock
+    core_platform_lib
+    pthread
+)
+
+# Register tests
+include(GoogleTest)
+gtest_discover_tests(auth_service_test)
+gtest_discover_tests(config_service_test)
+gtest_discover_tests(messaging_service_test)
+gtest_discover_tests(api_test)
+
+# Add test for main
+add_test(NAME main_test COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/core-platform-service --test-mode)

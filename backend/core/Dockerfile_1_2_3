@@ -1,0 +1,96 @@
+# Stage 1: Build environment
+FROM ubuntu:22.04 AS builder
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    git \
+    libssl-dev \
+    pkg-config \
+    curl \
+    unzip \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install vcpkg for dependency management
+WORKDIR /opt
+RUN git clone https://github.com/Microsoft/vcpkg.git && \
+    ./vcpkg/bootstrap-vcpkg.sh -disableMetrics && \
+    ./vcpkg/vcpkg integrate install
+
+# Install dependencies with vcpkg
+RUN ./vcpkg/vcpkg install \
+    grpc \
+    protobuf \
+    openssl \
+    nlohmann-json \
+    spdlog \
+    prometheus-cpp \
+    cpprestsdk \
+    boost-system \
+    boost-filesystem \
+    postgresql-libpq
+
+# Copy source code
+WORKDIR /app
+COPY . .
+
+# Create build directory
+RUN mkdir -p build
+
+# Configure and build
+WORKDIR /app/build
+RUN cmake .. \
+    -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
+    -DCMAKE_BUILD_TYPE=Release && \
+    cmake --build . --config Release -j$(nproc)
+
+# Stage 2: Runtime environment
+FROM ubuntu:22.04
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    libssl3 \
+    ca-certificates \
+    libpq5 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create app directories
+RUN mkdir -p /app/bin /app/config /app/logs /app/data /app/certs
+
+# Copy build artifacts
+COPY --from=builder /app/build/bin/etr-service /app/bin/
+COPY --from=builder /app/config/*.json /app/config/
+
+# Set working directory
+WORKDIR /app
+
+# Set environment variables
+ENV ETR_SERVER_HOST=0.0.0.0
+ENV ETR_SERVER_PORT=50053
+ENV ETR_DB_HOST=postgres
+ENV ETR_DB_PORT=5432
+ENV ETR_DB_NAME=training_platform
+ENV ETR_DB_USER=postgres
+ENV ETR_DB_PASSWORD=postgres
+ENV ETR_METRICS_HOST=0.0.0.0
+ENV ETR_METRICS_PORT=9103
+
+# Create non-root user
+RUN useradd -m -s /bin/bash appuser && \
+    chown -R appuser:appuser /app
+
+# Switch to non-root user
+USER appuser
+
+# Expose ports
+EXPOSE 50053
+EXPOSE 9103
+
+# Define health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD nc -z localhost 50053 || exit 1
+
+# Start the service
+CMD ["/app/bin/etr-service", "/app/config/config.json"]

@@ -1,0 +1,105 @@
+# Core libraries
+numpy==1.26.2
+pandas==2.1.3
+scipy==1.11.4
+scikit-learn==1.3.2
+pillow==10.1.0
+matplotlib==3.8.2
+seaborn==0.13.0
+
+# Machine Learning and AI
+tensorflow==2.14.0
+torch==2.1.1
+torchvision==0.16.1
+transformers==4.35.2
+sentence-transformers==2.2.2
+spacy==3.7.2
+nltk==3.8.1
+gensim==4.3.2
+opencv-python==4.8.1.78
+scikit-image==0.22.0
+librosa==0.10.1  # For audio processing
+sympy==1.12  # For symbolic mathematics
+statsmodels==0.14.0  # For statistical models
+
+# Data processing and document analysis
+python-pptx==1.0.1  # For PowerPoint processing
+python-docx==1.0.1  # For Word document processing
+pdfminer.six==20231228  # For PDF text extraction
+pytesseract==0.3.10  # For OCR capabilities
+pypdf2==3.0.1  # Alternative PDF processing
+langchain==0.0.344  # For document processing pipelines
+unstructured==0.10.30  # For unstructured data processing
+
+# API and web services
+fastapi==0.104.1
+uvicorn==0.24.0.post1
+flask==3.0.0
+requests==2.31.0
+httpx==0.25.2
+gunicorn==21.2.0
+grpcio==1.59.3
+grpcio-tools==1.59.3
+protobuf==4.25.1
+
+# Database connectivity
+psycopg2-binary==2.9.9  # For PostgreSQL
+pymongo==4.6.0  # For MongoDB
+redis==5.0.1
+sqlalchemy==2.0.23
+alembic==1.12.1  # For database migrations
+
+# Aviation-specific libraries
+pyopensky==1.3.0  # For ADS-B and flight data
+pyavwx==1.1.3  # For aviation weather data
+shapely==2.0.2  # For geospatial data processing 
+geopy==2.4.1  # For geocoding and distance calculations
+pyproj==3.6.1  # For cartographic projections
+
+# Utility libraries
+tqdm==4.66.1  # Progress bars
+pydantic==2.5.1  # Data validation
+python-dotenv==1.0.0  # Environment variables
+colorama==0.4.6  # Colored terminal output
+joblib==1.3.2  # Parallel processing
+dill==0.3.7  # Enhanced pickling
+PyYAML==6.0.1  # YAML parsing
+orjson==3.9.10  # Fast JSON parsing
+python-multipart==0.0.6  # Form data handling
+faker==20.1.0  # For generating test data
+
+# Testing and development
+pytest==7.4.3
+pytest-cov==4.1.0
+black==23.11.0
+flake8==6.1.0
+isort==5.12.0
+mypy==1.7.1
+pylint==3.0.2
+
+# 3D and visualization 
+pygltflib==1.16.0  # For GLTF file handling
+trimesh==4.0.4  # For 3D mesh processing
+pyrender==0.1.45  # For 3D rendering
+
+# Monitoring and observability
+opentelemetry-api==1.21.0
+opentelemetry-sdk==1.21.0
+opentelemetry-exporter-otlp==1.21.0
+prometheus-client==0.18.0
+
+# Concurrency and distributed processing
+celery==5.3.5
+dask==2023.11.0
+distributed==2023.11.0
+
+# C++ integration
+pybind11==2.11.1
+
+# Security
+cryptography==41.0.5
+passlib==1.7.4
+python-jose==3.3.0  # JWT token handling
+
+# Application-specific dependencies
+# Add any specific libraries required for your pilot training platform

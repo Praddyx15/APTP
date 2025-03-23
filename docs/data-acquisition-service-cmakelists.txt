@@ -1,0 +1,102 @@
+cmake_minimum_required(VERSION 3.20)
+project(data-acquisition-service VERSION 1.0.0 LANGUAGES CXX)
+
+# Set C++20 standard
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Set output directories
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# Find required packages
+find_package(gRPC REQUIRED)
+find_package(Protobuf REQUIRED)
+find_package(OpenSSL REQUIRED)
+find_package(nlohmann_json 3.10.0 REQUIRED)
+find_package(spdlog REQUIRED)
+find_package(prometheus-cpp REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system filesystem)
+find_package(Eigen3 REQUIRED)
+
+# Include directories
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_BINARY_DIR}/generated
+    ${EIGEN3_INCLUDE_DIR}
+)
+
+# Generate protobuf and gRPC code
+set(PROTO_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/proto/data_acquisition.proto
+    ${CMAKE_CURRENT_SOURCE_DIR}/proto/core_service.proto
+)
+
+protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_FILES})
+grpc_generate_cpp(GRPC_SRCS GRPC_HDRS ${CMAKE_CURRENT_BINARY_DIR}/generated ${PROTO_FILES})
+
+# Source files
+file(GLOB_RECURSE SOURCES 
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+)
+
+# Add executable
+add_executable(${PROJECT_NAME} ${SOURCES} ${PROTO_SRCS} ${PROTO_HDRS} ${GRPC_SRCS} ${GRPC_HDRS})
+
+# Link libraries
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+    gRPC::grpc++
+    gRPC::grpc++_reflection
+    protobuf::libprotobuf
+    OpenSSL::SSL
+    OpenSSL::Crypto
+    nlohmann_json::nlohmann_json
+    spdlog::spdlog
+    prometheus-cpp::core
+    prometheus-cpp::push
+    Boost::system
+    Boost::filesystem
+    Eigen3::Eigen
+)
+
+# Copy configuration files to build directory
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/config/config.json
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/config/config.json
+    COPYONLY
+)
+
+# Add tests
+enable_testing()
+add_subdirectory(tests)
+
+# Installation
+install(TARGETS ${PROJECT_NAME}
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)
+
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/config/
+    DESTINATION etc/${PROJECT_NAME}
+    FILES_MATCHING PATTERN "*.json"
+)
+
+# Documentation
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
+    set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+    
+    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+    
+    add_custom_target(docs
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM
+    )
+endif()

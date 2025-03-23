@@ -1,0 +1,95 @@
+# Build output
+/build/
+/*/build/
+/backend/build/
+/frontend/.next/
+/frontend/out/
+/dist/
+
+# Dependencies
+/node_modules/
+/frontend/node_modules/
+/.pnp
+.pnp.js
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing
+/coverage/
+.coverage
+htmlcov/
+.pytest_cache/
+/frontend/coverage/
+
+# Debug and Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*.log
+logs/
+
+# Environment variables
+.env
+.env*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# C++ specific
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+CTestTestfile.cmake
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+*.a
+*.so
+*.dylib
+*.dll
+*.lib
+*.exe
+*.obj
+*.o
+*.out
+*.app
+*.db
+*.stackdump
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+
+# Docker
+.docker-data/
+
+# Vercel
+.vercel
+
+# Database
+*.sqlite3

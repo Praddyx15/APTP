@@ -1,0 +1,261 @@
+name: Advanced Pilot Training Platform CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
+          pip install pytest pytest-cov
+      
+      - name: Install C++ dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake libssl-dev libjsoncpp-dev uuid-dev zlib1g-dev libpq-dev libspdlog-dev libfmt-dev libboost-all-dev
+      
+      - name: Install Drogon framework
+        run: |
+          git clone --depth=1 https://github.com/drogonframework/drogon
+          cd drogon
+          git submodule update --init
+          mkdir build
+          cd build
+          cmake -DCMAKE_BUILD_TYPE=Release ..
+          make -j $(nproc)
+          sudo make install
+          sudo ldconfig
+      
+      - name: Build and test backend
+        run: |
+          cd backend
+          mkdir -p build
+          cd build
+          cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON ..
+          make -j $(nproc)
+          ctest --output-on-failure
+      
+      - name: Run Python tests
+        run: |
+          cd backend
+          pytest --cov=. --cov-report=xml
+      
+      - name: Upload test coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./backend/coverage.xml
+          flags: backend
+          fail_ci_if_error: false
+
+  frontend-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci
+      
+      - name: Run linting
+        run: |
+          cd frontend
+          npm run lint
+      
+      - name: Run tests
+        run: |
+          cd frontend
+          npm test -- --coverage
+      
+      - name: Upload test coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./frontend/coverage/coverage-final.json
+          flags: frontend
+          fail_ci_if_error: false
+
+  microservices-test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          for service in document-intelligence predictive-analytics adaptive-learning gamification; do
+            if [ -f microservices/$service/requirements.txt ]; then pip install -r microservices/$service/requirements.txt; fi
+          done
+          pip install pytest pytest-cov
+      
+      - name: Run microservices tests
+        run: |
+          for service in document-intelligence predictive-analytics adaptive-learning gamification; do
+            if [ -d microservices/$service ]; then
+              cd microservices/$service
+              pytest --cov=. --cov-report=xml
+              cd ../..
+              if [ -f microservices/$service/coverage.xml ]; then
+                mv microservices/$service/coverage.xml microservices/$service-coverage.xml
+              fi
+            fi
+          done
+      
+      - name: Upload test coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./microservices/*-coverage.xml
+          flags: microservices
+          fail_ci_if_error: false
+
+  build-docker-images:
+    runs-on: ubuntu-latest
+    needs: [backend-test, frontend-test, microservices-test]
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: yourusername/apt-platform
+          tags: |
+            type=ref,event=branch
+            type=sha,format=short
+      
+      - name: Build and push backend
+        uses: docker/build-push-action@v4
+        with:
+          context: ./backend
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-backend
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=yourusername/apt-platform:buildcache-backend
+          cache-to: type=registry,ref=yourusername/apt-platform:buildcache-backend,mode=max
+      
+      - name: Build and push frontend
+        uses: docker/build-push-action@v4
+        with:
+          context: ./frontend
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-frontend
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=yourusername/apt-platform:buildcache-frontend
+          cache-to: type=registry,ref=yourusername/apt-platform:buildcache-frontend,mode=max
+      
+      - name: Build and push microservices
+        run: |
+          for service in document-intelligence predictive-analytics adaptive-learning gamification; do
+            if [ -d microservices/$service ]; then
+              docker buildx build --push \
+                --tag yourusername/apt-platform:${{ steps.meta.outputs.version }}-$service \
+                --cache-from type=registry,ref=yourusername/apt-platform:buildcache-$service \
+                --cache-to type=registry,ref=yourusername/apt-platform:buildcache-$service,mode=max \
+                ./microservices/$service
+            fi
+          done
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build-docker-images]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production environment"
+          # Add your deployment scripts or commands here
+          # This might involve SSH into server, running kubectl, or using cloud provider CLIs

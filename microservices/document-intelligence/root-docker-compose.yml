@@ -1,0 +1,422 @@
+version: '3.8'
+
+services:
+  # Frontend application
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://api-gateway:8080/api
+      - NEXT_PUBLIC_WS_URL=ws://api-gateway:8086
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - api-gateway
+    networks:
+      - pilot-training-network
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # API Gateway Service
+  api-gateway:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: runtime
+    ports:
+      - "8080:8080"
+      - "8086:8086" # WebSocket port
+    environment:
+      - PILOT_TRAINING_ENV=development
+      - IDENTITY_SERVICE_URL=http://identity-service:8081
+      - TRAINING_SERVICE_URL=http://training-service:8082
+      - DOCUMENT_SERVICE_URL=http://document-service:8083
+      - ASSESSMENT_SERVICE_URL=http://assessment-service:8084
+      - SCHEDULER_SERVICE_URL=http://scheduler-service:8085
+      - ANALYTICS_SERVICE_URL=http://analytics-service:8087
+      - CONFIG_PATH=/app/config
+      - LOG_LEVEL=debug
+    volumes:
+      - ./backend/config:/app/config
+      - ./backend/resources:/app/resources
+    depends_on:
+      - identity-service
+      - training-service
+      - document-service
+      - assessment-service
+      - scheduler-service
+      - analytics-service
+    command: ["/app/bin/pilot_training_api_gateway"]
+    networks:
+      - pilot-training-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # Identity Management Service
+  identity-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: runtime
+    ports:
+      - "8081:8081"
+    environment:
+      - PILOT_TRAINING_ENV=development
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=identity_db
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CONFIG_PATH=/app/config
+      - LOG_LEVEL=debug
+    volumes:
+      - ./backend/config:/app/config
+      - ./backend/resources:/app/resources
+    depends_on:
+      - postgres
+      - redis
+    command: ["/app/bin/pilot_training_identity_service"]
+    networks:
+      - pilot-training-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # Training Program Service
+  training-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: runtime
+    ports:
+      - "8082:8082"
+    environment:
+      - PILOT_TRAINING_ENV=development
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=training_db
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DOCUMENT_SERVICE_URL=http://document-service:8083
+      - CONFIG_PATH=/app/config
+      - LOG_LEVEL=debug
+    volumes:
+      - ./backend/config:/app/config
+      - ./backend/resources:/app/resources
+    depends_on:
+      - postgres
+      - document-service
+    command: ["/app/bin/pilot_training_training_service"]
+    networks:
+      - pilot-training-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # Document Management Service
+  document-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: runtime
+    ports:
+      - "8083:8083"
+    environment:
+      - PILOT_TRAINING_ENV=development
+      - MONGO_URI=mongodb://mongo:27017/documents
+      - MINIO_ENDPOINT=minio
+      - MINIO_PORT=9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - MINIO_USE_SSL=false
+      - CONFIG_PATH=/app/config
+      - LOG_LEVEL=debug
+    volumes:
+      - ./backend/config:/app/config
+      - ./backend/resources:/app/resources
+      - ./documents:/app/temp
+    depends_on:
+      - mongo
+      - minio
+    command: ["/app/bin/pilot_training_document_service"]
+    networks:
+      - pilot-training-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # Assessment Service
+  assessment-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: runtime
+    ports:
+      - "8084:8084"
+    environment:
+      - PILOT_TRAINING_ENV=development
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=assessment_db
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - TRAINING_SERVICE_URL=http://training-service:8082
+      - CONFIG_PATH=/app/config
+      - LOG_LEVEL=debug
+    volumes:
+      - ./backend/config:/app/config
+      - ./backend/resources:/app/resources
+    depends_on:
+      - postgres
+    command: ["/app/bin/pilot_training_assessment_service"]
+    networks:
+      - pilot-training-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8084/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # Scheduler Service
+  scheduler-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: runtime
+    ports:
+      - "8085:8085"
+    environment:
+      - PILOT_TRAINING_ENV=development
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=scheduler_db
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CONFIG_PATH=/app/config
+      - LOG_LEVEL=debug
+    volumes:
+      - ./backend/config:/app/config
+      - ./backend/resources:/app/resources
+    depends_on:
+      - postgres
+      - redis
+    command: ["/app/bin/pilot_training_scheduler_service"]
+    networks:
+      - pilot-training-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8085/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # Analytics Service
+  analytics-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: runtime
+    ports:
+      - "8087:8087"
+    environment:
+      - PILOT_TRAINING_ENV=development
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=analytics_db
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - TIMESCALE_HOST=timescaledb
+      - TIMESCALE_PORT=5432
+      - TIMESCALE_DB=telemetry_db
+      - TIMESCALE_USER=postgres
+      - TIMESCALE_PASSWORD=password
+      - CONFIG_PATH=/app/config
+      - LOG_LEVEL=debug
+    volumes:
+      - ./backend/config:/app/config
+      - ./backend/resources:/app/resources
+    depends_on:
+      - postgres
+      - timescaledb
+    command: ["/app/bin/pilot_training_analytics_service"]
+    networks:
+      - pilot-training-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8087/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/scripts/db/init:/docker-entrypoint-initdb.d
+    networks:
+      - pilot-training-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # TimescaleDB for time-series data
+  timescaledb:
+    image: timescale/timescaledb:latest-pg15
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+    volumes:
+      - timescaledb_data:/var/lib/postgresql/data
+      - ./backend/scripts/db/timescale:/docker-entrypoint-initdb.d
+    networks:
+      - pilot-training-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MongoDB for document storage
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - pilot-training-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching and messaging
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - pilot-training-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # MinIO for object storage
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - pilot-training-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Document AI Service (Python-based)
+  document-ai:
+    build:
+      context: ./microservices/document-intelligence
+      dockerfile: Dockerfile
+    ports:
+      - "8088:8088"
+    environment:
+      - ENVIRONMENT=development
+      - MONGO_URI=mongodb://mongo:27017/documents
+      - MINIO_ENDPOINT=minio
+      - MINIO_PORT=9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - DOCUMENT_SERVICE_URL=http://document-service:8083
+    volumes:
+      - ./microservices/document-intelligence:/app
+    depends_on:
+      - mongo
+      - minio
+      - document-service
+    networks:
+      - pilot-training-network
+
+  # Analytics ML Service (Python-based)
+  analytics-ml:
+    build:
+      context: ./microservices/predictive-analytics
+      dockerfile: Dockerfile
+    ports:
+      - "8089:8089"
+    environment:
+      - ENVIRONMENT=development
+      - POSTGRES_URI=postgresql://postgres:password@postgres:5432/analytics_db
+      - TIMESCALE_URI=postgresql://postgres:password@timescaledb:5432/telemetry_db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - ./microservices/predictive-analytics:/app
+    depends_on:
+      - postgres
+      - timescaledb
+      - redis
+    networks:
+      - pilot-training-network
+
+networks:
+  pilot-training-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  timescaledb_data:
+  mongo_data:
+  redis_data:
+  minio_data:

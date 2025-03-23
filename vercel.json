@@ -1,0 +1,96 @@
+{
+  "version": 2,
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/.next",
+  "framework": "nextjs",
+  "rewrites": [
+    {
+      "source": "/api/document/:path*",
+      "destination": "https://aptp-document-api.yourdomain.com/api/:path*"
+    },
+    {
+      "source": "/api/syllabus/:path*",
+      "destination": "https://aptp-syllabus-api.yourdomain.com/api/:path*"
+    },
+    {
+      "source": "/api/assessment/:path*",
+      "destination": "https://aptp-assessment-api.yourdomain.com/api/:path*"
+    },
+    {
+      "source": "/api/user/:path*",
+      "destination": "https://aptp-user-api.yourdomain.com/api/:path*"
+    },
+    {
+      "source": "/api/scheduler/:path*",
+      "destination": "https://aptp-scheduler-api.yourdomain.com/api/:path*"
+    },
+    {
+      "source": "/api/analytics/:path*",
+      "destination": "https://aptp-analytics-api.yourdomain.com/api/:path*"
+    },
+    {
+      "source": "/api/compliance/:path*",
+      "destination": "https://aptp-compliance-api.yourdomain.com/api/:path*"
+    },
+    {
+      "source": "/api/collaboration/:path*",
+      "destination": "https://aptp-collaboration-api.yourdomain.com/api/:path*"
+    },
+    {
+      "source": "/api/visualization/:path*",
+      "destination": "https://aptp-visualization-api.yourdomain.com/api/:path*"
+    },
+    {
+      "source": "/api/integration/:path*",
+      "destination": "https://aptp-integration-api.yourdomain.com/api/:path*"
+    },
+    {
+      "source": "/api/security/:path*",
+      "destination": "https://aptp-security-api.yourdomain.com/api/:path*"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://aptp-gateway-api.yourdomain.com/api/:path*"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://*.yourdomain.com wss://*.yourdomain.com; frame-src 'self'"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_API_URL": "https://api.yourdomain.com",
+    "NEXT_PUBLIC_WEBSOCKET_URL": "wss://ws.yourdomain.com"
+  }
+}
