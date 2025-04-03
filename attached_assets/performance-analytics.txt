@@ -1,0 +1,2621 @@
+/**
+ * PerformanceAnalytics - A comprehensive system for tracking and analyzing trainee 
+ * performance metrics, identifying strengths and weaknesses, generating progress visualizations,
+ * predicting success likelihood for upcoming modules, recommending focused improvement areas,
+ * and comparing performance against peer groups.
+ */
+
+import { EventEmitter } from 'events';
+
+// Assessment result interface
+export interface AssessmentResult {
+  id: string;
+  traineeId: number;
+  moduleId: string;
+  skillIds: string[];
+  score: number; // 0-100
+  passingScore: number;
+  date: string;
+  attemptNumber: number;
+  questionResults?: QuestionResult[];
+}
+
+// Question result interface
+export interface QuestionResult {
+  questionId: string;
+  skillId: string;
+  correct: boolean;
+  responseTime?: number; // in seconds
+  difficulty: 'easy' | 'medium' | 'hard';
+}
+
+// Session performance interface
+export interface SessionPerformance {
+  sessionId: string;
+  traineeId: number;
+  moduleId: string;
+  date: string;
+  duration: number; // in minutes
+  skillIds: string[];
+  instructorId: number;
+  objectives: string[];
+  completionRate: number; // 0-1
+  instructorRating?: number; // 1-5
+  comments?: string;
+  activities: {
+    id: string;
+    type: string;
+    skillIds: string[];
+    performanceRating: number; // 1-5
+    notes?: string;
+  }[];
+}
+
+// Skill definition interface
+export interface Skill {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  dependsOn: string[]; // prerequisite skill IDs
+  requiredFor: string[]; // skill IDs that depend on this
+  difficultyLevel: number; // 1-5
+  importanceLevel: number; // 1-5
+}
+
+// Module definition interface
+export interface Module {
+  id: string;
+  name: string;
+  description: string;
+  skillIds: string[];
+  requiredHours: number;
+  assessmentIds: string[];
+  prerequisiteModuleIds: string[];
+  successCriteria: {
+    minimumScore: number;
+    requiredActivities: string[];
+  };
+}
+
+// Trainee info interface
+export interface TraineeInfo {
+  id: number;
+  firstName: string;
+  lastName: string;
+  programId: number;
+  startDate: string;
+  expectedEndDate: string;
+  completedModules: string[];
+  currentModuleIds: string[];
+  learningProfile?: {
+    preferredLearningStyle?: string;
+    strengths?: string[];
+    challengeAreas?: string[];
+    adaptsQuickly?: boolean;
+    needsReinforcementInPractical?: boolean;
+  };
+}
+
+// Performance insights interface
+export interface PerformanceInsights {
+  traineeId: number;
+  overview: {
+    averageScore: number;
+    trendDirection: 'improving' | 'stable' | 'declining';
+    percentileRank: number; // 0-100, compared to peers
+    progressRate: number; // 0-1, completion rate compared to expected timeline
+    estimatedCompletionDate: string;
+    onTrack: boolean;
+  };
+  skillPerformance: SkillPerformance[];
+  strengths: string[]; // skill IDs
+  weakAreas: SkillGap[];
+  recentProgress: {
+    period: string;
+    moduleIds: string[];
+    averageScoreChange: number;
+    skillIdsImproved: string[];
+    skillIdsDeclined: string[];
+  };
+  recommendedFocus: {
+    skillIds: string[];
+    reason: string;
+    suggestedActivities: string[];
+  }[];
+  predictedSuccessRate: {
+    upcomingModuleId: string;
+    moduleName: string;
+    predictedScore: number;
+    confidenceLevel: number; // 0-1
+    criticalSkillGaps: string[];
+  }[];
+}
+
+// Skill performance interface
+export interface SkillPerformance {
+  skillId: string;
+  name: string;
+  category: string;
+  score: number; // 0-100
+  assessmentCount: number;
+  lastAssessed: string;
+  trend: number; // positive or negative change over time
+  importance: number; // 1-5
+  relativeStrength: boolean; // compared to other skills
+}
+
+// Skill gap interface
+export interface SkillGap {
+  skillId: string;
+  name: string;
+  category: string;
+  currentScore: number;
+  targetScore: number;
+  gap: number; // target - current
+  impact: 'critical' | 'high' | 'medium' | 'low';
+  affectedModules: string[]; // module IDs affected by this gap
+  recommendedActivities: string[];
+}
+
+// Progress report interface
+export interface ProgressReport {
+  traineeId: number;
+  traineeName: string;
+  programId: number;
+  programName: string;
+  period: {
+    start: string;
+    end: string;
+  };
+  overview: {
+    modulesCompleted: number;
+    modulesPending: number;
+    totalAssessments: number;
+    averageScore: number;
+    attendanceRate: number; // 0-1
+    hoursCompleted: number;
+    progressRate: number; // 0-1, actual vs expected
+  };
+  moduleProgress: {
+    moduleId: string;
+    name: string;
+    status: 'completed' | 'in-progress' | 'pending';
+    score?: number;
+    completionDate?: string;
+    skillsAcquired: string[];
+  }[];
+  skillProgress: {
+    skillId: string;
+    name: string;
+    initialScore: number;
+    currentScore: number;
+    change: number;
+  }[];
+  instructorFeedback: {
+    instructorId: number;
+    name: string;
+    comments: string;
+    recommendedFocus?: string[];
+  }[];
+  nextSteps: {
+    recommendedModules: string[];
+    focusAreas: string[];
+    estimatedTimeToCompletion: number; // in days
+  };
+}
+
+// Peer comparison result interface
+export interface PeerComparisonResult {
+  traineeId: number;
+  peerGroupSize: number;
+  peerGroupCriteria: string;
+  overallPerformance: {
+    traineeScore: number;
+    peerAverage: number;
+    percentileRank: number;
+    standardDeviations: number; // from the mean
+  };
+  byModule: {
+    moduleId: string;
+    name: string;
+    traineeScore: number;
+    peerAverage: number;
+    percentileRank: number;
+    performance: 'above' | 'average' | 'below';
+  }[];
+  bySkill: {
+    skillId: string;
+    name: string;
+    category: string;
+    traineeScore: number;
+    peerAverage: number;
+    percentileRank: number;
+    performance: 'above' | 'average' | 'below';
+  }[];
+  progressRate: {
+    traineeRate: number;
+    peerAverage: number;
+    percentileRank: number;
+  };
+}
+
+// Performance prediction input
+export interface PerformancePredictionInput {
+  traineeId: number;
+  moduleId: string;
+  useHistoricalData?: boolean;
+  considerPrerequisites?: boolean;
+  includeConfidenceScore?: boolean;
+}
+
+// Performance prediction result
+export interface PerformancePredictionResult {
+  traineeId: number;
+  moduleId: string;
+  moduleName: string;
+  predictedScore: number;
+  confidenceInterval?: {
+    min: number;
+    max: number;
+  };
+  confidenceScore: number; // 0-1
+  factors: {
+    factor: string;
+    impact: number; // -1 to 1, negative means negative impact
+    description: string;
+  }[];
+  prerequisiteModules: {
+    moduleId: string;
+    name: string;
+    performance: number;
+    impact: number; // 0-1
+  }[];
+  criticalSkills: {
+    skillId: string;
+    name: string;
+    currentLevel: number;
+    requiredLevel: number;
+    gap: number;
+  }[];
+}
+
+/**
+ * PerformanceAnalytics class for tracking and analyzing trainee performance
+ */
+export class PerformanceAnalytics extends EventEmitter {
+  private skills: Map<string, Skill> = new Map();
+  private modules: Map<string, Module> = new Map();
+  private trainees: Map<number, TraineeInfo> = new Map();
+  private assessmentResults: Map<number, AssessmentResult[]> = new Map();
+  private sessionPerformance: Map<number, SessionPerformance[]> = new Map();
+  private predictionCache: Map<string, PerformancePredictionResult> = new Map();
+  
+  /**
+   * Create a new PerformanceAnalytics instance
+   * @param apiClient Optional API client for data fetching
+   */
+  constructor(private apiClient?: any) {
+    super();
+  }
+  
+  /**
+   * Analyze trainee performance to generate comprehensive insights
+   * @param traineeId Trainee ID to analyze
+   * @returns Performance insights
+   */
+  public async analyzeTraineePerformance(traineeId: number): Promise<PerformanceInsights> {
+    try {
+      // Get trainee data
+      await this.loadTraineeData(traineeId);
+      
+      // Calculate overview metrics
+      const overview = await this.calculateOverviewMetrics(traineeId);
+      
+      // Analyze skill performance
+      const skillPerformance = await this.analyzeSkillPerformance(traineeId);
+      
+      // Identify strengths
+      const strengths = skillPerformance
+        .filter(skill => skill.relativeStrength && skill.score >= 80)
+        .map(skill => skill.skillId);
+      
+      // Identify weak areas
+      const weakAreas = await this.identifyWeakAreas(traineeId);
+      
+      // Analyze recent progress
+      const recentProgress = await this.analyzeRecentProgress(traineeId);
+      
+      // Generate recommended focus areas
+      const recommendedFocus = await this.generateRecommendedFocus(traineeId, weakAreas);
+      
+      // Predict success rates for upcoming modules
+      const predictedSuccessRate = await this.predictUpcomingModuleSuccess(traineeId);
+      
+      // Compile insights
+      const insights: PerformanceInsights = {
+        traineeId,
+        overview,
+        skillPerformance,
+        strengths,
+        weakAreas,
+        recentProgress,
+        recommendedFocus,
+        predictedSuccessRate
+      };
+      
+      return insights;
+    } catch (error) {
+      console.error(`Error analyzing trainee performance for ID ${traineeId}:`, error);
+      throw new Error(`Failed to analyze trainee performance: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+  
+  /**
+   * Identify specific weak areas for a trainee
+   * @param traineeId Trainee ID to analyze
+   * @returns Array of skill gaps
+   */
+  public async identifyWeakAreas(traineeId: number): Promise<SkillGap[]> {
+    try {
+      // Load trainee data if needed
+      if (!this.trainees.has(traineeId)) {
+        await this.loadTraineeData(traineeId);
+      }
+      
+      const trainee = this.trainees.get(traineeId)!;
+      const assessments = this.assessmentResults.get(traineeId) || [];
+      
+      // Calculate current skill scores
+      const skillScores = this.calculateSkillScores(traineeId);
+      
+      // Get current module IDs
+      const currentModuleIds = trainee.currentModuleIds;
+      
+      // Get required skills for current modules
+      const requiredSkills = new Map<string, number>(); // skillId -> target score
+      
+      for (const moduleId of currentModuleIds) {
+        const module = this.modules.get(moduleId);
+        if (!module) continue;
+        
+        // Add all skills required by this module
+        for (const skillId of module.skillIds) {
+          const skill = this.skills.get(skillId);
+          if (!skill) continue;
+          
+          // Target score based on module success criteria and skill importance
+          const targetScore = module.successCriteria.minimumScore * 
+            (1 + (skill.importanceLevel - 3) * 0.1); // Adjust by importance
+          
+          // Keep highest target score if skill appears in multiple modules
+          if (!requiredSkills.has(skillId) || requiredSkills.get(skillId)! < targetScore) {
+            requiredSkills.set(skillId, targetScore);
+          }
+        }
+      }
+      
+      // Identify gaps
+      const skillGaps: SkillGap[] = [];
+      
+      for (const [skillId, targetScore] of requiredSkills.entries()) {
+        const currentScore = skillScores.get(skillId) || 0;
+        const gap = targetScore - currentScore;
+        
+        // Only consider significant gaps
+        if (gap > 10) {
+          const skill = this.skills.get(skillId)!;
+          
+          // Determine impact based on gap size and skill importance
+          let impact: 'critical' | 'high' | 'medium' | 'low' = 'low';
+          if (gap > 30 && skill.importanceLevel >= 4) {
+            impact = 'critical';
+          } else if (gap > 20 && skill.importanceLevel >= 3) {
+            impact = 'high';
+          } else if (gap > 15) {
+            impact = 'medium';
+          }
+          
+          // Find affected modules
+          const affectedModules = currentModuleIds.filter(moduleId => {
+            const module = this.modules.get(moduleId);
+            return module && module.skillIds.includes(skillId);
+          });
+          
+          // Generate recommended activities
+          const recommendedActivities = await this.getRecommendedActivities(skillId, currentScore);
+          
+          skillGaps.push({
+            skillId,
+            name: skill.name,
+            category: skill.category,
+            currentScore,
+            targetScore,
+            gap,
+            impact,
+            affectedModules,
+            recommendedActivities
+          });
+        }
+      }
+      
+      // Sort by impact and gap size
+      skillGaps.sort((a, b) => {
+        const impactOrder = { 'critical': 0, 'high': 1, 'medium': 2, 'low': 3 };
+        if (impactOrder[a.impact] !== impactOrder[b.impact]) {
+          return impactOrder[a.impact] - impactOrder[b.impact];
+        }
+        return b.gap - a.gap;
+      });
+      
+      return skillGaps;
+    } catch (error) {
+      console.error(`Error identifying weak areas for trainee ${traineeId}:`, error);
+      throw new Error(`Failed to identify weak areas: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+  
+  /**
+   * Generate a comprehensive progress report for a trainee
+   * @param traineeId Trainee ID
+   * @param timeframe Date range for the report
+   * @returns Progress report
+   */
+  public async generateProgressReport(
+    traineeId: number,
+    timeframe: { start: Date; end: Date }
+  ): Promise<ProgressReport> {
+    try {
+      // Load trainee data if needed
+      if (!this.trainees.has(traineeId)) {
+        await this.loadTraineeData(traineeId);
+      }
+      
+      const trainee = this.trainees.get(traineeId)!;
+      
+      // Get program details
+      const program = await this.getProgramDetails(trainee.programId);
+      
+      // Filter assessments and sessions to timeframe
+      const timeframeStart = timeframe.start.toISOString();
+      const timeframeEnd = timeframe.end.toISOString();
+      
+      const assessments = (this.assessmentResults.get(traineeId) || [])
+        .filter(a => a.date >= timeframeStart && a.date <= timeframeEnd);
+      
+      const sessions = (this.sessionPerformance.get(traineeId) || [])
+        .filter(s => s.date >= timeframeStart && s.date <= timeframeEnd);
+      
+      // Calculate overview metrics
+      const totalModules = program.totalModules;
+      const completedModules = trainee.completedModules.length;
+      const modulesCompletedInPeriod = trainee.completedModules.filter(moduleId => {
+        const module = this.modules.get(moduleId);
+        if (!module) return false;
+        
+        // Check if completion date falls within timeframe
+        const moduleProgress = this.getModuleProgress(traineeId, moduleId);
+        return moduleProgress.completionDate && 
+               moduleProgress.completionDate >= timeframeStart && 
+               moduleProgress.completionDate <= timeframeEnd;
+      }).length;
+      
+      // Calculate attendance rate
+      const attendanceRate = this.calculateAttendanceRate(traineeId, timeframe);
+      
+      // Calculate hours completed
+      const hoursCompleted = sessions.reduce((total, session) => {
+        return total + (session.duration / 60); // Convert minutes to hours
+      }, 0);
+      
+      // Calculate progress rate
+      const progressRate = this.calculateProgressRate(
+        traineeId, 
+        trainee.startDate, 
+        trainee.expectedEndDate,
+        completedModules,
+        totalModules
+      );
+      
+      // Calculate average score
+      const averageScore = assessments.length > 0
+        ? assessments.reduce((sum, a) => sum + a.score, 0) / assessments.length
+        : 0;
+      
+      // Generate module progress data
+      const moduleProgress = await this.generateModuleProgressData(traineeId, timeframe);
+      
+      // Generate skill progress data
+      const skillProgress = await this.generateSkillProgressData(traineeId, timeframe);
+      
+      // Get instructor feedback
+      const instructorFeedback = await this.getInstructorFeedback(traineeId, timeframe);
+      
+      // Generate next steps
+      const nextSteps = await this.generateNextSteps(traineeId);
+      
+      // Compile report
+      const report: ProgressReport = {
+        traineeId,
+        traineeName: `${trainee.firstName} ${trainee.lastName}`,
+        programId: trainee.programId,
+        programName: program.name,
+        period: {
+          start: timeframeStart,
+          end: timeframeEnd
+        },
+        overview: {
+          modulesCompleted: modulesCompletedInPeriod,
+          modulesPending: totalModules - completedModules,
+          totalAssessments: assessments.length,
+          averageScore,
+          attendanceRate,
+          hoursCompleted,
+          progressRate
+        },
+        moduleProgress,
+        skillProgress,
+        instructorFeedback,
+        nextSteps
+      };
+      
+      return report;
+    } catch (error) {
+      console.error(`Error generating progress report for trainee ${traineeId}:`, error);
+      throw new Error(`Failed to generate progress report: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+  
+  /**
+   * Compare trainee performance against peer group
+   * @param traineeId Trainee ID to analyze
+   * @param peerGroupOptions Options for defining the peer group
+   * @returns Peer comparison results
+   */
+  public async compareToPeers(
+    traineeId: number,
+    peerGroupOptions?: {
+      programId?: number;
+      startDateRange?: { start: Date; end: Date };
+      customPeerIds?: number[];
+      maxPeers?: number;
+    }
+  ): Promise<PeerComparisonResult> {
+    try {
+      // Load trainee data if needed
+      if (!this.trainees.has(traineeId)) {
+        await this.loadTraineeData(traineeId);
+      }
+      
+      const trainee = this.trainees.get(traineeId)!;
+      
+      // Determine peer group
+      const peerIds = await this.identifyPeerGroup(traineeId, peerGroupOptions);
+      
+      // Load data for all peers if not already loaded
+      await Promise.all(
+        peerIds.map(peerId => {
+          if (!this.trainees.has(peerId)) {
+            return this.loadTraineeData(peerId);
+          }
+          return Promise.resolve();
+        })
+      );
+      
+      // Calculate overall performance metrics
+      const traineePerformance = await this.calculateOverallPerformance(traineeId);
+      const peerPerformances = await Promise.all(
+        peerIds.map(peerId => this.calculateOverallPerformance(peerId))
+      );
+      
+      // Calculate peer average
+      const peerAverage = peerPerformances.reduce((sum, p) => sum + p, 0) / peerPerformances.length;
+      
+      // Calculate standard deviation
+      const squaredDiffs = peerPerformances.map(p => Math.pow(p - peerAverage, 2));
+      const variance = squaredDiffs.reduce((sum, sd) => sum + sd, 0) / peerPerformances.length;
+      const standardDeviation = Math.sqrt(variance);
+      
+      // Calculate percentile rank
+      const belowTrainee = peerPerformances.filter(p => p < traineePerformance).length;
+      const percentileRank = (belowTrainee / peerPerformances.length) * 100;
+      
+      // Calculate standard deviations from mean
+      const stdFromMean = (traineePerformance - peerAverage) / standardDeviation;
+      
+      // Compare by module
+      const byModule = await this.compareModulePerformance(traineeId, peerIds);
+      
+      // Compare by skill
+      const bySkill = await this.compareSkillPerformance(traineeId, peerIds);
+      
+      // Compare progress rate
+      const traineeProgressRate = this.calculateProgressRate(
+        traineeId,
+        trainee.startDate,
+        trainee.expectedEndDate,
+        trainee.completedModules.length,
+        await this.getTotalModulesInProgram(trainee.programId)
+      );
+      
+      const peerProgressRates = await Promise.all(
+        peerIds.map(async (peerId) => {
+          const peer = this.trainees.get(peerId)!;
+          return this.calculateProgressRate(
+            peerId,
+            peer.startDate,
+            peer.expectedEndDate,
+            peer.completedModules.length,
+            await this.getTotalModulesInProgram(peer.programId)
+          );
+        })
+      );
+      
+      const avgPeerProgressRate = peerProgressRates.reduce((sum, r) => sum + r, 0) / peerProgressRates.length;
+      const belowTraineeProgress = peerProgressRates.filter(r => r < traineeProgressRate).length;
+      const progressPercentile = (belowTraineeProgress / peerProgressRates.length) * 100;
+      
+      // Create peer comparison result
+      const result: PeerComparisonResult = {
+        traineeId,
+        peerGroupSize: peerIds.length,
+        peerGroupCriteria: this.describePeerGroupCriteria(peerGroupOptions, trainee),
+        overallPerformance: {
+          traineeScore: traineePerformance,
+          peerAverage,
+          percentileRank,
+          standardDeviations: stdFromMean
+        },
+        byModule,
+        bySkill,
+        progressRate: {
+          traineeRate: traineeProgressRate,
+          peerAverage: avgPeerProgressRate,
+          percentileRank: progressPercentile
+        }
+      };
+      
+      return result;
+    } catch (error) {
+      console.error(`Error comparing trainee ${traineeId} to peers:`, error);
+      throw new Error(`Failed to compare with peers: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+  
+  /**
+   * Predict performance for an upcoming module
+   * @param params Prediction parameters
+   * @returns Performance prediction
+   */
+  public async predictModulePerformance(
+    params: PerformancePredictionInput
+  ): Promise<PerformancePredictionResult> {
+    try {
+      const { traineeId, moduleId } = params;
+      
+      // Check cache first
+      const cacheKey = `${traineeId}:${moduleId}`;
+      const cachedPrediction = this.predictionCache.get(cacheKey);
+      if (cachedPrediction && this.isPredictionRecent(cachedPrediction)) {
+        return cachedPrediction;
+      }
+      
+      // Load trainee data if needed
+      if (!this.trainees.has(traineeId)) {
+        await this.loadTraineeData(traineeId);
+      }
+      
+      // Get module data
+      const module = this.modules.get(moduleId);
+      if (!module) {
+        throw new Error(`Module ${moduleId} not found`);
+      }
+      
+      // Get current skill scores
+      const skillScores = this.calculateSkillScores(traineeId);
+      
+      // Get prerequisite module performance
+      const prerequisites: PerformancePredictionResult['prerequisiteModules'] = [];
+      
+      if (params.considerPrerequisites !== false) {
+        for (const prereqId of module.prerequisiteModuleIds) {
+          const prereqModule = this.modules.get(prereqId);
+          if (!prereqModule) continue;
+          
+          // Get actual performance if completed, or predict if not
+          let performance = 0;
+          
+          if (this.trainees.get(traineeId)!.completedModules.includes(prereqId)) {
+            // Get actual performance from completed assessments
+            const moduleAssessments = (this.assessmentResults.get(traineeId) || [])
+              .filter(a => a.moduleId === prereqId);
+            
+            if (moduleAssessments.length > 0) {
+              performance = moduleAssessments.reduce((sum, a) => sum + a.score, 0) / moduleAssessments.length;
+            }
+          } else {
+            // Predict performance
+            const prediction = await this.predictModulePerformance({
+              traineeId,
+              moduleId: prereqId,
+              considerPrerequisites: false // Avoid deep recursion
+            });
+            performance = prediction.predictedScore;
+          }
+          
+          // Calculate impact based on importance
+          const impact = 0.2 + (0.6 * (module.prerequisiteModuleIds.length > 0 ? 
+            1 / module.prerequisiteModuleIds.length : 0));
+          
+          prerequisites.push({
+            moduleId: prereqId,
+            name: prereqModule.name,
+            performance,
+            impact
+          });
+        }
+      }
+      
+      // Identify critical skills
+      const criticalSkills: PerformancePredictionResult['criticalSkills'] = [];
+      
+      for (const skillId of module.skillIds) {
+        const skill = this.skills.get(skillId);
+        if (!skill) continue;
+        
+        // Higher importance skills are more critical
+        if (skill.importanceLevel >= 3) {
+          const currentLevel = skillScores.get(skillId) || 0;
+          const requiredLevel = module.successCriteria.minimumScore;
+          const gap = Math.max(0, requiredLevel - currentLevel);
+          
+          criticalSkills.push({
+            skillId,
+            name: skill.name,
+            currentLevel,
+            requiredLevel,
+            gap
+          });
+        }
+      }
+      
+      // Sort critical skills by gap
+      criticalSkills.sort((a, b) => b.gap - a.gap);
+      
+      // Calculate prediction factors
+      const factors: PerformancePredictionResult['factors'] = [];
+      
+      // Factor 1: Overall performance trend
+      const overallTrend = await this.calculatePerformanceTrend(traineeId);
+      factors.push({
+        factor: 'Performance trend',
+        impact: overallTrend > 0 ? Math.min(overallTrend / 10, 0.3) : Math.max(overallTrend / 10, -0.3),
+        description: overallTrend > 0 ? 
+          'Improving performance trend' : 
+          'Declining performance trend'
+      });
+      
+      // Factor 2: Prerequisite mastery
+      if (prerequisites.length > 0) {
+        const avgPrereqPerformance = prerequisites.reduce((sum, p) => sum + p.performance, 0) / 
+          prerequisites.length;
+        const prereqImpact = (avgPrereqPerformance / 100) * 0.4 - 0.2; // -0.2 to 0.2
+        
+        factors.push({
+          factor: 'Prerequisite mastery',
+          impact: prereqImpact,
+          description: avgPrereqPerformance > 75 ? 
+            'Strong prerequisite knowledge' : 
+            'Weak prerequisite knowledge'
+        });
+      }
+      
+      // Factor 3: Skill gaps
+      if (criticalSkills.length > 0) {
+        const avgGap = criticalSkills.reduce((sum, s) => sum + s.gap, 0) / criticalSkills.length;
+        const gapImpact = Math.max(-0.3, -avgGap / 100);
+        
+        factors.push({
+          factor: 'Skill gaps',
+          impact: gapImpact,
+          description: avgGap > 20 ? 
+            'Significant skill gaps may affect performance' : 
+            'Minor skill gaps'
+        });
+      }
+      
+      // Factor 4: Historical module performance
+      if (params.useHistoricalData !== false) {
+        const historicalImpact = await this.calculateHistoricalPerformanceImpact(traineeId, module);
+        
+        if (historicalImpact !== null) {
+          factors.push({
+            factor: 'Historical performance',
+            impact: historicalImpact,
+            description: historicalImpact > 0 ? 
+              'Historically strong in similar modules' : 
+              'Historically struggled with similar modules'
+          });
+        }
+      }
+      
+      // Calculate base prediction score
+      let basePrediction = 70; // Start with average score
+      
+      // Adjust by prerequisite performance
+      if (prerequisites.length > 0) {
+        let prereqAdjustment = 0;
+        for (const prereq of prerequisites) {
+          prereqAdjustment += (prereq.performance - 70) * prereq.impact;
+        }
+        basePrediction += prereqAdjustment;
+      }
+      
+      // Adjust by factors
+      for (const factor of factors) {
+        basePrediction += factor.impact * 20; // Scale impact to points
+      }
+      
+      // Adjust by skill gaps
+      if (criticalSkills.length > 0) {
+        const totalGap = criticalSkills.reduce((sum, s) => sum + s.gap, 0);
+        const avgGap = totalGap / criticalSkills.length;
+        basePrediction -= avgGap * 0.3; // Reduce score based on gaps
+      }
+      
+      // Ensure prediction is within bounds
+      const predictedScore = Math.min(100, Math.max(0, Math.round(basePrediction)));
+      
+      // Calculate confidence interval and score
+      let confidenceInterval = undefined;
+      let confidenceScore = 0.7; // Default medium confidence
+      
+      if (params.includeConfidenceScore !== false) {
+        // More factors and prerequisites = higher confidence
+        confidenceScore = 0.5 + Math.min(0.4, (factors.length * 0.1 + prerequisites.length * 0.05));
+        
+        // Large skill gaps = lower confidence
+        if (criticalSkills.length > 0 && criticalSkills[0].gap > 30) {
+          confidenceScore -= 0.2;
+        }
+        
+        // Calculate confidence interval based on confidence score
+        const interval = (1 - confidenceScore) * 20; // 20% max interval width
+        confidenceInterval = {
+          min: Math.max(0, Math.round(predictedScore - interval)),
+          max: Math.min(100, Math.round(predictedScore + interval))
+        };
+      }
+      
+      // Create prediction result
+      const prediction: PerformancePredictionResult = {
+        traineeId,
+        moduleId,
+        moduleName: module.name,
+        predictedScore,
+        confidenceInterval,
+        confidenceScore,
+        factors,
+        prerequisiteModules: prerequisites,
+        criticalSkills
+      };
+      
+      // Cache the prediction
+      this.predictionCache.set(cacheKey, prediction);
+      
+      return prediction;
+    } catch (error) {
+      console.error(`Error predicting performance for trainee ${params.traineeId}, module ${params.moduleId}:`, error);
+      throw new Error(`Failed to predict performance: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+  
+  /**
+   * Generate skill improvement plan for a trainee
+   * @param traineeId Trainee ID
+   * @param skillIds Skills to focus on (if not provided, will use weak areas)
+   * @returns Improvement plan with activities and estimated timelines
+   */
+  public async generateImprovementPlan(
+    traineeId: number,
+    skillIds?: string[]
+  ): Promise<{
+    traineeId: number;
+    focusSkills: {
+      skillId: string;
+      name: string;
+      currentScore: number;
+      targetScore: number;
+      estimatedTimeToTarget: number; // in days
+      activities: {
+        type: string;
+        description: string;
+        duration: number; // in minutes
+        expectedImprovement: number;
+      }[];
+    }[];
+    estimatedTotalTime: number; // in days
+    recommendedSchedule: {
+      weeks: {
+        weekNumber: number;
+        focus: string[];
+        hours: number;
+      }[];
+    };
+  }> {
+    try {
+      // Load trainee data if needed
+      if (!this.trainees.has(traineeId)) {
+        await this.loadTraineeData(traineeId);
+      }
+      
+      // Identify skills to focus on if not provided
+      let focusSkillIds: string[] = skillIds || [];
+      
+      if (focusSkillIds.length === 0) {
+        // Use weak areas
+        const weakAreas = await this.identifyWeakAreas(traineeId);
+        focusSkillIds = weakAreas.map(area => area.skillId);
+      }
+      
+      // Limit to top 5 skills
+      focusSkillIds = focusSkillIds.slice(0, 5);
+      
+      // Get current skill scores
+      const skillScores = this.calculateSkillScores(traineeId);
+      
+      // Generate improvement plan for each skill
+      const focusSkills = await Promise.all(
+        focusSkillIds.map(async (skillId) => {
+          const skill = this.skills.get(skillId);
+          if (!skill) {
+            throw new Error(`Skill ${skillId} not found`);
+          }
+          
+          const currentScore = skillScores.get(skillId) || 0;
+          const targetScore = Math.min(100, currentScore + 20); // Aim for 20 point improvement
+          
+          // Get recommended activities
+          const activityTemplates = await this.getRecommendedActivities(skillId, currentScore);
+          
+          // Create activities with estimated improvements
+          const activities = activityTemplates.map(template => {
+            // Estimate improvement based on activity type and duration
+            const baseImprovement = template.type.includes('practice') ? 5 : 
+                                   template.type.includes('assessment') ? 3 : 2;
+            
+            // Adjust by intensity and duration
+            const intensity = template.type.includes('intensive') ? 1.5 : 1;
+            const durationFactor = template.duration > 120 ? 1.2 : 
+                                  template.duration > 60 ? 1 : 0.8;
+            
+            const expectedImprovement = baseImprovement * intensity * durationFactor;
+            
+            return {
+              type: template.type,
+              description: template.description,
+              duration: template.duration,
+              expectedImprovement
+            };
+          });
+          
+          // Estimate time to target
+          // Assumptions: 2 hours per day, activities are done sequentially
+          const totalMinutes = activities.reduce((sum, a) => sum + a.duration, 0);
+          const totalDays = Math.ceil(totalMinutes / 120); // 2 hours (120 min) per day
+          
+          return {
+            skillId,
+            name: skill.name,
+            currentScore,
+            targetScore,
+            estimatedTimeToTarget: totalDays,
+            activities
+          };
+        })
+      );
+      
+      // Calculate total estimated time
+      const totalDays = Math.max(...focusSkills.map(s => s.estimatedTimeToTarget));
+      
+      // Generate recommended schedule
+      const totalWeeks = Math.ceil(totalDays / 7);
+      const weeks = Array(totalWeeks).fill(null).map((_, index) => {
+        // Determine focus for this week
+        const weekNumber = index + 1;
+        const weekFocus: string[] = [];
+        
+        // Assign skills to weeks based on priority and dependencies
+        focusSkills.forEach(skill => {
+          const skillWeeks = Math.ceil(skill.estimatedTimeToTarget / 7);
+          if (weekNumber <= skillWeeks) {
+            weekFocus.push(skill.name);
+          }
+        });
+        
+        // Estimate hours per week (assume 10 hours max)
+        const focusSkillCount = weekFocus.length;
+        const hours = Math.min(10, focusSkillCount * 3);
+        
+        return {
+          weekNumber,
+          focus: weekFocus,
+          hours
+        };
+      });
+      
+      return {
+        traineeId,
+        focusSkills,
+        estimatedTotalTime: totalDays,
+        recommendedSchedule: { weeks }
+      };
+    } catch (error) {
+      console.error(`Error generating improvement plan for trainee ${traineeId}:`, error);
+      throw new Error(`Failed to generate improvement plan: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+  
+  // PRIVATE METHODS
+
+  /**
+   * Load trainee data from API or cache
+   */
+  private async loadTraineeData(traineeId: number): Promise<void> {
+    try {
+      if (!this.apiClient) {
+        throw new Error('API client required to load trainee data');
+      }
+      
+      // Load trainee info
+      const traineeInfo = await this.apiClient.getTraineeInfo(traineeId);
+      this.trainees.set(traineeId, traineeInfo);
+      
+      // Load skills if not already loaded
+      if (this.skills.size === 0) {
+        const skills = await this.apiClient.getAllSkills();
+        skills.forEach((skill: Skill) => {
+          this.skills.set(skill.id, skill);
+        });
+      }
+      
+      // Load modules if not already loaded
+      if (this.modules.size === 0) {
+        const modules = await this.apiClient.getAllModules();
+        modules.forEach((module: Module) => {
+          this.modules.set(module.id, module);
+        });
+      }
+      
+      // Load assessment results
+      const assessmentResults = await this.apiClient.getTraineeAssessments(traineeId);
+      this.assessmentResults.set(traineeId, assessmentResults);
+      
+      // Load session performance
+      const sessionPerformance = await this.apiClient.getTraineeSessions(traineeId);
+      this.sessionPerformance.set(traineeId, sessionPerformance);
+    } catch (error) {
+      console.error(`Error loading data for trainee ${traineeId}:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Calculate overview metrics for a trainee
+   */
+  private async calculateOverviewMetrics(traineeId: number): Promise<PerformanceInsights['overview']> {
+    const trainee = this.trainees.get(traineeId)!;
+    const assessments = this.assessmentResults.get(traineeId) || [];
+    
+    // Calculate average score
+    const averageScore = assessments.length > 0
+      ? assessments.reduce((sum, a) => sum + a.score, 0) / assessments.length
+      : 0;
+    
+    // Calculate trend direction
+    const trend = await this.calculatePerformanceTrend(traineeId);
+    const trendDirection: 'improving' | 'stable' | 'declining' = 
+      trend > 5 ? 'improving' : (trend < -5 ? 'declining' : 'stable');
+    
+    // Calculate percentile rank among peers
+    const percentileRank = await this.calculatePercentileRank(traineeId);
+    
+    // Calculate progress rate
+    const totalModules = await this.getTotalModulesInProgram(trainee.programId);
+    const progressRate = this.calculateProgressRate(
+      traineeId,
+      trainee.startDate,
+      trainee.expectedEndDate,
+      trainee.completedModules.length,
+      totalModules
+    );
+    
+    // Estimate completion date
+    const estimatedCompletionDate = this.estimateCompletionDate(
+      traineeId,
+      trainee.startDate,
+      trainee.expectedEndDate,
+      trainee.completedModules.length,
+      totalModules,
+      progressRate
+    );
+    
+    // Determine if on track
+    const startDate = new Date(trainee.startDate);
+    const expectedEndDate = new Date(trainee.expectedEndDate);
+    const now = new Date();
+    
+    const totalDuration = expectedEndDate.getTime() - startDate.getTime();
+    const elapsedDuration = now.getTime() - startDate.getTime();
+    const elapsedRatio = Math.max(0, Math.min(1, elapsedDuration / totalDuration));
+    
+    // On track if progress rate is at least 90% of expected progress
+    const expectedProgress = elapsedRatio * totalModules;
+    const actualProgress = trainee.completedModules.length;
+    const onTrack = actualProgress >= (expectedProgress * 0.9);
+    
+    return {
+      averageScore,
+      trendDirection,
+      percentileRank,
+      progressRate,
+      estimatedCompletionDate: estimatedCompletionDate.toISOString(),
+      onTrack
+    };
+  }
+
+  /**
+   * Calculate performance trend
+   */
+  private async calculatePerformanceTrend(traineeId: number): Promise<number> {
+    const assessments = this.assessmentResults.get(traineeId) || [];
+    
+    if (assessments.length < 2) {
+      return 0; // Not enough data to determine trend
+    }
+    
+    // Sort assessments by date
+    const sortedAssessments = [...assessments].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+    
+    // Calculate moving average for first and last third
+    const chunkSize = Math.max(1, Math.floor(sortedAssessments.length / 3));
+    
+    const firstChunk = sortedAssessments.slice(0, chunkSize);
+    const lastChunk = sortedAssessments.slice(-chunkSize);
+    
+    const firstAvg = firstChunk.reduce((sum, a) => sum + a.score, 0) / firstChunk.length;
+    const lastAvg = lastChunk.reduce((sum, a) => sum + a.score, 0) / lastChunk.length;
+    
+    return lastAvg - firstAvg;
+  }
+
+  /**
+   * Calculate percentile rank among peers
+   */
+  private async calculatePercentileRank(traineeId: number): Promise<number> {
+    try {
+      // Get trainee's program
+      const trainee = this.trainees.get(traineeId)!;
+      const programId = trainee.programId;
+      
+      // Get peers in the same program
+      const peers = await this.apiClient.getPeersInProgram(programId);
+      const peerIds = peers.map((p: any) => p.id).filter((id: number) => id !== traineeId);
+      
+      // Calculate average score for each peer
+      const traineeScore = await this.calculateOverallPerformance(traineeId);
+      const peerScores = await Promise.all(
+        peerIds.map(peerId => this.calculateOverallPerformance(peerId))
+      );
+      
+      // Count peers with lower scores
+      const peersBelow = peerScores.filter(score => score < traineeScore).length;
+      
+      // Calculate percentile
+      return (peersBelow / peerScores.length) * 100;
+    } catch (error) {
+      console.error(`Error calculating percentile rank for ${traineeId}:`, error);
+      return 50; // Default to middle percentile
+    }
+  }
+
+  /**
+   * Calculate progress rate
+   */
+  private calculateProgressRate(
+    traineeId: number,
+    startDate: string,
+    expectedEndDate: string,
+    completedModules: number,
+    totalModules: number
+  ): number {
+    // Calculate elapsed time ratio
+    const start = new Date(startDate).getTime();
+    const end = new Date(expectedEndDate).getTime();
+    const now = new Date().getTime();
+    
+    const totalDuration = end - start;
+    const elapsedDuration = now - start;
+    const timeRatio = Math.max(0, Math.min(1, elapsedDuration / totalDuration));
+    
+    // Calculate completion ratio
+    const completionRatio = completedModules / totalModules;
+    
+    // Calculate progress rate (1.0 means exactly on track)
+    return timeRatio > 0 ? completionRatio / timeRatio : 0;
+  }
+
+  /**
+   * Estimate completion date
+   */
+  private estimateCompletionDate(
+    traineeId: number,
+    startDate: string,
+    expectedEndDate: string,
+    completedModules: number,
+    totalModules: number,
+    progressRate: number
+  ): Date {
+    // If no modules completed yet, return expected end date
+    if (completedModules === 0 || progressRate === 0) {
+      return new Date(expectedEndDate);
+    }
+    
+    // Calculate total program duration
+    const start = new Date(startDate);
+    const end = new Date(expectedEndDate);
+    const totalDuration = end.getTime() - start.getTime();
+    
+    // Calculate current rate of completion (modules per ms)
+    const now = new Date();
+    const elapsedTime = now.getTime() - start.getTime();
+    const moduleRate = completedModules / elapsedTime;
+    
+    // Estimate remaining time
+    const remainingModules = totalModules - completedModules;
+    const estimatedRemainingTime = remainingModules / moduleRate;
+    
+    // Calculate estimated completion date
+    const estimatedDate = new Date(now.getTime() + estimatedRemainingTime);
+    
+    // Blend with expected end date based on confidence
+    // Lower progress rate = more weight to the calculated date
+    const confidence = Math.min(1, completedModules / (totalModules * 0.25));
+    const blendFactor = 0.7 * confidence;
+    
+    const blendedTime = (estimatedDate.getTime() * (1 - blendFactor)) + 
+                       (end.getTime() * blendFactor);
+    
+    return new Date(blendedTime);
+  }
+
+  /**
+   * Analyze skill performance for a trainee
+   */
+  private async analyzeSkillPerformance(traineeId: number): Promise<SkillPerformance[]> {
+    const assessments = this.assessmentResults.get(traineeId) || [];
+    const sessions = this.sessionPerformance.get(traineeId) || [];
+    
+    // Get all skills assessed
+    const assessedSkillIds = new Set<string>();
+    assessments.forEach(assessment => {
+      assessment.skillIds.forEach(skillId => {
+        assessedSkillIds.add(skillId);
+      });
+    });
+    
+    // Calculate performance for each skill
+    const skillPerformance: SkillPerformance[] = [];
+    
+    for (const skillId of assessedSkillIds) {
+      const skill = this.skills.get(skillId);
+      if (!skill) continue;
+      
+      // Find assessments for this skill
+      const skillAssessments = assessments.filter(a => 
+        a.skillIds.includes(skillId)
+      );
+      
+      if (skillAssessments.length === 0) continue;
+      
+      // Calculate average score
+      const avgScore = skillAssessments.reduce((sum, a) => sum + a.score, 0) / 
+        skillAssessments.length;
+      
+      // Calculate trend
+      const sortedAssessments = [...skillAssessments].sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      );
+      
+      let trend = 0;
+      if (sortedAssessments.length >= 2) {
+        const first = sortedAssessments[0].score;
+        const last = sortedAssessments[sortedAssessments.length - 1].score;
+        trend = last - first;
+      }
+      
+      // Get last assessment date
+      const lastAssessment = sortedAssessments[sortedAssessments.length - 1];
+      const lastAssessed = lastAssessment.date;
+      
+      skillPerformance.push({
+        skillId,
+        name: skill.name,
+        category: skill.category,
+        score: avgScore,
+        assessmentCount: skillAssessments.length,
+        lastAssessed,
+        trend,
+        importance: skill.importanceLevel,
+        relativeStrength: false // Will be calculated after all skills are processed
+      });
+    }
+    
+    // Calculate relative strengths (top 30% of skills)
+    skillPerformance.sort((a, b) => b.score - a.score);
+    
+    const topThreshold = Math.ceil(skillPerformance.length * 0.3);
+    skillPerformance.forEach((skill, index) => {
+      skill.relativeStrength = index < topThreshold;
+    });
+    
+    // Re-sort by category and name for readability
+    skillPerformance.sort((a, b) => {
+      if (a.category !== b.category) {
+        return a.category.localeCompare(b.category);
+      }
+      return a.name.localeCompare(b.name);
+    });
+    
+    return skillPerformance;
+  }
+
+  /**
+   * Calculate skill scores for a trainee
+   */
+  private calculateSkillScores(traineeId: number): Map<string, number> {
+    const assessments = this.assessmentResults.get(traineeId) || [];
+    const scores = new Map<string, { sum: number; count: number }>();
+    
+    // Collect scores by skill
+    assessments.forEach(assessment => {
+      assessment.skillIds.forEach(skillId => {
+        if (!scores.has(skillId)) {
+          scores.set(skillId, { sum: 0, count: 0 });
+        }
+        
+        const skillScore = scores.get(skillId)!;
+        skillScore.sum += assessment.score;
+        skillScore.count += 1;
+      });
+    });
+    
+    // Calculate averages
+    const averages = new Map<string, number>();
+    scores.forEach((score, skillId) => {
+      averages.set(skillId, score.count > 0 ? score.sum / score.count : 0);
+    });
+    
+    return averages;
+  }
+
+  /**
+   * Analyze recent progress
+   */
+  private async analyzeRecentProgress(traineeId: number): Promise<PerformanceInsights['recentProgress']> {
+    const assessments = this.assessmentResults.get(traineeId) || [];
+    
+    // Define recent period (last 30 days)
+    const now = new Date();
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    const thirtyDaysAgoStr = thirtyDaysAgo.toISOString();
+    
+    // Find recent assessments
+    const recentAssessments = assessments.filter(a => a.date >= thirtyDaysAgoStr);
+    
+    // Find previous period assessments
+    const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
+    const sixtyDaysAgoStr = sixtyDaysAgo.toISOString();
+    const previousAssessments = assessments.filter(a => 
+      a.date >= sixtyDaysAgoStr && a.date < thirtyDaysAgoStr
+    );
+    
+    // Get modules covered in recent period
+    const recentModuleIds = new Set<string>();
+    recentAssessments.forEach(a => {
+      recentModuleIds.add(a.moduleId);
+    });
+    
+    // Calculate score changes by skill
+    const skillScores: Map<string, { recent: number; previous: number }> = new Map();
+    
+    // Function to process assessments for a period
+    const processAssessments = (assessments: AssessmentResult[], isPrevious: boolean) => {
+      const scoreSums = new Map<string, number>();
+      const scoreCounts = new Map<string, number>();
+      
+      assessments.forEach(assessment => {
+        assessment.skillIds.forEach(skillId => {
+          const currentSum = scoreSums.get(skillId) || 0;
+          const currentCount = scoreCounts.get(skillId) || 0;
+          
+          scoreSums.set(skillId, currentSum + assessment.score);
+          scoreCounts.set(skillId, currentCount + 1);
+        });
+      });
+      
+      // Calculate averages and update skill scores
+      scoreSums.forEach((sum, skillId) => {
+        const count = scoreCounts.get(skillId) || 0;
+        const average = count > 0 ? sum / count : 0;
+        
+        if (!skillScores.has(skillId)) {
+          skillScores.set(skillId, { recent: 0, previous: 0 });
+        }
+        
+        const scores = skillScores.get(skillId)!;
+        if (isPrevious) {
+          scores.previous = average;
+        } else {
+          scores.recent = average;
+        }
+      });
+    };
+    
+    // Process both periods
+    processAssessments(recentAssessments, false);
+    processAssessments(previousAssessments, true);
+    
+    // Identify improved and declined skills
+    const improved: string[] = [];
+    const declined: string[] = [];
+    
+    skillScores.forEach((scores, skillId) => {
+      const change = scores.recent - scores.previous;
+      
+      if (change >= 5) {
+        improved.push(skillId);
+      } else if (change <= -5) {
+        declined.push(skillId);
+      }
+    });
+    
+    // Calculate average score change
+    let totalChange = 0;
+    let changeCount = 0;
+    
+    skillScores.forEach(scores => {
+      if (scores.previous > 0 && scores.recent > 0) {
+        totalChange += scores.recent - scores.previous;
+        changeCount++;
+      }
+    });
+    
+    const averageScoreChange = changeCount > 0 ? totalChange / changeCount : 0;
+    
+    return {
+      period: '30 days',
+      moduleIds: Array.from(recentModuleIds),
+      averageScoreChange,
+      skillIdsImproved: improved,
+      skillIdsDeclined: declined
+    };
+  }
+
+  /**
+   * Generate recommended focus areas
+   */
+  private async generateRecommendedFocus(
+    traineeId: number,
+    weakAreas: SkillGap[]
+  ): Promise<PerformanceInsights['recommendedFocus']> {
+    const trainee = this.trainees.get(traineeId)!;
+    
+    // Get current module requirements
+    const currentModuleSkills = new Set<string>();
+    trainee.currentModuleIds.forEach(moduleId => {
+      const module = this.modules.get(moduleId);
+      if (module) {
+        module.skillIds.forEach(skillId => {
+          currentModuleSkills.add(skillId);
+        });
+      }
+    });
+    
+    // Prioritize weak areas that affect current modules
+    const prioritizedWeakAreas = weakAreas
+      .filter(area => currentModuleSkills.has(area.skillId) || area.impact === 'critical')
+      .slice(0, 3); // Limit to top 3
+    
+    // Generate recommendations
+    const recommendedFocus: PerformanceInsights['recommendedFocus'] = [];
+    
+    for (const area of prioritizedWeakAreas) {
+      const skill = this.skills.get(area.skillId);
+      if (!skill) continue;
+      
+      // Get recommended activities
+      const activities = await this.getRecommendedActivities(area.skillId, area.currentScore);
+      const activityNames = activities.map(a => a.description);
+      
+      // Determine reason
+      let reason = '';
+      if (area.impact === 'critical') {
+        reason = `Critical skill gap affecting multiple modules`;
+      } else if (currentModuleSkills.has(area.skillId)) {
+        reason = `Required for current module(s) with significant performance gap`;
+      } else {
+        reason = `Significant skill gap that may affect future modules`;
+      }
+      
+      recommendedFocus.push({
+        skillIds: [area.skillId],
+        reason,
+        suggestedActivities: activityNames
+      });
+    }
+    
+    // Check for prerequisite skill groups that need improvement
+    const skillGroups = this.identifyRelatedSkillGroups(traineeId);
+    
+    for (const group of skillGroups) {
+      // Check if any skills in this group are weak
+      const groupWeakAreas = weakAreas.filter(area => group.skillIds.includes(area.skillId));
+      
+      if (groupWeakAreas.length > 0) {
+        // Check if this group affects current modules
+        const affectsCurrent = group.skillIds.some(skillId => currentModuleSkills.has(skillId));
+        
+        if (affectsCurrent && recommendedFocus.length < 5) {
+          // Get activities that address multiple skills in the group
+          const groupActivities = await this.getGroupActivities(group.skillIds);
+          
+          recommendedFocus.push({
+            skillIds: group.skillIds,
+            reason: `Related skill group with multiple gaps affecting current progress`,
+            suggestedActivities: groupActivities.map(a => a.description)
+          });
+        }
+      }
+    }
+    
+    return recommendedFocus;
+  }
+
+  /**
+   * Predict success rates for upcoming modules
+   */
+  private async predictUpcomingModuleSuccess(
+    traineeId: number
+  ): Promise<PerformanceInsights['predictedSuccessRate']> {
+    const trainee = this.trainees.get(traineeId)!;
+    
+    // Get current and upcoming modules
+    const completedModuleIds = new Set(trainee.completedModules);
+    const currentModuleIds = new Set(trainee.currentModuleIds);
+    
+    // Find modules that are next in sequence
+    const program = await this.apiClient.getProgram(trainee.programId);
+    const moduleSequence = program.moduleSequence || [];
+    
+    // Find upcoming modules (not completed or current)
+    const upcomingModuleIds = moduleSequence.filter(moduleId => 
+      !completedModuleIds.has(moduleId) && !currentModuleIds.has(moduleId)
+    );
+    
+    // Get next 3 modules
+    const nextModuleIds = upcomingModuleIds.slice(0, 3);
+    
+    // Predict performance for each module
+    const predictions: PerformanceInsights['predictedSuccessRate'] = [];
+    
+    for (const moduleId of nextModuleIds) {
+      const prediction = await this.predictModulePerformance({
+        traineeId,
+        moduleId,
+        useHistoricalData: true,
+        considerPrerequisites: true,
+        includeConfidenceScore: true
+      });
+      
+      const module = this.modules.get(moduleId);
+      if (!module) continue;
+      
+      predictions.push({
+        upcomingModuleId: moduleId,
+        moduleName: module.name,
+        predictedScore: prediction.predictedScore,
+        confidenceLevel: prediction.confidenceScore,
+        criticalSkillGaps: prediction.criticalSkills
+          .filter(skill => skill.gap > 20)
+          .map(skill => skill.skillId)
+      });
+    }
+    
+    return predictions;
+  }
+
+  /**
+   * Get recommended activities for a skill
+   */
+  private async getRecommendedActivities(
+    skillId: string,
+    currentScore: number
+  ): Promise<{ type: string; description: string; duration: number }[]> {
+    try {
+      // Get from API
+      const activities = await this.apiClient.getRecommendedActivities(skillId, currentScore);
+      return activities;
+    } catch (error) {
+      console.error(`Error getting activities for skill ${skillId}:`, error);
+      
+      // Return placeholder activities
+      return [
+        {
+          type: 'practice',
+          description: `Guided practice session for ${this.skills.get(skillId)?.name || skillId}`,
+          duration: 60
+        },
+        {
+          type: 'assessment',
+          description: `Self-assessment for ${this.skills.get(skillId)?.name || skillId}`,
+          duration: 30
+        }
+      ];
+    }
+  }
+
+  /**
+   * Get activities for a group of related skills
+   */
+  private async getGroupActivities(
+    skillIds: string[]
+  ): Promise<{ type: string; description: string; duration: number }[]> {
+    try {
+      // Get from API
+      const activities = await this.apiClient.getGroupActivities(skillIds);
+      return activities;
+    } catch (error) {
+      console.error(`Error getting group activities for skills:`, error);
+      
+      // Create a description of the skill group
+      const skillNames = skillIds
+        .map(id => this.skills.get(id)?.name || id)
+        .join(', ');
+      
+      // Return placeholder activities
+      return [
+        {
+          type: 'integrated_practice',
+          description: `Integrated practice session covering: ${skillNames}`,
+          duration: 90
+        },
+        {
+          type: 'group_assessment',
+          description: `Comprehensive assessment covering: ${skillNames}`,
+          duration: 45
+        }
+      ];
+    }
+  }
+
+  /**
+   * Identify related skill groups
+   */
+  private identifyRelatedSkillGroups(traineeId: number): { 
+    skillIds: string[]; 
+    name: string;
+    category: string;
+  }[] {
+    const groups: { skillIds: string[]; name: string; category: string }[] = [];
+    
+    // Get skill dependency relationships
+    const skillRelationships = new Map<string, Set<string>>();
+    
+    this.skills.forEach((skill, skillId) => {
+      const related = new Set<string>();
+      
+      // Add dependencies
+      skill.dependsOn.forEach(depId => {
+        related.add(depId);
+      });
+      
+      // Add skills that depend on this one
+      skill.requiredFor.forEach(reqId => {
+        related.add(reqId);
+      });
+      
+      skillRelationships.set(skillId, related);
+    });
+    
+    // Find connected skill groups
+    const visited = new Set<string>();
+    
+    this.skills.forEach((skill, skillId) => {
+      if (visited.has(skillId)) return;
+      
+      // Start a new group
+      const group: string[] = [skillId];
+      visited.add(skillId);
+      
+      // BFS to find connected skills
+      const queue = [skillId];
+      while (queue.length > 0) {
+        const currentSkillId = queue.shift()!;
+        const related = skillRelationships.get(currentSkillId);
+        
+        if (related) {
+          related.forEach(relatedId => {
+            if (!visited.has(relatedId)) {
+              visited.add(relatedId);
+              group.push(relatedId);
+              queue.push(relatedId);
+            }
+          });
+        }
+      }
+      
+      // Only keep groups with 2+ skills
+      if (group.length >= 2) {
+        // Name the group based on common category
+        const categories = new Map<string, number>();
+        
+        group.forEach(id => {
+          const skill = this.skills.get(id);
+          if (skill) {
+            const count = categories.get(skill.category) || 0;
+            categories.set(skill.category, count + 1);
+          }
+        });
+        
+        // Find most common category
+        let maxCategory = '';
+        let maxCount = 0;
+        
+        categories.forEach((count, category) => {
+          if (count > maxCount) {
+            maxCount = count;
+            maxCategory = category;
+          }
+        });
+        
+        groups.push({
+          skillIds: group,
+          name: `${maxCategory} Skills Group`,
+          category: maxCategory
+        });
+      }
+    });
+    
+    return groups;
+  }
+
+  /**
+   * Get module progress data
+   */
+  private async getModuleProgress(
+    traineeId: number,
+    moduleId: string
+  ): Promise<{
+    status: 'completed' | 'in-progress' | 'pending';
+    score?: number;
+    completionDate?: string;
+  }> {
+    const trainee = this.trainees.get(traineeId)!;
+    const assessments = this.assessmentResults.get(traineeId) || [];
+    
+    // Check if module is completed
+    if (trainee.completedModules.includes(moduleId)) {
+      // Find latest assessment for this module
+      const moduleAssessments = assessments.filter(a => a.moduleId === moduleId);
+      
+      if (moduleAssessments.length > 0) {
+        // Sort by date (newest first)
+        moduleAssessments.sort((a, b) => 
+          new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+        
+        const latestAssessment = moduleAssessments[0];
+        
+        return {
+          status: 'completed',
+          score: latestAssessment.score,
+          completionDate: latestAssessment.date
+        };
+      }
+      
+      // If no assessments found but module is marked completed
+      return {
+        status: 'completed',
+        completionDate: new Date().toISOString() // Use current date as fallback
+      };
+    }
+    
+    // Check if module is in progress
+    if (trainee.currentModuleIds.includes(moduleId)) {
+      return { status: 'in-progress' };
+    }
+    
+    // Module is pending
+    return { status: 'pending' };
+  }
+
+  /**
+   * Generate module progress data for report
+   */
+  private async generateModuleProgressData(
+    traineeId: number,
+    timeframe: { start: Date; end: Date }
+  ): Promise<ProgressReport['moduleProgress']> {
+    const trainee = this.trainees.get(traineeId)!;
+    const assessments = this.assessmentResults.get(traineeId) || [];
+    
+    // Get all modules in the program
+    const program = await this.apiClient.getProgram(trainee.programId);
+    const programModules = program.modules || [];
+    
+    // Format date strings
+    const timeframeStart = timeframe.start.toISOString();
+    const timeframeEnd = timeframe.end.toISOString();
+    
+    // Generate progress data for each module
+    const moduleProgress: ProgressReport['moduleProgress'] = [];
+    
+    for (const moduleInfo of programModules) {
+      const module = this.modules.get(moduleInfo.id);
+      if (!module) continue;
+      
+      // Get module progress
+      const progress = await this.getModuleProgress(traineeId, module.id);
+      
+      // Skip modules completed before timeframe
+      if (progress.status === 'completed' && 
+          progress.completionDate && 
+          progress.completionDate < timeframeStart) {
+        continue;
+      }
+      
+      // Get skills acquired in this module
+      const skillsAcquired: string[] = [];
+      
+      if (progress.status === 'completed') {
+        // Find skills with good scores
+        const moduleAssessments = assessments.filter(a => 
+          a.moduleId === module.id && 
+          a.date >= timeframeStart && 
+          a.date <= timeframeEnd
+        );
+        
+        if (moduleAssessments.length > 0) {
+          // Calculate average score by skill
+          const skillScores = new Map<string, { sum: number; count: number }>();
+          
+          moduleAssessments.forEach(assessment => {
+            assessment.skillIds.forEach(skillId => {
+              if (!skillScores.has(skillId)) {
+                skillScores.set(skillId, { sum: 0, count: 0 });
+              }
+              
+              const score = skillScores.get(skillId)!;
+              score.sum += assessment.score;
+              score.count++;
+            });
+          });
+          
+          // Consider skills with average score >= 70 as acquired
+          skillScores.forEach((score, skillId) => {
+            const avgScore = score.count > 0 ? score.sum / score.count : 0;
+            if (avgScore >= 70) {
+              skillsAcquired.push(skillId);
+            }
+          });
+        } else {
+          // If no assessments, assume all skills acquired
+          skillsAcquired.push(...module.skillIds);
+        }
+      }
+      
+      moduleProgress.push({
+        moduleId: module.id,
+        name: module.name,
+        status: progress.status,
+        score: progress.score,
+        completionDate: progress.completionDate,
+        skillsAcquired
+      });
+    }
+    
+    return moduleProgress;
+  }
+
+  /**
+   * Generate skill progress data for report
+   */
+  private async generateSkillProgressData(
+    traineeId: number,
+    timeframe: { start: Date; end: Date }
+  ): Promise<ProgressReport['skillProgress']> {
+    const assessments = this.assessmentResults.get(traineeId) || [];
+    
+    // Format date strings
+    const timeframeStart = timeframe.start.toISOString();
+    const timeframeEnd = timeframe.end.toISOString();
+    
+    // Get assessments in timeframe
+    const timeframeAssessments = assessments.filter(a => 
+      a.date >= timeframeStart && a.date <= timeframeEnd
+    );
+    
+    // Get assessments before timeframe
+    const priorAssessments = assessments.filter(a => a.date < timeframeStart);
+    
+    // Get all skill IDs assessed in timeframe
+    const skillIds = new Set<string>();
+    timeframeAssessments.forEach(assessment => {
+      assessment.skillIds.forEach(skillId => {
+        skillIds.add(skillId);
+      });
+    });
+    
+    // Calculate progress for each skill
+    const skillProgress: ProgressReport['skillProgress'] = [];
+    
+    for (const skillId of skillIds) {
+      const skill = this.skills.get(skillId);
+      if (!skill) continue;
+      
+      // Calculate initial score (before timeframe)
+      let initialScore = 0;
+      let initialAssessments = priorAssessments.filter(a => 
+        a.skillIds.includes(skillId)
+      );
+      
+      if (initialAssessments.length > 0) {
+        initialScore = initialAssessments.reduce((sum, a) => sum + a.score, 0) / 
+          initialAssessments.length;
+      }
+      
+      // Calculate current score (in timeframe)
+      let currentScore = 0;
+      const currentAssessments = timeframeAssessments.filter(a => 
+        a.skillIds.includes(skillId)
+      );
+      
+      if (currentAssessments.length > 0) {
+        currentScore = currentAssessments.reduce((sum, a) => sum + a.score, 0) / 
+          currentAssessments.length;
+      }
+      
+      // Calculate change
+      const change = currentScore - initialScore;
+      
+      skillProgress.push({
+        skillId,
+        name: skill.name,
+        initialScore,
+        currentScore,
+        change
+      });
+    }
+    
+    // Sort by change (largest improvement first)
+    skillProgress.sort((a, b) => b.change - a.change);
+    
+    return skillProgress;
+  }
+
+  /**
+   * Get instructor feedback for a trainee
+   */
+  private async getInstructorFeedback(
+    traineeId: number,
+    timeframe: { start: Date; end: Date }
+  ): Promise<ProgressReport['instructorFeedback']> {
+    const sessions = this.sessionPerformance.get(traineeId) || [];
+    
+    // Format date strings
+    const timeframeStart = timeframe.start.toISOString();
+    const timeframeEnd = timeframe.end.toISOString();
+    
+    // Get sessions in timeframe with comments
+    const sessionsWithFeedback = sessions.filter(s => 
+      s.date >= timeframeStart && 
+      s.date <= timeframeEnd && 
+      s.comments
+    );
+    
+    // Group feedback by instructor
+    const instructorFeedback = new Map<number, {
+      name: string;
+      comments: string[];
+      recommendedFocus: Set<string>;
+    }>();
+    
+    for (const session of sessionsWithFeedback) {
+      // Get instructor
+      const instructor = await this.apiClient.getInstructor(session.instructorId);
+      
+      if (!instructorFeedback.has(session.instructorId)) {
+        instructorFeedback.set(session.instructorId, {
+          name: instructor ? `${instructor.firstName} ${instructor.lastName}` : 
+                `Instructor ${session.instructorId}`,
+          comments: [],
+          recommendedFocus: new Set<string>()
+        });
+      }
+      
+      const feedback = instructorFeedback.get(session.instructorId)!;
+      
+      // Add comment
+      if (session.comments) {
+        feedback.comments.push(session.comments);
+      }
+      
+      // Extract focus areas from activities with low ratings
+      session.activities.forEach(activity => {
+        if (activity.performanceRating <= 3) {
+          activity.skillIds.forEach(skillId => {
+            feedback.recommendedFocus.add(skillId);
+          });
+        }
+      });
+    }
+    
+    // Format feedback
+    const formattedFeedback: ProgressReport['instructorFeedback'] = [];
+    
+    instructorFeedback.forEach((feedback, instructorId) => {
+      formattedFeedback.push({
+        instructorId,
+        name: feedback.name,
+        comments: feedback.comments.join('\n\n'),
+        recommendedFocus: feedback.recommendedFocus.size > 0 
+          ? Array.from(feedback.recommendedFocus)
+          : undefined
+      });
+    });
+    
+    return formattedFeedback;
+  }
+
+  /**
+   * Generate next steps recommendations
+   */
+  private async generateNextSteps(
+    traineeId: number
+  ): Promise<ProgressReport['nextSteps']> {
+    const trainee = this.trainees.get(traineeId)!;
+    
+    // Get program modules
+    const program = await this.apiClient.getProgram(trainee.programId);
+    const moduleSequence = program.moduleSequence || [];
+    
+    // Find next modules in sequence
+    const completedModuleIds = new Set(trainee.completedModules);
+    const currentModuleIds = new Set(trainee.currentModuleIds);
+    
+    const nextModuleIds = moduleSequence.filter(moduleId => 
+      !completedModuleIds.has(moduleId) && !currentModuleIds.has(moduleId)
+    ).slice(0, 3); // Next 3 modules
+    
+    // Get weak areas
+    const weakAreas = await this.identifyWeakAreas(traineeId);
+    const focusAreas = weakAreas
+      .filter(area => area.impact === 'critical' || area.impact === 'high')
+      .map(area => area.skillId);
+    
+    // Estimate time to completion
+    const totalModules = moduleSequence.length;
+    const completedModules = trainee.completedModules.length;
+    const remainingModules = totalModules - completedModules;
+    
+    // Calculate average module completion time
+    const startDate = new Date(trainee.startDate);
+    const now = new Date();
+    const daysSinceStart = (now.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000);
+    
+    let avgDaysPerModule = 30; // Default to 30 days if no modules completed
+    if (completedModules > 0) {
+      avgDaysPerModule = daysSinceStart / completedModules;
+    }
+    
+    // Adjust for weak areas
+    const weakAreaFactor = 1 + (weakAreas.length * 0.1);
+    const estimatedTimeToCompletion = Math.ceil(remainingModules * avgDaysPerModule * weakAreaFactor);
+    
+    return {
+      recommendedModules: nextModuleIds,
+      focusAreas,
+      estimatedTimeToCompletion
+    };
+  }
+
+  /**
+   * Calculate attendance rate
+   */
+  private calculateAttendanceRate(
+    traineeId: number,
+    timeframe: { start: Date; end: Date }
+  ): number {
+    const sessions = this.sessionPerformance.get(traineeId) || [];
+    
+    // Format date strings
+    const timeframeStart = timeframe.start.toISOString();
+    const timeframeEnd = timeframe.end.toISOString();
+    
+    // Get sessions in timeframe
+    const timeframeSessions = sessions.filter(s => 
+      s.date >= timeframeStart && s.date <= timeframeEnd
+    );
+    
+    if (timeframeSessions.length === 0) {
+      return 1.0; // No sessions scheduled, return 100%
+    }
+    
+    // Count attended sessions
+    const attendedSessions = timeframeSessions.filter(s => s.completionRate > 0);
+    
+    return attendedSessions.length / timeframeSessions.length;
+  }
+
+  /**
+   * Calculate overall performance
+   */
+  private async calculateOverallPerformance(traineeId: number): Promise<number> {
+    const assessments = this.assessmentResults.get(traineeId) || [];
+    
+    if (assessments.length === 0) {
+      return 0;
+    }
+    
+    // Calculate weighted average, giving more weight to recent assessments
+    const sortedAssessments = [...assessments].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+    
+    let totalWeight = 0;
+    let weightedSum = 0;
+    
+    sortedAssessments.forEach((assessment, index) => {
+      // Weight increases with index (more recent = higher weight)
+      const weight = 1 + (index * 0.1);
+      weightedSum += assessment.score * weight;
+      totalWeight += weight;
+    });
+    
+    return totalWeight > 0 ? weightedSum / totalWeight : 0;
+  }
+
+  /**
+   * Compare module performance with peers
+   */
+  private async compareModulePerformance(
+    traineeId: number,
+    peerIds: number[]
+  ): Promise<PeerComparisonResult['byModule']> {
+    const trainee = this.trainees.get(traineeId)!;
+    const traineeAssessments = this.assessmentResults.get(traineeId) || [];
+    
+    // Get modules completed by trainee
+    const completedModuleIds = trainee.completedModules;
+    
+    // Compare each module
+    const moduleComparisons: PeerComparisonResult['byModule'] = [];
+    
+    for (const moduleId of completedModuleIds) {
+      const module = this.modules.get(moduleId);
+      if (!module) continue;
+      
+      // Calculate trainee's score for this module
+      const moduleAssessments = traineeAssessments.filter(a => a.moduleId === moduleId);
+      
+      if (moduleAssessments.length === 0) continue;
+      
+      const traineeScore = moduleAssessments.reduce((sum, a) => sum + a.score, 0) / 
+        moduleAssessments.length;
+      
+      // Calculate peer scores
+      const peerScores: number[] = [];
+      
+      for (const peerId of peerIds) {
+        const peerAssessments = this.assessmentResults.get(peerId) || [];
+        const peerModuleAssessments = peerAssessments.filter(a => a.moduleId === moduleId);
+        
+        if (peerModuleAssessments.length > 0) {
+          const peerScore = peerModuleAssessments.reduce((sum, a) => sum + a.score, 0) / 
+            peerModuleAssessments.length;
+          peerScores.push(peerScore);
+        }
+      }
+      
+      if (peerScores.length === 0) continue;
+      
+      // Calculate peer average
+      const peerAverage = peerScores.reduce((sum, score) => sum + score, 0) / peerScores.length;
+      
+      // Calculate percentile rank
+      const peersBelow = peerScores.filter(score => score < traineeScore).length;
+      const percentileRank = (peersBelow / peerScores.length) * 100;
+      
+      // Determine performance category
+      let performance: 'above' | 'average' | 'below';
+      
+      if (traineeScore > peerAverage * 1.1) {
+        performance = 'above';
+      } else if (traineeScore < peerAverage * 0.9) {
+        performance = 'below';
+      } else {
+        performance = 'average';
+      }
+      
+      moduleComparisons.push({
+        moduleId,
+        name: module.name,
+        traineeScore,
+        peerAverage,
+        percentileRank,
+        performance
+      });
+    }
+    
+    return moduleComparisons;
+  }
+
+  /**
+   * Compare skill performance with peers
+   */
+  private async compareSkillPerformance(
+    traineeId: number,
+    peerIds: number[]
+  ): Promise<PeerComparisonResult['bySkill']> {
+    const traineeAssessments = this.assessmentResults.get(traineeId) || [];
+    
+    // Get all skills assessed by trainee
+    const skillIds = new Set<string>();
+    traineeAssessments.forEach(assessment => {
+      assessment.skillIds.forEach(skillId => {
+        skillIds.add(skillId);
+      });
+    });
+    
+    // Compare each skill
+    const skillComparisons: PeerComparisonResult['bySkill'] = [];
+    
+    for (const skillId of skillIds) {
+      const skill = this.skills.get(skillId);
+      if (!skill) continue;
+      
+      // Calculate trainee's score for this skill
+      const skillAssessments = traineeAssessments.filter(a => 
+        a.skillIds.includes(skillId)
+      );
+      
+      if (skillAssessments.length === 0) continue;
+      
+      const traineeScore = skillAssessments.reduce((sum, a) => sum + a.score, 0) / 
+        skillAssessments.length;
+      
+      // Calculate peer scores
+      const peerScores: number[] = [];
+      
+      for (const peerId of peerIds) {
+        const peerAssessments = this.assessmentResults.get(peerId) || [];
+        const peerSkillAssessments = peerAssessments.filter(a => 
+          a.skillIds.includes(skillId)
+        );
+        
+        if (peerSkillAssessments.length > 0) {
+          const peerScore = peerSkillAssessments.reduce((sum, a) => sum + a.score, 0) / 
+            peerSkillAssessments.length;
+          peerScores.push(peerScore);
+        }
+      }
+      
+      if (peerScores.length === 0) continue;
+      
+      // Calculate peer average
+      const peerAverage = peerScores.reduce((sum, score) => sum + score, 0) / peerScores.length;
+      
+      // Calculate percentile rank
+      const peersBelow = peerScores.filter(score => score < traineeScore).length;
+      const percentileRank = (peersBelow / peerScores.length) * 100;
+      
+      // Determine performance category
+      let performance: 'above' | 'average' | 'below';
+      
+      if (traineeScore > peerAverage * 1.1) {
+        performance = 'above';
+      } else if (traineeScore < peerAverage * 0.9) {
+        performance = 'below';
+      } else {
+        performance = 'average';
+      }
+      
+      skillComparisons.push({
+        skillId,
+        name: skill.name,
+        category: skill.category,
+        traineeScore,
+        peerAverage,
+        percentileRank,
+        performance
+      });
+    }
+    
+    // Sort by performance category and score difference
+    return skillComparisons.sort((a, b) => {
+      const performanceOrder = { 'above': 0, 'average': 1, 'below': 2 };
+      if (performanceOrder[a.performance] !== performanceOrder[b.performance]) {
+        return performanceOrder[a.performance] - performanceOrder[b.performance];
+      }
+      return (b.traineeScore - b.peerAverage) - (a.traineeScore - a.peerAverage);
+    });
+  }
+
+  /**
+   * Identify peer group
+   */
+  private async identifyPeerGroup(
+    traineeId: number,
+    options?: {
+      programId?: number;
+      startDateRange?: { start: Date; end: Date };
+      customPeerIds?: number[];
+      maxPeers?: number;
+    }
+  ): Promise<number[]> {
+    // Use custom peers if provided
+    if (options?.customPeerIds && options.customPeerIds.length > 0) {
+      return options.customPeerIds.filter(id => id !== traineeId);
+    }
+    
+    const trainee = this.trainees.get(traineeId)!;
+    
+    // Get program ID
+    const programId = options?.programId || trainee.programId;
+    
+    // Get all trainees in program
+    const programTrainees = await this.apiClient.getPeersInProgram(programId);
+    
+    // Filter by start date if specified
+    let filteredTrainees = programTrainees.filter((t: any) => t.id !== traineeId);
+    
+    if (options?.startDateRange) {
+      const startMin = options.startDateRange.start.toISOString();
+      const startMax = options.startDateRange.end.toISOString();
+      
+      filteredTrainees = filteredTrainees.filter((t: any) => 
+        t.startDate >= startMin && t.startDate <= startMax
+      );
+    }
+    
+    // Limit number of peers if specified
+    const maxPeers = options?.maxPeers || 20;
+    if (filteredTrainees.length > maxPeers) {
+      // Sort by start date proximity to trainee's start date
+      const traineeStartDate = new Date(trainee.startDate).getTime();
+      
+      filteredTrainees.sort((a: any, b: any) => {
+        const aDistance = Math.abs(new Date(a.startDate).getTime() - traineeStartDate);
+        const bDistance = Math.abs(new Date(b.startDate).getTime() - traineeStartDate);
+        return aDistance - bDistance;
+      });
+      
+      // Take closest peers
+      filteredTrainees = filteredTrainees.slice(0, maxPeers);
+    }
+    
+    return filteredTrainees.map((t: any) => t.id);
+  }
+
+  /**
+   * Describe peer group criteria
+   */
+  private describePeerGroupCriteria(
+    options?: {
+      programId?: number;
+      startDateRange?: { start: Date; end: Date };
+      customPeerIds?: number[];
+      maxPeers?: number;
+    },
+    trainee?: TraineeInfo
+  ): string {
+    if (options?.customPeerIds && options.customPeerIds.length > 0) {
+      return 'Custom selected peer group';
+    }
+    
+    let description = 'Trainees';
+    
+    if (trainee) {
+      description += ` in the same program (${trainee.programId})`;
+    } else if (options?.programId) {
+      description += ` in program ${options.programId}`;
+    }
+    
+    if (options?.startDateRange) {
+      const startMin = options.startDateRange.start.toLocaleDateString();
+      const startMax = options.startDateRange.end.toLocaleDateString();
+      description += ` who started between ${startMin} and ${startMax}`;
+    }
+    
+    return description;
+  }
+
+  /**
+   * Get program details
+   */
+  private async getProgramDetails(
+    programId: number
+  ): Promise<{ name: string; totalModules: number }> {
+    try {
+      const program = await this.apiClient.getProgram(programId);
+      return {
+        name: program.name,
+        totalModules: program.modules.length
+      };
+    } catch (error) {
+      console.error(`Error getting program details for ${programId}:`, error);
+      return {
+        name: `Program ${programId}`,
+        totalModules: 0
+      };
+    }
+  }
+
+  /**
+   * Get total modules in program
+   */
+  private async getTotalModulesInProgram(programId: number): Promise<number> {
+    try {
+      const program = await this.apiClient.getProgram(programId);
+      return program.modules.length;
+    } catch (error) {
+      console.error(`Error getting module count for program ${programId}:`, error);
+      return 0;
+    }
+  }
+
+  /**
+   * Calculate historical performance impact
+   */
+  private async calculateHistoricalPerformanceImpact(
+    traineeId: number,
+    module: Module
+  ): Promise<number | null> {
+    const trainee = this.trainees.get(traineeId)!;
+    const assessments = this.assessmentResults.get(traineeId) || [];
+    
+    // Find similar modules the trainee has completed
+    const similarModules: { moduleId: string; similarity: number }[] = [];
+    
+    for (const completedModuleId of trainee.completedModules) {
+      const completedModule = this.modules.get(completedModuleId);
+      if (!completedModule) continue;
+      
+      // Calculate similarity based on shared skills
+      const sharedSkills = module.skillIds.filter(skillId => 
+        completedModule.skillIds.includes(skillId)
+      );
+      
+      if (sharedSkills.length > 0) {
+        const similarity = sharedSkills.length / 
+          Math.sqrt(module.skillIds.length * completedModule.skillIds.length);
+        
+        similarModules.push({
+          moduleId: completedModuleId,
+          similarity
+        });
+      }
+    }
+    
+    if (similarModules.length === 0) {
+      return null; // No similar modules found
+    }
+    
+    // Sort by similarity
+    similarModules.sort((a, b) => b.similarity - a.similarity);
+    
+    // Get top 3 most similar modules
+    const topSimilar = similarModules.slice(0, 3);
+    
+    // Calculate weighted average performance
+    let totalWeight = 0;
+    let weightedSum = 0;
+    
+    for (const { moduleId, similarity } of topSimilar) {
+      // Find assessments for this module
+      const moduleAssessments = assessments.filter(a => a.moduleId === moduleId);
+      
+      if (moduleAssessments.length > 0) {
+        const avgScore = moduleAssessments.reduce((sum, a) => sum + a.score, 0) / 
+          moduleAssessments.length;
+        
+        const weight = similarity;
+        weightedSum += avgScore * weight;
+        totalWeight += weight;
+      }
+    }
+    
+    if (totalWeight === 0) {
+      return null; // No valid assessments found
+    }
+    
+    const avgPerformance = weightedSum / totalWeight;
+    
+    // Convert to impact factor between -0.3 and 0.3
+    return (avgPerformance - 70) / 100; // Normalized around 70 as average
+  }
+
+  /**
+   * Check if a prediction is recent
+   */
+  private isPredictionRecent(prediction: PerformancePredictionResult): boolean {
+    // Check for timestamp property (added to cache entries)
+    const timestamp = (prediction as any)._timestamp;
+    
+    if (!timestamp) {
+      return false;
+    }
+    
+    // Consider predictions from the last day as recent
+    const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
+    return timestamp > oneDayAgo;
+  }
+}
+
+// Example usage:
+/*
+import { PerformanceAnalytics } from './PerformanceAnalytics';
+
+// Initialize with API client
+const apiClient = {
+  getTraineeInfo: async (traineeId) => { /* API call */ },
+  getAllSkills: async () => { /* API call */ },
+  getAllModules: async () => { /* API call */ },
+  getTraineeAssessments: async (traineeId) => { /* API call */ },
+  getTraineeSessions: async (traineeId) => { /* API call */ },
+  // ... other API methods
+};
+
+const analytics = new PerformanceAnalytics(apiClient);
+
+// Analyze trainee performance
+async function analyzeTrainee(traineeId) {
+  try {
+    const insights = await analytics.analyzeTraineePerformance(traineeId);
+    console.log('Performance Overview:', insights.overview);
+    console.log('Strengths:', insights.strengths);
+    console.log('Weak Areas:', insights.weakAreas);
+    
+    // Generate progress report
+    const timeframe = {
+      start: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 90 days ago
+      end: new Date()
+    };
+    
+    const report = await analytics.generateProgressReport(traineeId, timeframe);
+    console.log('Progress Report:', report);
+    
+    // Compare to peers
+    const comparison = await analytics.compareToPeers(traineeId);
+    console.log('Peer Comparison:', comparison);
+    
+    // Predict performance for upcoming module
+    const prediction = await analytics.predictModulePerformance({
+      traineeId,
+      moduleId: 'module-123',
+      includeConfidenceScore: true
+    });
+    console.log('Predicted Score:', prediction.predictedScore);
+    console.log('Confidence Level:', prediction.confidenceScore);
+    
+  } catch (error) {
+    console.error('Analysis error:', error);
+  }
+}
+
+// Run analysis
+analyzeTrainee(12345);
+*/

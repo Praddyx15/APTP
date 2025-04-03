@@ -1,0 +1,688 @@
+import { Logger } from '../utils/logger';
+import { v4 as uuidv4 } from 'uuid';
+import path from 'path';
+import fs from 'fs/promises';
+import { Document, DocumentContent, DocumentType, DocumentMetadata } from '../../shared/document-types';
+import { User } from '../../shared/schema';
+import { documentUtils } from '../utils/document-utils';
+
+/**
+ * Service for managing documents
+ */
+export class DocumentService {
+  private logger: Logger;
+  private documentsDir: string;
+  private documents: Map<string, Document>;
+  
+  constructor() {
+    this.logger = new Logger('DocumentService');
+    this.documentsDir = path.join(process.cwd(), 'uploads');
+    this.documents = new Map<string, Document>();
+    
+    // Ensure uploads directory exists
+    this.ensureUploadsDirectory().catch(err => {
+      this.logger.error(`Failed to create uploads directory: ${err instanceof Error ? err.message : String(err)}`);
+    });
+  }
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }
+  
+  /**
+   * Ensure the uploads directory exists
+   * @returns Promise that resolves when directory is created or already exists
+   */
+  private async ensureUploadsDirectory(): Promise<void> {
+    try {
+      await fs.mkdir(this.documentsDir, { recursive: true });
+      this.logger.info(`Uploads directory created at ${this.documentsDir}`);
+    } catch (error) {
+      this.logger.error(`Error creating uploads directory: ${error instanceof Error ? error.message : String(error)}`);
+      throw error;
+    }
+  }
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }
+  
+  /**
+   * Generate a unique filename for a document
+   * @param originalFilename - Original filename
+   * @returns Unique filename
+   */
+  private generateUniqueFilename(originalFilename: string): string {
+    const extension = path.extname(originalFilename);
+    const uuid = uuidv4();
+    return `${uuid}${extension}`;
+  }
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }
+  
+  /**
+   * Get file path for a document
+   * @param filename - Document filename
+   * @returns Absolute file path
+   */
+  private getFilePath(filename: string): string {
+    return path.join(this.documentsDir, filename);
+  }
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }
+  
+  /**
+   * Save uploaded file to disk
+   * @param file - File buffer
+   * @param originalFilename - Original filename
+   * @returns Saved filename
+   */
+  public async saveUploadedFile(file: Buffer, originalFilename: string): Promise<string> {
+    try {
+      const filename = this.generateUniqueFilename(originalFilename);
+      const filePath = this.getFilePath(filename);
+      
+      await fs.writeFile(filePath, file);
+      this.logger.info(`File saved as ${filename}`);
+      
+      return filename;
+    } catch (error) {
+      this.logger.error(`Error saving file: ${error instanceof Error ? error.message : String(error)}`);
+      throw error;
+    }
+  }
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }
+  
+  /**
+   * Create a new document
+   * @param userId - User ID
+   * @param name - Document name
+   * @param description - Document description
+   * @param type - Document type
+   * @param filename - Saved filename
+   * @param originalFilename - Original filename
+   * @param fileSize - File size in bytes
+   * @returns Created document
+   */
+  public async createDocument(
+    userId: number,
+    name: string,
+    description: string,
+    type: DocumentType,
+    filename: string,
+    originalFilename: string,
+    fileSize: number
+  ): Promise<Document> {
+    try {
+      const document: Document = {
+        id: uuidv4(),
+        userId,
+        name,
+        description,
+        type,
+        filename,
+        originalFilename,
+        fileSize,
+        fileType: path.extname(originalFilename).toLowerCase(),
+        isAnalyzed: false,
+        uploadedAt: new Date(),
+        lastAccessedAt: new Date(),
+        entityCount: 0,
+        wordCount: 0,
+        processingTimeMs: 0,
+        topics: []
+      };
+      
+      // Store in memory (in a real application, this would be saved to database)
+      this.documents.set(document.id, document);
+      
+      return document;
+    } catch (error) {
+      this.logger.error(`Error creating document: ${error instanceof Error ? error.message : String(error)}`);
+      throw error;
+    }
+  }
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }
+  
+  /**
+   * Get a document by ID
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocument(documentId: string, userId: number): Promise<Document | undefined> {
+    try {
+      const document = this.documents.get(documentId);
+      
+      if (!document) {
+        this.logger.warn(`Document not found: ${documentId}`);
+        return undefined;
+      }
+      
+      // Check authorization
+      if (document.userId !== userId) {
+        this.logger.warn(`User ${userId} not authorized to access document ${documentId}`);
+        return undefined;
+      }
+      
+      // Update last accessed timestamp
+      document.lastAccessedAt = new Date();
+      this.documents.set(documentId, document);
+      
+      return document;
+    } catch (error) {
+      this.logger.error(`Error getting document: ${error instanceof Error ? error.message : String(error)}`);
+      return undefined;
+    }
+  }
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }
+  
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }
+  
+  /**
+   * Delete a document
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Whether deletion was successful
+   */
+  public async deleteDocument(documentId: string, userId: number): Promise<boolean> {
+    try {
+      const document = await this.getDocument(documentId, userId);
+      
+      if (!document) {
+        return false;
+      }
+      
+      // Delete file from disk
+      const filePath = this.getFilePath(document.filename);
+      await fs.unlink(filePath);
+      
+      // Remove from memory store
+      this.documents.delete(documentId);
+      
+      return true;
+    } catch (error) {
+      this.logger.error(`Error deleting document: ${error instanceof Error ? error.message : String(error)}`);
+      return false;
+    }
+  }
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }
+  
+  /**
+   * List all documents for a user
+   * @param userId - User ID
+   * @returns Array of documents
+   */
+  public async listDocuments(userId: number): Promise<Document[]> {
+    try {
+      const userDocuments: Document[] = [];
+      
+      for (const document of this.documents.values()) {
+        if (document.userId === userId) {
+          userDocuments.push(document);
+        }
+      }
+      
+      // Sort by upload date (newest first)
+      return userDocuments.sort((a, b) => 
+        new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
+      );
+    } catch (error) {
+      this.logger.error(`Error listing documents: ${error instanceof Error ? error.message : String(error)}`);
+      return [];
+    }
+  }
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }
+  
+  /**
+   * Get document content
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document content
+   */
+  public async getDocumentContent(documentId: string, userId: number): Promise<DocumentContent | undefined> {
+    try {
+      const document = await this.getDocument(documentId, userId);
+      
+      if (!document) {
+        return undefined;
+      }
+      
+      const filePath = this.getFilePath(document.filename);
+      
+      // Check if file exists
+      try {
+        await fs.access(filePath);
+      } catch (err) {
+        this.logger.error(`File not found: ${filePath}`);
+        return undefined;
+      }
+      
+      // Extract text based on file type
+      const rawText = await documentUtils.extractText(filePath, document.fileType);
+      
+      return {
+        documentId: document.id,
+        name: document.name,
+        fileType: document.fileType,
+        rawText,
+        textLength: rawText.length,
+        extractionTimestamp: new Date()
+      };
+    } catch (error) {
+      this.logger.error(`Error getting document content: ${error instanceof Error ? error.message : String(error)}`);
+      return undefined;
+    }
+  }
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }
+  
+  /**
+   * Update document metadata
+   * @param documentId - Document ID
+   * @param metadata - Document metadata to update
+   * @param userId - User ID for authorization
+   * @returns Updated document
+   */
+  public async updateDocumentMetadata(
+    documentId: string,
+    metadata: Partial<DocumentMetadata>,
+    userId: number
+  ): Promise<Document | undefined> {
+    try {
+      const document = await this.getDocument(documentId, userId);
+      
+      if (!document) {
+        return undefined;
+      }
+      
+      // Update fields
+      const updatedDocument = {
+        ...document,
+        ...metadata
+      };
+      
+      // Store updated document
+      this.documents.set(documentId, updatedDocument);
+      
+      return updatedDocument;
+    } catch (error) {
+      this.logger.error(`Error updating document metadata: ${error instanceof Error ? error.message : String(error)}`);
+      return undefined;
+    }
+  }
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }
+  
+  /**
+   * Search documents by keyword
+   * @param userId - User ID
+   * @param query - Search query
+   * @returns Array of matching documents
+   */
+  public async searchDocuments(userId: number, query: string): Promise<Document[]> {
+    try {
+      if (!query || query.trim().length === 0) {
+        return this.listDocuments(userId);
+      }
+      
+      const normalizedQuery = query.toLowerCase().trim();
+      
+      // Get user documents
+      const userDocuments = await this.listDocuments(userId);
+      
+      // Filter by search terms
+      return userDocuments.filter(doc => {
+        return (
+          doc.name.toLowerCase().includes(normalizedQuery) ||
+          doc.description.toLowerCase().includes(normalizedQuery) ||
+          doc.topics.some(topic => topic.toLowerCase().includes(normalizedQuery))
+        );
+      });
+    } catch (error) {
+      this.logger.error(`Error searching documents: ${error instanceof Error ? error.message : String(error)}`);
+      return [];
+    }
+  }
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }
+  
+  /**
+   * Filter documents by type
+   * @param userId - User ID
+   * @param type - Document type
+   * @returns Array of matching documents
+   */
+  public async filterDocumentsByType(userId: number, type: DocumentType): Promise<Document[]> {
+    try {
+      // Get user documents
+      const userDocuments = await this.listDocuments(userId);
+      
+      // Filter by type
+      return userDocuments.filter(doc => doc.type === type);
+    } catch (error) {
+      this.logger.error(`Error filtering documents: ${error instanceof Error ? error.message : String(error)}`);
+      return [];
+    }
+  }
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }
+  
+  /**
+   * Get document file for download
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns File buffer and metadata
+   */
+  public async getDocumentFile(
+    documentId: string,
+    userId: number
+  ): Promise<{ buffer: Buffer; filename: string; mimeType: string } | undefined> {
+    try {
+      const document = await this.getDocument(documentId, userId);
+      
+      if (!document) {
+        return undefined;
+      }
+      
+      const filePath = this.getFilePath(document.filename);
+      
+      // Read file
+      const buffer = await fs.readFile(filePath);
+      
+      // Get MIME type
+      const mimeType = documentUtils.getMimeType(document.fileType);
+      
+      return {
+        buffer,
+        filename: document.originalFilename,
+        mimeType
+      };
+    } catch (error) {
+      this.logger.error(`Error getting document file: ${error instanceof Error ? error.message : String(error)}`);
+      return undefined;
+    }
+  }
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }
+}
+
+// Create and export singleton instance
+
+  /**
+   * Save uploaded file from multer
+   * @param file - Multer file object
+   * @param documentId - Document ID
+   * @returns File path
+   */
+  public async saveUploadedFile(file: Express.Multer.File, documentId: number): Promise<string> {
+    try {
+      // Ensure uploads directory exists
+      await this.ensureUploadsDirectory();
+      
+      const subDir = path.join(this.documentsDir, documentId.toString());
+      await fs.mkdir(subDir, { recursive: true });
+      
+      const filePath = path.join(subDir, file.originalname);
+      
+      // Write buffer to file
+      await fs.writeFile(filePath, file.buffer);
+      
+      return filePath;
+    } catch (error) {
+      this.logger.error(`Failed to save uploaded file: ${error instanceof Error ? error.message : String(error)}`);
+      throw error;
+    }
+  }
+  
+  /**
+   * Create a document record
+   * @param data - Document data
+   * @returns Created document
+   */
+  public async createDocument(data: {
+    title: string;
+    description?: string;
+    fileType: string;
+    fileName: string;
+    fileSize: number;
+    uploadedById: number;
+    uploadedByRole: string;
+    filePath?: string;
+    url?: string;
+    createKnowledgeGraph?: boolean;
+    processingStatus?: string;
+    isProcessed?: boolean;
+  }): Promise<any> {
+    try {
+      // In a real implementation, this would save to the database
+      const document = {
+        id: Date.now(), // Using timestamp as ID for now
+        ...data,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      
+      // Store in memory map
+      this.documents.set(document.id.toString(), document);
+      
+      return document;
+    } catch (error) {
+      this.logger.error(`Failed to create document: ${error instanceof Error ? error.message : String(error)}`);
+      throw error;
+    }
+  }
+  
+  /**
+   * Update document
+   * @param documentId - Document ID
+   * @param data - Updated fields
+   * @returns Updated document
+   */
+  public async updateDocument(documentId: number | string, data: Partial<any>): Promise<any> {
+    try {
+      const id = documentId.toString();
+      const document = this.documents.get(id);
+      
+      if (!document) {
+        throw new Error(`Document with ID ${documentId} not found`);
+      }
+      
+      const updatedDocument = {
+        ...document,
+        ...data,
+        updatedAt: new Date()
+      };
+      
+      // Store updated document
+      this.documents.set(id, updatedDocument);
+      
+      return updatedDocument;
+    } catch (error) {
+      this.logger.error(`Failed to update document: ${error instanceof Error ? error.message : String(error)}`);
+      throw error;
+    }
+  }
+  
+  /**
+   * Get all documents with pagination
+   * @param userId - User ID
+   * @param page - Page number
+   * @param pageSize - Page size
+   * @returns Paginated documents
+   */
+  public async getDocuments(userId: number, page: number = 1, pageSize: number = 10): Promise<{ documents: any[]; total: number; page: number; pageSize: number; totalPages: number }> {
+    try {
+      const allDocuments = Array.from(this.documents.values()).filter(
+        doc => doc.uploadedById === userId
+      );
+      
+      const total = allDocuments.length;
+      const totalPages = Math.ceil(total / pageSize);
+      const startIndex = (page - 1) * pageSize;
+      const endIndex = startIndex + pageSize;
+      
+      // Sort by most recent first
+      const sortedDocuments = allDocuments.sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      
+      // Get current page documents
+      const documents = sortedDocuments.slice(startIndex, endIndex);
+      
+      return {
+        documents,
+        total,
+        page,
+        pageSize,
+        totalPages
+      };
+    } catch (error) {
+      this.logger.error(`Failed to get documents: ${error instanceof Error ? error.message : String(error)}`);
+      throw error;
+    }
+  }
+  
+  /**
+   * Get document content
+   * @param documentId - Document ID
+   * @returns Document content
+   */
+  public async getDocumentContent(documentId: string): Promise<any> {
+    try {
+      const document = this.documents.get(documentId);
+      
+      if (!document) {
+        throw new Error(`Document with ID ${documentId} not found`);
+      }
+      
+      // In a real implementation, this would retrieve content from the database
+      return {
+        documentId,
+        textContent: "Sample document content would be retrieved here",
+        structuredContent: {},
+        extractedAt: new Date()
+      };
+    } catch (error) {
+      this.logger.error(`Failed to get document content: ${error instanceof Error ? error.message : String(error)}`);
+      throw error;
+    }
+  }
+const documentService = new DocumentService();
+export default documentService;

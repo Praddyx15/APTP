@@ -1,0 +1,1228 @@
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+    Play,
+    Pause,
+    ChevronLeft,
+    ChevronRight,
+    List,
+    X,
+    CheckCircle,
+    AlertTriangle,
+    Loader2,
+    Book,
+    Video,
+    Monitor,
+    Users,
+    Settings,
+    LogOut,
+    Search,
+    Airplay,
+    BarChart,
+    Check,
+    Edit,
+    Trash2,
+    Save,
+    PlusCircle,
+    Clock,
+    User,
+    KeyRound,
+    MessageSquare,
+    FileText,
+    TrendingUp
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { cn } from '@/lib/utils';
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet"
+import { Textarea } from "@/components/ui/textarea"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { Calendar } from "@/components/ui/calendar"
+import { format } from "date-fns";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Command, CommandInput, CommandList, CommandItem } from "@/components/ui/command"
+
+// Mock Data and Types (Replace with actual API calls and types)
+interface User {
+    id: string;
+    username: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    role: string;
+}
+
+interface TrainingProgram {
+    id: string;
+    name: string;
+    description: string;
+    modules: Module[];
+}
+
+interface Module {
+    id: string;
+    name: string;
+    lessons: Lesson[];
+}
+
+interface Lesson {
+    id: string;
+    name: string;
+    type: 'video' | 'document' | 'interactive';
+    content: string; // Could be a URL or embedded content
+}
+
+interface Session {
+    id: string;
+    programId: string;
+    moduleId: string;
+    status: 'scheduled' | 'in progress' | 'completed';
+    trainees: User[];
+    startTime: Date;
+    endTime: Date;
+}
+
+interface Assessment {
+    id: string;
+    traineeId: string;
+    sessionId: string;
+    moduleId: string;
+    instructorId: string;
+    date: Date;
+    status: 'pending' | 'graded';
+    grades: Grade[];
+}
+
+interface Grade {
+    competencyAreaId: string;
+    score: number;
+    comments: string;
+}
+
+interface Document {
+    id: string;
+    title: string;
+    description: string;
+    fileType: string;
+    url: string; // URL to the document
+}
+
+interface Notification {
+    id: string;
+    type: 'info' | 'warning' | 'error';
+    content: string;
+    recipientId: string; // User ID
+    createdAt: Date;
+    status: 'sent' | 'read';
+}
+
+interface Resource {
+    id: string;
+    name: string;
+    type: 'simulator' | 'classroom';
+    location: string;
+    capacity: number;
+}
+
+const mockUser: User = {
+    id: 'user123',
+    username: 'instructor1',
+    email: 'instructor1@example.com',
+    firstName: 'John',
+    lastName: 'Doe',
+    role: 'instructor',
+};
+
+const mockTrainee: User = {
+    id: 'trainee456',
+    username: 'trainee1',
+    email: 'trainee1@example.com',
+    firstName: 'Jane',
+    lastName: 'Smith',
+    role: 'trainee'
+}
+
+const mockTrainingPrograms: TrainingProgram[] = [
+    {
+        id: 'program1',
+        name: 'Initial Pilot Training',
+        description: 'Comprehensive program for new pilots.',
+        modules: [
+            {
+                id: 'module1',
+                name: 'Aircraft Systems',
+                lessons: [
+                    { id: 'lesson1', name: 'Engine Overview', type: 'video', content: 'https://example.com/engine_video' },
+                    { id: 'lesson2', name: 'Flight Controls', type: 'document', content: 'https://example.com/flight_controls_doc' },
+                    { id: 'lesson3', name: 'Interactive Cockpit', type: 'interactive', content: 'https://example.com/cockpit_sim' },
+                ],
+            },
+            {
+                id: 'module2',
+                name: 'Navigation',
+                lessons: [
+                    { id: 'lesson4', name: 'Basic Navigation', type: 'document', content: 'https://example.com/basic_nav_doc' },
+                    { id: 'lesson5', name: 'Advanced Navigation', type: 'video', content: 'https://example.com/advanced_nav_video' },
+                ]
+            }
+        ],
+    },
+    {
+        id: 'program2',
+        name: 'Recurrent Training',
+        description: 'Yearly refresher course.',
+        modules: [
+            {
+                id: 'module3',
+                name: 'Emergency Procedures',
+                lessons: [
+                    { id: 'lesson6', name: 'Engine Failure', type: 'video', content: 'https://example.com/engine_failure_video' },
+                    { id: 'lesson7', name: 'Fire Suppression', type: 'document', content: 'https://example.com/fire_suppression_doc' }
+                ]
+            }
+        ]
+    }
+];
+
+const mockSessions: Session[] = [
+    {
+        id: 'session1',
+        programId: 'program1',
+        moduleId: 'module1',
+        status: 'scheduled',
+        trainees: [mockTrainee],
+        startTime: new Date(Date.now() + 3600000), // 1 hour from now
+        endTime: new Date(Date.now() + 7200000),   // 2 hours from now
+    },
+    {
+        id: 'session2',
+        programId: 'program1',
+        moduleId: 'module2',
+        status: 'in progress',
+        trainees: [mockTrainee],
+        startTime: new Date(),
+        endTime: new Date(Date.now() + 7200000),
+    }
+];
+
+const mockAssessments: Assessment[] = [
+    {
+        id: 'assessment1',
+        traineeId: mockTrainee.id,
+        sessionId: 'session1',
+        moduleId: 'module1',
+        instructorId: mockUser.id,
+        date: new Date(),
+        status: 'pending',
+        grades: [],
+    },
+    {
+        id: 'assessment2',
+        traineeId: mockTrainee.id,
+        sessionId: 'session2',
+        moduleId: 'module2',
+        instructorId: mockUser.id,
+        date: new Date(),
+        status: 'graded',
+        grades: [
+            { competencyAreaId: 'comp1', score: 3, comments: 'Good understanding' },
+            { competencyAreaId: 'comp2', score: 4, comments: 'Excellent performance' },
+        ],
+    },
+];
+
+const mockDocuments: Document[] = [
+    { id: 'doc1', title: 'Aircraft Flight Manual', description: 'Detailed manual for the aircraft.', fileType: 'pdf', url: 'https://example.com/afm.pdf' },
+    { id: 'doc2', title: 'Standard Operating Procedures', description: 'SOP for normal operations.', fileType: 'pdf', url: 'https://example.com/sop.pdf' },
+];
+
+const mockNotifications: Notification[] = [
+    { id: 'notif1', type: 'info', content: 'Session 1 is starting in 30 minutes.', recipientId: mockUser.id, createdAt: new Date(), status: 'sent' },
+    { id: 'notif2', type: 'warning', content: 'Assessment 1 is due tomorrow.', recipientId: mockUser.id, createdAt: new Date(), status: 'sent' },
+];
+
+const mockResources: Resource[] = [
+    { id: 'sim1', name: 'Simulator A', type: 'simulator', location: 'Building 1', capacity: 1 },
+    { id: 'room1', name: 'Classroom 1', type: 'classroom', location: 'Building 2', capacity: 20 },
+];
+
+// Utility function (Replace with actual implementation)
+const formatDate = (date: Date) => {
+    return format(date, 'PPPpp');
+};
+
+const App: React.FC = () => {
+    const [user, setUser] = useState<User | null>(mockUser); // Replace with actual auth
+    const [trainingPrograms, setTrainingPrograms] = useState<TrainingProgram[]>(mockTrainingPrograms);
+    const [sessions, setSessions] = useState<Session[]>(mockSessions);
+    const [assessments, setAssessments] = useState<Assessment[]>(mockAssessments);
+    const [documents, setDocuments] = useState<Document[]>(mockDocuments);
+    const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
+    const [resources, setResources] = useState<Resource[]>(mockResources);
+    const [selectedProgram, setSelectedProgram] = useState<TrainingProgram | null>(null);
+    const [currentSession, setCurrentSession] = useState<Session | null>(null);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState('dashboard');
+    const [isCreatingSession, setIsCreatingSession] = useState(false);
+    const [newSession, setNewSession] = useState<Partial<Session>>({
+        programId: '',
+        moduleId: '',
+        startTime: new Date(),
+        endTime: new Date(),
+        trainees: [],
+    });
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isEditingAssessment, setIsEditingAssessment] = useState(false);
+    const [editedAssessment, setEditedAssessment] = useState<Assessment | null>(null);
+    const [showNotifications, setShowNotifications] = useState(false);
+
+    // --- Navigation Handlers ---
+    const handleLogout = () => {
+        setUser(null); // Replace with actual logout logic
+        setActiveTab('dashboard');
+    };
+
+    const handleProgramSelect = (programId: string) => {
+        const program = trainingPrograms.find((p) => p.id === programId);
+        setSelectedProgram(program || null);
+        setActiveTab('programs');
+    };
+
+    const handleSessionSelect = (sessionId: string) => {
+        const session = sessions.find(s => s.id === sessionId);
+        setCurrentSession(session || null);
+        setActiveTab('sessions');
+    };
+
+    const handleCreateSession = () => {
+        setIsCreatingSession(true);
+        setNewSession({
+            programId: trainingPrograms[0]?.id || '', // Default to the first program
+            moduleId: trainingPrograms[0]?.modules[0]?.id || '', // Default to the first module
+            startTime: new Date(),
+            endTime: new Date(Date.now() + 3600000),
+            trainees: [], // Initialize with empty array
+        });
+    };
+
+    const handleSaveNewSession = () => {
+        if (newSession.programId && newSession.moduleId && newSession.startTime && newSession.endTime) {
+            const createdSession: Session = {
+                id: `session-${Date.now()}`, // Generate unique ID
+                programId: newSession.programId,
+                moduleId: newSession.moduleId,
+                status: 'scheduled', // Set initial status
+                trainees: newSession.trainees || [],
+                startTime: newSession.startTime,
+                endTime: newSession.endTime,
+            };
+
+            setSessions([...sessions, createdSession]);
+            setIsCreatingSession(false);
+            setNewSession({}); // Reset the form
+        } else {
+            alert('Please fill in all session details.'); // Basic validation
+        }
+    };
+
+    const handleCancelNewSession = () => {
+        setIsCreatingSession(false);
+        setNewSession({});
+    };
+
+    const handleAssessmentEdit = (assessmentId: string) => {
+        const assessmentToEdit = assessments.find(a => a.id === assessmentId);
+        if (assessmentToEdit) {
+            setEditedAssessment(assessmentToEdit);
+            setIsEditingAssessment(true);
+        }
+    };
+
+    const handleAssessmentSave = () => {
+        if (editedAssessment) {
+            // Update the assessment in the list
+            setAssessments(assessments.map(a => a.id === editedAssessment.id ? editedAssessment : a));
+            setIsEditingAssessment(false);
+            setEditedAssessment(null);
+        }
+    };
+
+    const handleAssessmentCancel = () => {
+        setIsEditingAssessment(false);
+        setEditedAssessment(null);
+    };
+
+    const filteredDocuments = documents.filter(doc =>
+        doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        doc.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const filteredPrograms = trainingPrograms.filter(program =>
+        program.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        program.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const filteredSessions = sessions.filter(session => {
+        const program = trainingPrograms.find(p => p.id === session.programId);
+        if (!program) return false;
+        return program.name.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+
+    const filteredUsers = [mockUser, mockTrainee].filter(user =>
+        user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+
+    // --- UI Components ---
+
+    const Sidebar = () => (
+        <motion.div
+            initial={{ x: '-100%' }}
+            animate={{ x: isSidebarOpen ? 0 : '-100%' }}
+            transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+            className="fixed top-0 left-0 h-screen w-64 bg-gray-900 text-white border-r border-gray-800 z-50 overflow-y-auto"
+        >
+            <div className="p-4 border-b border-gray-800">
+                <h1 className="text-xl font-bold">Pilot Training</h1>
+            </div>
+            <nav className="p-4 space-y-2">
+                <Button
+                    variant={activeTab === 'dashboard' ? 'secondary' : 'ghost'}
+                    className="w-full justify-start"
+                    onClick={() => { setActiveTab('dashboard'); setIsSidebarOpen(false); }}
+                >
+                    <Airplay className="mr-2" /> Dashboard
+                </Button>
+                <Button
+                    variant={activeTab === 'programs' ? 'secondary' : 'ghost'}
+                    className="w-full justify-start"
+                    onClick={() => { setActiveTab('programs'); setIsSidebarOpen(false); }}
+                >
+                    <Book className="mr-2" /> Training Programs
+                </Button>
+                <Button
+                    variant={activeTab === 'sessions' ? 'secondary' : 'ghost'}
+                    className="w-full justify-start"
+                    onClick={() => { setActiveTab('sessions'); setIsSidebarOpen(false); }}
+                >
+                    <Clock className="mr-2" /> Sessions
+                </Button>
+                <Button
+                    variant={activeTab === 'users' ? 'secondary' : 'ghost'}
+                    className="w-full justify-start"
+                    onClick={() => { setActiveTab('users'); setIsSidebarOpen(false); }}
+                >
+                    <Users className="mr-2" /> Users
+                </Button>
+                <Button
+                    variant={activeTab === 'documents' ? 'secondary' : 'ghost'}
+                    className="w-full justify-start"
+                    onClick={() => { setActiveTab('documents'); setIsSidebarOpen(false); }}
+                >
+                    <FileText className="mr-2" /> Documents
+                </Button>
+                <Button
+                    variant={activeTab === 'reports' ? 'secondary' : 'ghost'}
+                    className="w-full justify-start"
+                    onClick={() => { setActiveTab('reports'); setIsSidebarOpen(false); }}
+                >
+                    <BarChart className="mr-2" /> Reports
+                </Button>
+                <Button
+                    variant={activeTab === 'settings' ? 'secondary' : 'ghost'}
+                    className="w-full justify-start"
+                    onClick={() => { setActiveTab('settings'); setIsSidebarOpen(false); }}
+                >
+                    <Settings className="mr-2" /> Settings
+                </Button>
+                <Button
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={handleLogout}
+                >
+                    <LogOut className="mr-2" /> Logout
+                </Button>
+            </nav>
+        </motion.div>
+    );
+
+    const Navbar = () => (
+        <nav className="bg-gray-800 text-white p-4 flex justify-between items-center border-b border-gray-700">
+            <div className="flex items-center">
+                <Button variant="ghost" className="mr-4 text-white" onClick={() => setIsSidebarOpen(true)}>
+                    <List />
+                </Button>
+                <h1 className="text-lg font-semibold">
+                    {activeTab === 'dashboard' && 'Dashboard'}
+                    {activeTab === 'programs' && 'Training Programs'}
+                    {activeTab === 'sessions' && 'Sessions'}
+                    {activeTab === 'users' && 'Users'}
+                    {activeTab === 'documents' && 'Documents'}
+                    {activeTab === 'reports' && 'Reports'}
+                    {activeTab === 'settings' && 'Settings'}
+                </h1>
+            </div>
+            <div className="flex items-center gap-4">
+                <Input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-64 bg-gray-700 border-gray-600 text-white placeholder:text-gray-400"
+                />
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button variant="ghost" className="text-white relative" onClick={() => setShowNotifications(prev => !prev)}>
+                                <BellIcon className="h-5 w-5" />
+                                {notifications.filter(n => n.status === 'sent').length > 0 && (
+                                    <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 animate-ping" />
+                                )}
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>View Notifications</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+
+                {user && (
+                    <div className="flex items-center gap-2">
+                        <User className="h-6 w-6" />
+                        <span className="text-sm">{user.username}</span>
+                    </div>
+                )}
+            </div>
+        </nav>
+    );
+
+    const NotificationBell = () => {
+        const [localNotifications, setLocalNotifications] = useState(notifications);
+
+        const markAsRead = (id: string) => {
+            setLocalNotifications(localNotifications.map(n =>
+                n.id === id ? { ...n, status: 'read' } : n
+            ));
+        };
+
+        const markAllAsRead = () => {
+            setLocalNotifications(localNotifications.map(n => ({ ...n, status: 'read' })));
+        };
+
+        const unreadCount = localNotifications.filter(n => n.status === 'sent').length;
+
+        return (
+            <Popover open={showNotifications} onOpenChange={setShowNotifications}>
+                <PopoverTrigger asChild>
+                    <Button variant="ghost" className="text-white relative">
+                        <BellIcon className="h-5 w-5" />
+                        {unreadCount > 0 && (
+                            <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 animate-ping" />
+                        )}
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80 bg-gray-800 text-white border-gray-700" align="end">
+                    <div className="p-4 border-b border-gray-700">
+                        <h2 className="text-lg font-semibold">Notifications</h2>
+                        {unreadCount > 0 && (
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                className="text-blue-400 hover:text-blue-300 hover:bg-gray-700 float-right"
+                                onClick={markAllAsRead}
+                            >
+                                Mark All as Read
+                            </Button>
+                        )}
+                    </div>
+                    <div className="p-4 space-y-2 max-h-64 overflow-y-auto">
+                        {localNotifications.length === 0 ? (
+                            <p className="text-gray-400">No notifications.</p>
+                        ) : (
+                            localNotifications.map((notification) => (
+                                <div
+                                    key={notification.id}
+                                    className={cn(
+                                        "p-2 rounded-md border",
+                                        notification.status === 'sent'
+                                            ? "bg-gray-700 border-gray-600"
+                                            : "bg-gray-800 border-gray-700",
+                                        "flex justify-between items-start gap-4"
+                                    )}
+                                >
+                                    <div>
+                                        <div className="flex items-center gap-2 mb-1">
+                                            {notification.type === 'info' && <BellIcon className="h-4 w-4 text-blue-400" />}
+                                            {notification.type === 'warning' && <AlertTriangle className="h-4 w-4 text-yellow-400" />}
+                                            {notification.type === 'error' && <AlertTriangle className="h-4 w-4 text-red-400" />}
+                                            <span className="font-medium">
+                                                {notification.type === 'info' && 'Information'}
+                                                {notification.type === 'warning' && 'Warning'}
+                                                {notification.type === 'error' && 'Error'}
+                                            </span>
+                                        </div>
+                                        <p className="text-sm">{notification.content}</p>
+                                        <p className="text-xs text-gray-400 mt-1">
+                                            {formatDate(notification.createdAt)}
+                                        </p>
+                                    </div>
+
+                                    {notification.status === 'sent' && (
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="text-gray-400 hover:text-white"
+                                            onClick={() => markAsRead(notification.id)}
+                                        >
+                                            <X className="h-4 w-4" />
+                                        </Button>
+                                    )}
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </PopoverContent>
+            </Popover>
+        );
+    };
+
+    const Dashboard = () => (
+        <div className="p-6 space-y-6">
+            <h2 className="text-2xl font-semibold">Dashboard</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <Card className="bg-gray-800 text-white border-gray-700">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <Book className="h-5 w-5" /> Training Programs
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-3xl font-bold">{trainingPrograms.length}</p>
+                        <Button
+                            variant="outline"
+                            className="mt-4 text-blue-400 hover:text-blue-300 hover:bg-gray-700"
+                            onClick={() => setActiveTab('programs')}
+                        >
+                            View Programs
+                        </Button>
+                    </CardContent>
+                </Card>
+
+                <Card className="bg-gray-800 text-white border-gray-700">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <Clock className="h-5 w-5" /> Scheduled Sessions
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-3xl font-bold">{sessions.length}</p>
+                        <Button
+                            variant="outline"
+                            className="mt-4 text-blue-400 hover:text-blue-300 hover:bg-gray-700"
+                            onClick={() => setActiveTab('sessions')}
+                        >
+                            View Sessions
+                        </Button>
+                    </CardContent>
+                </Card>
+
+                <Card className="bg-gray-800 text-white border-gray-700">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <Users className="h-5 w-5" /> Active Users
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-3xl font-bold">2</p> {/* mock users */}
+                        <Button
+                            variant="outline"
+                            className="mt-4 text-blue-400 hover:text-blue-300 hover:bg-gray-700"
+                            onClick={() => setActiveTab('users')}
+                        >
+                            View Users
+                        </Button>
+                    </CardContent>
+                </Card>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card className="bg-gray-800 text-white border-gray-700">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <TrendingUp className="h-5 w-5" /> Recent Activity
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        {/* recent activity feed */}
+                        <div className="space-y-2 max-h-64 overflow-y-auto">
+                            {sessions.slice(-3).map(session => {
+                                const program = trainingPrograms.find(p => p.id === session.programId);
+                                const module = program?.modules.find(m => m.id === session.moduleId);
+                                return (
+                                    <div key={session.id} className="p-2 rounded-md bg-gray-700 border border-gray-600">
+                                        <p className="text-sm">
+                                            Session <span className="font-medium">{session.id}</span> ({module?.name}) for program <span className="font-medium">{program?.name}</span> is {session.status}.
+                                        </p>
+                                        <p className="text-xs text-gray-400">
+                                            {formatDate(session.startTime)} - {formatDate(session.endTime)}
+                                        </p>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card className="bg-gray-800 text-white border-gray-700">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <FileText className="h-5 w-5" /> Recent Documents
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-2 max-h-64 overflow-y-auto">
+                            {documents.slice(-3).map(doc => (
+                                <div key={doc.id} className="p-2 rounded-md bg-gray-700 border border-gray-600">
+                                    <p className="text-sm font-medium">{doc.title}</p>
+                                    <p className="text-xs text-gray-400">{doc.description}</p>
+                                    <a
+                                        href={doc.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-400 hover:text-blue-300 text-xs"
+                                    >
+                                        Open Document
+                                    </a>
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
+    );
+
+    const TrainingProgramsPage = () => (
+        <div className="p-6 space-y-6">
+            <h2 className="text-2xl font-semibold">Training Programs</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredPrograms.map((program) => (
+                    <Card
+                        key={program.id}
+                        className="bg-gray-800 text-white border-gray-700 hover:shadow-lg transition-shadow cursor-pointer"
+                        onClick={() => handleProgramSelect(program.id)}
+                    >
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                                <Book className="h-5 w-5" /> {program.name}
+                            </CardTitle>
+                            <CardDescription>{program.description}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-sm">Modules: {program.modules.length}</p>
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
+            {selectedProgram && (
+                <Card className="bg-gray-800 text-white border-gray-700">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <Book className="h-5 w-5" /> {selectedProgram.name}
+                        </CardTitle>
+                        <CardDescription>{selectedProgram.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <h3 className="text-lg font-semibold">Modules</h3>
+                        <div className="space-y-2">
+                            {selectedProgram.modules.map((module) => (
+                                <div key={module.id} className="p-2 rounded-md bg-gray-700 border border-gray-600">
+                                    <h4 className="text-md font-medium">{module.name}</h4>
+                                    <p className="text-sm">Lessons: {module.lessons.length}</p>
+                                    <div className="mt-2 space-y-1">
+                                        {module.lessons.map(lesson => (
+                                            <div key={lesson.id} className="p-1 rounded-md bg-gray-800 border border-gray-700 flex items-center gap-2">
+                                                {lesson.type === 'video' && <Video className="h-4 w-4" />}
+                                                {lesson.type === 'document' && <FileText className="h-4 w-4" />}
+                                                {lesson.type === 'interactive' && <Monitor className="h-4 w-4" />}
+                                                <span className="text-sm">{lesson.name}</span>
+                                                <a
+                                                    href={lesson.content}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-blue-400 hover:text-blue-300 text-xs ml-auto"
+                                                >
+                                                    View
+                                                </a>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
+        </div>
+    );
+
+    const SessionsPage = () => (
+        <div className="p-6 space-y-6">
+            <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-semibold">Sessions</h2>
+                <Button
+                    onClick={handleCreateSession}
+                    className="bg-blue-500 text-white hover:bg-blue-600"
+                >
+                    <PlusCircle className="mr-2" /> Create Session
+                </Button>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {filteredSessions.map(session => {
+                    const program = trainingPrograms.find(p => p.id === session.programId);
+                    const module = program?.modules.find(m => m.id === session.moduleId);
+                    return (
+                        <Card
+                            key={session.id}
+                            className="bg-gray-800 text-white border-gray-700 hover:shadow-lg transition-shadow cursor-pointer"
+                            onClick={() => handleSessionSelect(session.id)}
+                        >
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2">
+                                    <Clock className="h-5 w-5" /> Session {session.id}
+                                </CardTitle>
+                                <CardDescription>
+                                    Program: {program?.name}, Module: {module?.name}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-sm">Status: {session.status}</p>
+                                <p className="text-sm">
+                                    Time: {formatDate(session.startTime)} - {formatDate(session.endTime)}
+                                </p>
+                                <p className="text-sm">
+                                    Trainees: {session.trainees.length}
+                                </p>
+                            </CardContent>
+                        </Card>
+                    )
+                })}
+            </div>
+
+            {currentSession && (
+                <Card className="bg-gray-800 text-white border-gray-700">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <Clock className="h-5 w-5" /> Session {currentSession.id}
+                        </CardTitle>
+                        <CardDescription>
+                            Program: {trainingPrograms.find(p => p.id === currentSession.programId)?.name},
+                            Module: {trainingPrograms.find(p => p.id === currentSession.programId)?.modules.find(m => m.id === currentSession.moduleId)?.name}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <h3 className="text-lg font-semibold">Session Details</h3>
+                        <div className="space-y-2">
+                            <p className="text-sm">Status: {currentSession.status}</p>
+                            <p className="text-sm">
+                                Time: {formatDate(currentSession.startTime)} - {formatDate(currentSession.endTime)}
+                            </p>
+                            <p className="text-sm">
+                                Trainees: {currentSession.trainees.map(t => t.username).join(', ')}
+                            </p>
+                        </div>
+                        <h3 className="text-lg font-semibold">Assessments</h3>
+                        {assessments.filter(a => a.sessionId === currentSession.id).map(assessment => (
+                            <Card key={assessment.id} className="bg-gray-700 text-white border-gray-600">
+                                <CardHeader>
+                                    <CardTitle>Assessment {assessment.id}</CardTitle>
+                                    <CardDescription>
+                                        Trainee: {mockTrainee.username}, Date: {formatDate(assessment.date)}
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <p>Status: {assessment.status}</p>
+                                    {assessment.status === 'graded' && (
+                                        <div className="mt-4">
+                                            <h4 className="font-medium">Grades:</h4>
+                                            {assessment.grades.map((grade, index) => (
+                                                <div key={index} className="mb-2">
+                                                    <p>Competency: {grade.competencyAreaId}</p>
+                                                    <p>Score: {grade.score} / 4</p>
+                                                    <p>Comments: {grade.comments}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                    {assessment.status === 'pending' && (
+                                        <div className="mt-4">
+                                            <p className="text-yellow-400">Assessment is pending grading.</p>
+                                            <Button
+                                                className="mt-4 bg-blue-500 text-white hover:bg-blue-600"
+                                                onClick={() => handleAssessmentEdit(assessment.id)}
+                                            >
+                                                <Edit className="mr-2" /> Grade Assessment
+                                            </Button>
+                                        </div>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </CardContent>
+                </Card>
+            )}
+
+            {isCreatingSession && (
+                <Card className="bg-gray-800 text-white border-gray-700">
+                    <CardHeader>
+                        <CardTitle>Create New Session</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300">Program</label>
+                                <Select
+                                    value={newSession.programId}
+                                    onValueChange={(value) => setNewSession({ ...newSession, programId: value })}
+                                >
+                                    <SelectTrigger className="w-full bg-gray-700 border-gray-600 text-white">
+                                        <SelectValue placeholder="Select a program" />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-gray-800 text-white border-gray-700">
+                                        {trainingPrograms.map(program => (
+                                            <SelectItem key={program.id} value={program.id}>
+                                                {program.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300">Module</label>
+                                <Select
+                                    value={newSession.moduleId}
+                                    onValueChange={(value) => setNewSession({ ...newSession, moduleId: value })}
+                                >
+                                    <SelectTrigger className="w-full bg-gray-700 border-gray-600 text-white">
+                                        <SelectValue placeholder="Select a module" />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-gray-800 text-white border-gray-700">
+                                        {trainingPrograms.find(p => p.id === newSession.programId)?.modules.map(module => (
+                                            <SelectItem key={module.id} value={module.id}>
+                                                {module.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300">Start Time</label>
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <Input
+                                            value={formatDate(newSession.startTime || new Date())}
+                                            className="w-full bg-gray-700 border-gray-600 text-white"
+                                            readOnly
+                                        />
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-auto p-0 bg-gray-800 text-white border-gray-700" align="start">
+                                        <Calendar
+                                            mode="single"
+                                            selected={newSession.startTime || new Date()}
+                                            onSelect={(date) => setNewSession({ ...newSession, startTime: date || new Date() })}
+                                            className="rounded-md border border-gray-700"
+                                            style={{ backgroundColor: '#374151', color: '#fff' }}
+                                        />
+                                    </PopoverContent>
+                                </Popover>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300">End Time</label>
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <Input
+                                            value={formatDate(newSession.endTime || new Date())}
+                                            className="w-full bg-gray-700 border-gray-600 text-white"
+                                            readOnly
+                                        />
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-auto p-0 bg-gray-800 text-white border-gray-700" align="start">
+                                        <Calendar
+                                            mode="single"
+                                            selected={newSession.endTime || new Date()}
+                                            onSelect={(date) => setNewSession({ ...newSession, endTime: date || new Date() })}
+                                            className="rounded-md border border-gray-700"
+                                            style={{ backgroundColor: '#374151', color: '#fff' }}
+                                        />
+                                    </PopoverContent>
+                                </Popover>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300">Trainees</label>
+                            <Select
+                                multiple
+                                value={newSession.trainees?.map(t => t.id)}
+                                onValueChange={(values) => {
+                                    const selectedTrainees = [mockTrainee].filter(t => values.includes(t.id)); // Replace with actual user fetching
+                                    setNewSession({ ...newSession, trainees: selectedTrainees });
+                                }}
+                            >
+                                <SelectTrigger className="w-full bg-gray-700 border-gray-600 text-white">
+                                    <SelectValue placeholder="Select trainees" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-gray-800 text-white border-gray-700">
+                                    {[mockTrainee].map(trainee => ( // Replace with actual user list
+                                        <SelectItem key={trainee.id} value={trainee.id}>
+                                            {trainee.username}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className="flex justify-end gap-4 mt-4">
+                            <Button
+                                variant="outline"
+                                className="text-gray-300 hover:text-white hover:bg-gray-700"
+                                onClick={handleCancelNewSession}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                className="bg-blue-500 text-white hover:bg-blue-600"
+                                onClick={handleSaveNewSession}
+                            >
+                                <Save className="mr-2" /> Save
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
+
+            {isEditingAssessment && editedAssessment && (
+                <Card className="bg-gray-800 text-white border-gray-700">
+                    <CardHeader>
+                        <CardTitle>Grade Assessment {editedAssessment.id}</CardTitle>
+                        <CardDescription>
+                            Trainee: {mockTrainee.username}, Date: {formatDate(editedAssessment.date)}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <h3 className="text-lg font-semibold">Grades</h3>
+                        {editedAssessment.grades.map((grade, index) => (
+                            <div key={index} className="p-2 rounded-md bg-gray-700 border border-gray-600 space-y-2">
+                                <label className="block text-sm font-medium text-gray-300">Competency Area {index + 1}</label>
+                                <Input
+                                    type="number"
+                                    min="1"
+                                    max="4"
+                                    value={grade.score}
+                                    onChange={(e) => {
+                                        const newScore = parseInt(e.target.value);
+                                        if (newScore >= 1 && newScore <= 4) {
+                                            const newGrades = editedAssessment.grades.map((g, i) =>
+                                                i === index ? { ...g, score: newScore } : g
+                                            );
+                                            setEditedAssessment({ ...editedAssessment, grades: newGrades });
+                                        }
+                                    }}
+                                    className="w-full bg-gray-800 border-gray-600 text-white"
+                                />
+                                <Textarea
+                                    placeholder="Enter comments..."
+                                    value={grade.comments}
+                                    onChange={(e) => {
+                                        const newComments = e.target.value;
+                                        const newGrades = editedAssessment.grades.map((g, i) =>
+                                            i === index ? { ...g, comments: newComments } : g
+                                        );
+                                        setEditedAssessment({ ...editedAssessment, grades: newGrades });
+                                    }}
+                                    className="w-full bg-gray-800 border-gray-600 text-white"
+                                />
+                            </div>
+                        ))}
+                        {editedAssessment.grades.length < 3 && ( // Limit to max 3 grades
+                            <Button
+                                variant="outline"
+                                className="mt-4 text-blue-400 hover:text-blue-300 hover:bg-gray-700"
+                                onClick={() => {
+                                    setEditedAssessment({
+                                        ...editedAssessment,
+                                        grades: [...editedAssessment.grades, { competencyAreaId: `comp${editedAssessment.grades.length + 1}`, score: 1, comments: '' }], // Initialize with default values
+                                    });
+                                }}
+                            >
+                                <PlusCircle className="mr-2" /> Add Competency Area
+                            </Button>
+                        )}
+                        <div className="flex justify-end gap-4 mt-4">
+                            <Button
+                                variant="outline"
+                                className="text-gray-300 hover:text-white hover:bg-gray-700"
+                                onClick={handleAssessmentCancel}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                className="bg-green-500 text-white hover:bg-green-600"
+                                onClick={handleAssessmentSave}
+                            >
+                                <Save className="mr-2" /> Save Grades
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
+        </div>
+    );
+
+    const UsersPage = () => (
+        <div className="p-6 space-y-6">
+            <h2 className="text-2xl font-semibold">Users</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredUsers.map((user) => (
+                    <Card key={user.id} className="bg-gray-800 text-white border-gray-700">
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                                <User className="h-5 w-5" /> {user.firstName} {user.lastName}
+                            </CardTitle>
+                            <CardDescription>{user.role}</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                            <p className="text-sm">Username: {user.username}</p>
+                            <p className="text-sm">Email: {user.email}</p>
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
+        </div>
+    )
+
+    const DocumentsPage = () => (
+        <div className="p-6 space-y-6">
+            <h2 className="text-2xl font-semibold">Documents</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {filteredDocuments.map(doc => (
+                    <Card key={doc.id} className="bg-gray-800 text-white border-gray-700">
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                                <FileText className="h-5 w-5" /> {doc.title}
+                            </CardTitle>
+                            <CardDescription>{doc.description}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-sm">Type: {doc.fileType}</p>
+                            <a
+                                href={doc.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-400 hover:text-blue-300 text-sm"
+                            >
+                                Open Document
+                            </a>
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
+        </div>
+    )
+
+    const ReportsPage = () => (
+        <div className="p-6 space-y-6">
+            <h2 className="text-2xl font-semibold">Reports</h2>
+            <p className="text-gray-400">
+                Report generation is under development.  This will include functionality to generate
+                custom reports on training progress, assessment results, and other key metrics.
+            </p>
+        </div>
+    )
+
+    const SettingsPage = () => (
+        <div className="p-6 space-y-6">
+            <h2 className="text-2xl font-semibold">Settings</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card className="bg-gray-800 text-white border-gray-700">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <KeyRound className="h-5 w-5" /> Account Settings
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <p className="text-sm">
+                            Manage your account details, including password, email, and profile information.
+                        </p>
+                        <Button className="bg-blue-500 text-white hover:bg-blue-600">
+                            Edit Profile
+                        </Button>
+                    </CardContent>
+                </Card>
+
+                <Card className="bg-gray-800 text-white border-gray-700">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <MessageSquare className="h-5 w-5" /> Notification Preferences
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <p className="text-sm">
+                            Customize your notification settings, including email, SMS, and in-app alerts.
+                        </p>
+                        <Button className="bg-blue-500 text-white hover:bg-blue-600">
+                            Edit Preferences
+                        </Button>
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
+    )
+
+    return (
+        <div className="flex h-screen bg-gray-950">
+            <Sidebar />
+            <div className="flex-1 overflow-y-auto">
+                <Navbar />
+                {activeTab === 'dashboard' && <Dashboard />}
+                {activeTab === 'programs' && <TrainingProgramsPage />}
+                {activeTab === 'sessions' && <SessionsPage />}
+                {activeTab === 'users' && <UsersPage />}
+                {activeTab === 'documents' && <DocumentsPage />}
+                {activeTab === 'reports' && <ReportsPage />}
+                {activeTab === 'settings' && <SettingsPage />}
+            </div>
+            <NotificationBell />
+        </div>
+    );
+};
+
+export default App;
+

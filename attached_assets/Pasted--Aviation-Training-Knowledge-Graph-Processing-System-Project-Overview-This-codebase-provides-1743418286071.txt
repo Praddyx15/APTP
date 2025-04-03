@@ -1,0 +1,98 @@
+# Aviation Training Knowledge Graph Processing System
+
+## Project Overview
+This codebase provides a complete implementation of a document processing system for aviation training knowledge graph generation. The system analyzes uploaded aviation training documents, extracts key concepts and their relationships, and generates a structured knowledge graph for visualization and querying.
+
+## Key Features
+- Extracts aviation training concepts from uploaded documents (PDF, DOCX, TXT)
+- Identifies relationships between concepts using NLP techniques
+- Generates graph data structures (nodes & edges) with proper typing
+- Stores knowledge graph data in a PostgreSQL database using Drizzle ORM
+- Provides RESTful API endpoints for knowledge graph access and search
+- Domain-specific focus on aviation training concepts and relationships
+- Production-ready implementation with error handling and logging
+
+## How to Implement
+
+### 1. File Structure
+Place the provided files in your project structure:
+```
+server/
+├── services/
+│   ├── document-analysis-service.ts  (Processes documents and generates knowledge graphs)
+│   ├── nlp-service.ts               (Extracts aviation concepts and relationships)
+│   └── knowledge-graph-service.ts    (Retrieves and manages knowledge graph data)
+├── routes/
+│   ├── document-routes.ts           (Document upload and processing endpoints)
+│   └── knowledge-graph-routes.ts    (Knowledge graph data access endpoints)
+├── database/
+│   └── schema.ts                    (Database schema for documents and knowledge graph)
+├── types/
+│   ├── document.ts                  (Document-related type definitions)
+│   └── knowledge-graph.ts           (Knowledge graph type definitions)
+└── utils/
+    └── logger.ts                    (Logging utility)
+```
+
+### 2. Dependencies
+Ensure these dependencies are installed:
+```
+express, multer, drizzle-orm, pg, compromise, compromise-aviation, 
+langchain, pdf-parse, mammoth, uuid
+```
+
+### 3. Database Setup
+- Create the required PostgreSQL database
+- Run the schema migrations using Drizzle ORM
+- Set up environment variables for database connections
+
+### 4. Integration with Existing Code
+- Add document routes to your Express router
+- Add knowledge graph routes to your Express router
+- Create an upload directory for document storage
+- Connect the document upload UI to the API endpoints
+
+### 5. Testing
+- Upload a sample aviation training document
+- Check processing status via the API
+- Retrieve and visualize the generated knowledge graph
+
+## Customization Options
+
+### Aviation Domain Concepts
+The system comes pre-configured with aviation training concepts, but you can extend these in `nlp-service.ts`:
+- Add more aviation terms to the `AVIATION_TERMS` object
+- Add new categories for different training domains
+- Customize relationship patterns in `RELATIONSHIP_PATTERNS`
+
+### Visualization
+The API provides structured data that can be visualized using:
+- D3.js for custom graph visualizations
+- Cytoscape.js for interactive network graphs
+- VIS.js for simple network diagrams
+
+## Troubleshooting
+
+If the knowledge graph isn't being generated:
+1. Check document processing status in the database
+2. Verify text extraction from the document succeeded
+3. Confirm NLP processing completed successfully
+4. Check for errors in the server logs
+
+Common fixes:
+- Ensure document is properly formatted and contains aviation terminology
+- Verify database connection and schema setup
+- Check file permissions on the upload directory
+- Increase logging level for more detailed diagnostics
+
+## Next Steps After Implementation
+
+1. Add more sophisticated NLP processing for better concept extraction
+2. Implement user feedback for improving concept detection
+3. Add visualization controls for filtering and exploring the graph
+4. Create recommendations based on knowledge graph relationships
+5. Expand to additional document types (HTML, PPT, etc.)
+
+---
+
+This system should address the current issue where "Documents upload successfully, but the knowledge graph isn't being generated." The implementation provides comprehensive document processing with aviation domain-specific knowledge extraction.

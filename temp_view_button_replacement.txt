@@ -1,0 +1,11 @@
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => doc.analyzeComplete ? 
+                              navigate(`/document-analysis/${doc.id}`) : 
+                              handleAnalyzeDocument(doc.id)}
+                            disabled={analyzeMutation.isPending && analyzeMutation.variables?.documentId === doc.id}
+                          >
+                            {analyzeMutation.isPending && analyzeMutation.variables?.documentId === doc.id ? 
+                              "Processing..." : doc.analyzeComplete ? "View Analysis" : "Analyze"}
+                          </Button>

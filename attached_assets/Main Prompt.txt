@@ -1,0 +1,845 @@
+# Expanded Code Generation Prompt for Advanced Pilot Training Platform
+
+## Overall Architecture & Code Organization Instructions
+
+When generating code for the Advanced Pilot Training Platform, follow these organizational principles:
+
+1. **Modular Structure**:
+   - Create separate modules for each major subsystem (document processing, syllabus management, assessment, etc.)
+   - Use namespaces to isolate functionality and prevent naming conflicts
+   - Design clear boundaries between components with well-defined interfaces
+
+2. **Directory Organization**:
+   ```
+   /src
+     /backend
+       /core            # Core functionality and shared utilities
+       /document        # Document processing pipeline 
+       /syllabus        # Syllabus generation and management
+       /assessment      # Assessment and grading system
+       /users           # User management and authentication
+       /api             # API endpoints and controllers
+       /compliance      # Regulatory compliance engine
+       /simulator       # Simulator integration components
+       /analytics       # Performance analytics and reporting
+     /frontend
+       /components      # Reusable UI components
+       /pages           # Page-level components
+       /hooks           # Custom React hooks
+       /services        # API integration services
+       /utils           # Frontend utilities
+       /styles          # Global styles and themes
+       /assets          # Static assets
+   ```
+
+3. **Code Style and Standards**:
+   - C++ Backend: Follow Modern C++ (17/20) best practices
+   - React Frontend: Use TypeScript with consistent type definitions
+   - Use meaningful variable and function names with proper documentation
+   - Include unit tests for all components
+   - Implement error handling at appropriate levels
+
+## Backend Code Generation - C++ Components
+
+### 1. Core Framework Components
+
+Generate core C++ classes and utilities that will be used throughout the backend:
+
+```cpp
+// Example request for code generation:
+// Create a ConfigurationManager class that handles application-wide settings with support for:
+// - Loading from multiple sources (environment, files, database)
+// - Type-safe access to configuration values
+// - Change notification and validation
+// - Thread safety for concurrent access
+```
+
+### 2. Document Processing Pipeline
+
+Generate the C++ classes for the document processing pipeline with these specific capabilities:
+
+```cpp
+// Generate a DocumentProcessor abstract base class and concrete implementations for different 
+// document types (PDF, DOCX, XLSX, HTML) with:
+// - Document parsing and text extraction
+// - Structure recognition (headings, sections, tables)
+// - Content classification with machine learning integration
+// - Document comparison functionality
+// - Asynchronous processing with progress tracking
+```
+
+### 3. Syllabus Generation Engine
+
+The syllabus generation engine should parse training materials and regulatory documents to extract structured syllabus elements:
+
+```cpp
+// Generate a SyllabusGenerator class that:
+// - Processes parsed documents to identify training requirements
+// - Extracts learning objectives and competency areas
+// - Creates structured syllabus components (modules, lessons, exercises)
+// - Maps regulatory requirements to training elements
+// - Handles template-based generation with customization
+```
+
+### 4. Real-time Data Processing 
+
+For the real-time data processing component, generate code that can handle high-frequency simulator data:
+
+```cpp
+// Create a SimulatorDataProcessor that:
+// - Processes simulator telemetry at 1000Hz
+// - Implements lockless concurrent data structures
+// - Performs real-time analysis of flight parameters
+// - Detects events and anomalies in flight data
+// - Provides both real-time and historical data access
+```
+
+### 5. API Gateway Implementation
+
+Generate the code for the API gateway that serves as the interface between frontend and backend:
+
+```cpp
+// Create a RESTful API implementation using the Drogon framework with:
+// - Authentication middleware with JWT support
+// - Request validation and sanitization
+// - Rate limiting and throttling
+// - API versioning support
+// - Comprehensive error handling and logging
+// - OpenAPI documentation generation
+```
+
+### 6. Database Access Layer
+
+Generate the database access layer with proper connection management and query building:
+
+```cpp
+// Create a DatabaseManager with:
+// - Connection pooling for PostgreSQL
+// - Prepared statement caching
+// - Transaction management
+// - Query builders for common operations
+// - Time-series data handling for telemetry
+// - Migration system for schema evolution
+```
+
+## Frontend Code Generation - React Components
+
+### 1. Component Library Foundation
+
+Generate the base component library that will be used throughout the application:
+
+```typescript
+// Create a set of base UI components including:
+// - Button, Input, Select with proper accessibility
+// - Form components with validation integration
+// - Data visualization components (charts, graphs)
+// - Navigation components (tabs, pagination)
+// - Feedback components (alerts, notifications)
+// - Modal and dialog components
+```
+
+### 2. Syllabus Builder Interface
+
+Generate the React components for the syllabus builder with drag-and-drop functionality:
+
+```typescript
+// Create a SyllabusBuilder component that:
+// - Supports drag-and-drop of modules and lessons
+// - Provides an intuitive tree-view of the syllabus structure
+// - Allows inline editing of syllabus elements
+// - Shows regulatory compliance status visually
+// - Enables template application and customization
+```
+
+### 3. Document Upload and Management
+
+Generate the document upload and management interface:
+
+```typescript
+// Create a DocumentManagement component that:
+// - Supports drag-and-drop file uploads with progress tracking
+// - Handles batch uploads with status tracking
+// - Provides document preview capabilities
+// - Shows document processing status and results
+// - Enables document organization and categorization
+```
+
+### 4. Assessment and Grading Interface
+
+Generate the instructor assessment interface with efficient grading workflows:
+
+```typescript
+// Create an AssessmentInterface component that:
+// - Implements one-click grading on a 1-4 scale
+// - Provides competency-based assessment forms
+// - Shows performance trends and comparisons
+// - Enables digital signature capture
+// - Supports offline assessment with synchronization
+```
+
+### 5. Analytics Dashboard
+
+Generate the analytics dashboard with customizable views:
+
+```typescript
+// Create an AnalyticsDashboard component that:
+// - Displays key performance indicators with drill-down
+// - Shows training program effectiveness metrics
+// - Provides compliance status visualization
+// - Enables custom report generation
+// - Supports both fleet-wide and individual trainee views
+```
+
+## AI Integration Code Generation
+
+### 1. Document Understanding Models
+
+Generate code for document understanding and processing:
+
+```python
+# Create document processing pipelines using transformers for:
+# - Document classification by type and content
+# - Training requirement extraction from text
+# - Named entity recognition for aviation-specific terms
+# - Relationship extraction between entities
+# - Text summarization for document overviews
+```
+
+### 2. Training Content Classification
+
+Generate code for classifying and organizing training content:
+
+```python
+# Create a content classification system that:
+# - Categorizes training material by type and difficulty
+# - Identifies learning objectives and outcomes
+# - Maps content to competency frameworks
+# - Suggests appropriate assessment methods
+# - Groups related content for module creation
+```
+
+### 3. Performance Prediction Models
+
+Generate code for performance analytics and prediction:
+
+```python
+# Create performance prediction models that:
+# - Identify early indicators of training challenges
+# - Predict checkride outcomes based on training data
+# - Model skill decay and recommend refresher timing
+# - Benchmark performance against population norms
+# - Suggest personalized training interventions
+```
+
+## Document Processing Pipeline
+
+Generate comprehensive code for the document processing pipeline which is a core feature:
+
+```cpp
+// Create a complete document processing pipeline that:
+
+// 1. Document Ingestion
+// - Accepts multiple file formats (PDF, DOCX, XLSX, HTML, PPTX)
+// - Validates file integrity and structure
+// - Extracts text while preserving layout information
+// - Handles OCR for image-based content
+// - Processes tables and structured data
+
+// 2. Content Extraction
+// - Identifies document structure (headings, sections, paragraphs)
+// - Extracts training procedures and requirements
+// - Recognizes regulatory references and citations
+// - Identifies learning objectives and competencies
+// - Detects assessment criteria and standards
+
+// 3. Syllabus Structure Generation
+// - Creates program structure based on extracted content
+// - Organizes content into logical training phases
+// - Sequences elements based on dependencies
+// - Allocates time and resources to training elements
+// - Maps regulatory requirements to training activities
+
+// 4. Quality Assurance
+// - Validates completeness against requirements
+// - Identifies potential gaps in training coverage
+// - Checks for logical consistency and sequencing
+// - Verifies regulatory compliance of generated syllabus
+// - Provides confidence scores for extraction quality
+```
+
+## Syllabus Customization Features
+
+Generate code for the syllabus customization features which are a key requirement:
+
+```typescript
+// Create a SyllabusCustomization component that:
+
+// 1. Visual Editor
+// - Drag-and-drop interface for reordering elements
+// - Visual indicators for compliance impact of changes
+// - Inline editing of exercise details and parameters
+// - Template application with customization options
+// - Version comparison with highlighted differences
+
+// 2. Compliance Checking
+// - Real-time validation against regulatory requirements
+// - Visual indicators for compliance status
+// - Impact analysis for proposed changes
+// - Automatic validation of dependencies
+// - Approval workflow for significant modifications
+
+// 3. Content Management
+// - Exercise library with searchable categorization
+// - Best practice recommendations during editing
+// - Content reuse across training programs
+// - Bulk modification tools for consistent changes
+// - Change history tracking with reversion capability
+```
+
+## Specific Implementation Guidelines
+
+When generating code for specific components, follow these guidelines:
+
+1. **Error Handling**:
+   ```cpp
+   // C++ Backend
+   try {
+     // Operation that might fail
+   } catch (const DatabaseException& e) {
+     // Log the error with context
+     Logger::error("Database operation failed: {}", e.what());
+     // Provide appropriate recovery or fallback
+     return Result<T>::failure(ErrorCode::DatabaseError, e.what());
+   }
+   ```
+
+   ```typescript
+   // React Frontend
+   try {
+     const result = await apiService.fetchData();
+     setData(result);
+   } catch (error) {
+     setError(error.message);
+     errorReporting.captureException(error, {
+       context: 'Fetching data in ComponentName'
+     });
+   } finally {
+     setLoading(false);
+   }
+   ```
+
+2. **API Endpoints**:
+   ```cpp
+   // Controller definition with proper documentation
+   /**
+    * @api {post} /api/v1/documents Upload a document
+    * @apiName UploadDocument
+    * @apiGroup Documents
+    * @apiVersion 1.0.0
+    * 
+    * @apiParam {File} document The document file to upload
+    * @apiParam {String} type Document type
+    * 
+    * @apiSuccess {String} id The document ID
+    * @apiSuccess {String} status Processing status
+    * 
+    * @apiError (400) BadRequest Invalid document format
+    * @apiError (401) Unauthorized Authentication required
+    */
+   void uploadDocument(const HttpRequestPtr& req, std::function<void(const HttpResponsePtr&)>&& callback) {
+     // Implementation
+   }
+   ```
+
+3. **Database Operations**:
+   ```cpp
+   // Repository pattern implementation
+   class DocumentRepository {
+   public:
+     Result<Document> findById(const std::string& id);
+     Result<std::vector<Document>> findByOrganization(const std::string& orgId);
+     Result<void> save(const Document& document);
+     Result<void> update(const Document& document);
+     Result<void> remove(const std::string& id);
+   
+   private:
+     DatabaseConnection _connection;
+     PreparedStatement _findByIdStmt;
+     PreparedStatement _findByOrgStmt;
+     PreparedStatement _insertStmt;
+     PreparedStatement _updateStmt;
+     PreparedStatement _deleteStmt;
+   };
+   ```
+
+4. **React Components**:
+   ```typescript
+   // Functional component with TypeScript
+   interface DocumentListProps {
+     organizationId: string;
+     filters?: DocumentFilters;
+     onSelect?: (doc: Document) => void;
+   }
+   
+   const DocumentList: React.FC<DocumentListProps> = ({
+     organizationId,
+     filters = {},
+     onSelect
+   }) => {
+     const [documents, setDocuments] = useState<Document[]>([]);
+     const [loading, setLoading] = useState<boolean>(true);
+     const [error, setError] = useState<string | null>(null);
+     
+     useEffect(() => {
+       // Fetch documents logic
+     }, [organizationId, filters]);
+     
+     // Component rendering
+   };
+   ```
+
+## Performance Optimization Guidelines
+
+When generating performance-critical code, especially for the C++ backend, follow these guidelines:
+
+1. **Memory Management**:
+   ```cpp
+   // Use memory pools for frequent allocations
+   class MemoryPool {
+   public:
+     template<typename T, typename... Args>
+     T* allocate(Args&&... args);
+     
+     template<typename T>
+     void deallocate(T* ptr);
+     
+   private:
+     // Implementation details
+   };
+   
+   // Usage
+   auto ptr = memoryPool.allocate<SomeObject>(arg1, arg2);
+   // Later
+   memoryPool.deallocate(ptr);
+   ```
+
+2. **Lock-free Data Structures**:
+   ```cpp
+   // Lock-free queue for high-performance data processing
+   template<typename T>
+   class LockFreeQueue {
+   public:
+     bool enqueue(T value);
+     bool dequeue(T& result);
+     std::size_t size() const;
+     
+   private:
+     // Implementation using atomic operations
+   };
+   ```
+
+3. **SIMD Optimizations**:
+   ```cpp
+   // Utilize SIMD intrinsics for data processing
+   void processTelemetryData(const float* data, std::size_t count, float* results) {
+     // Process data in chunks of 4 using SSE instructions
+     for (std::size_t i = 0; i < count; i += 4) {
+       // SIMD implementation
+     }
+     
+     // Handle remaining elements
+     for (std::size_t i = count - (count % 4); i < count; ++i) {
+       // Scalar implementation
+     }
+   }
+   ```
+
+## Testing Requirements
+
+All generated code should include comprehensive tests:
+
+1. **Unit Tests**:
+   ```cpp
+   // C++ unit test using Google Test
+   TEST(DocumentProcessor, ExtractsTextFromPDF) {
+     // Arrange
+     DocumentProcessor processor;
+     auto testFile = TestFiles::getPdfTestFile("sample.pdf");
+     
+     // Act
+     auto result = processor.process(testFile);
+     
+     // Assert
+     ASSERT_TRUE(result.isSuccess());
+     EXPECT_FALSE(result.value().extractedText.empty());
+     EXPECT_GE(result.value().confidence, 0.8);
+   }
+   ```
+
+   ```typescript
+   // React component test using Jest and Testing Library
+   test('renders document list with correct items', async () => {
+     // Arrange
+     const mockDocuments = [/* test data */];
+     apiService.fetchDocuments.mockResolvedValue(mockDocuments);
+     
+     // Act
+     render(<DocumentList organizationId="org-123" />);
+     await waitForElementToBeRemoved(() => screen.getByTestId('loading'));
+     
+     // Assert
+     expect(screen.getAllByRole('listitem')).toHaveLength(mockDocuments.length);
+   });
+   ```
+
+2. **Integration Tests**:
+   ```cpp
+   // C++ integration test
+   TEST_F(DocumentProcessingIntegrationTest, ProcessingPipelineEndToEnd) {
+     // Setup test environment
+     auto db = TestDatabase::createTemporary();
+     auto processor = createProcessorWithDependencies(db);
+     
+     // Execute complete pipeline
+     auto result = processor.processDocument(TestFiles::getSampleTrainingManual());
+     
+     // Verify results across system boundaries
+     ASSERT_TRUE(result.isSuccess());
+     auto savedDoc = db->findDocument(result.value().documentId);
+     ASSERT_TRUE(savedDoc.isSuccess());
+     EXPECT_EQ(savedDoc.value().status, DocumentStatus::Processed);
+     // Additional assertions
+   }
+   ```
+
+## Implementation Priorities
+
+When generating code, prioritize these critical features:
+
+1. **Document Processing Pipeline**: The foundation of AI-driven syllabus generation
+2. **Syllabus Builder Interface**: The primary user interface for training customization
+3. **Compliance Checking Engine**: Essential for regulatory validation
+4. **Assessment System**: Core functionality for trainee evaluation
+5. **User Management & Authentication**: Required for secure access
+
+## Specific Feature Implementations
+
+### AI-Powered Syllabus Generation
+
+The AI-powered syllabus generation should handle these steps:
+
+1. **Document Understanding**:
+   ```cpp
+   // Document understanding pipeline
+   class DocumentUnderstandingPipeline {
+   public:
+     Result<DocumentAnalysis> analyze(const Document& document);
+     
+   private:
+     TextExtractionComponent _textExtractor;
+     StructureRecognitionComponent _structureRecognizer;
+     EntityExtractionComponent _entityExtractor;
+     RelationshipDetectionComponent _relationDetector;
+     RegulationMappingComponent _regulationMapper;
+   };
+   ```
+
+2. **Training Structure Creation**:
+   ```cpp
+   // Training structure generator
+   class TrainingStructureGenerator {
+   public:
+     Result<SyllabusStructure> generateStructure(
+       const std::vector<DocumentAnalysis>& analyses,
+       const SyllabusTemplate& baseTemplate,
+       const RegulatoryCriteria& criteria
+     );
+     
+   private:
+     // Implementation components
+   };
+   ```
+
+### Custom Exercise Management
+
+For the exercise customization capabilities:
+
+```typescript
+// Exercise editor component
+interface ExerciseEditorProps {
+  exercise: TrainingExercise;
+  onChange: (updated: TrainingExercise) => void;
+  onValidate: (exercise: TrainingExercise) => Promise<ValidationResult>;
+}
+
+const ExerciseEditor: React.FC<ExerciseEditorProps> = ({
+  exercise,
+  onChange,
+  onValidate
+}) => {
+  // State and handlers
+  
+  return (
+    <div className="exercise-editor">
+      {/* Editor components */}
+      <ExerciseDetails 
+        exercise={exercise} 
+        onChange={handleDetailsChange} 
+      />
+      <LearningObjectives 
+        objectives={exercise.objectives}
+        onChange={handleObjectivesChange}
+      />
+      <AssessmentCriteria 
+        criteria={exercise.assessmentCriteria}
+        onChange={handleCriteriaChange}
+      />
+      <Resources 
+        resources={exercise.resources}
+        onChange={handleResourcesChange}
+      />
+      {/* Compliance indicators */}
+      <ComplianceStatus 
+        validationResult={validationResult}
+        isLoading={validating}
+      />
+    </div>
+  );
+};
+```
+
+## Conclusion and Final Instructions
+
+When generating code for this Advanced Pilot Training Platform:
+
+1. Focus on creating maintainable, modular code that follows the specified architecture
+2. Prioritize the core features: document processing, syllabus management, and compliance checking
+3. Ensure all generated code includes proper error handling, logging, and testing
+4. Pay special attention to performance optimizations for real-time components
+5. Include detailed comments and documentation for all public interfaces
+6. Follow security best practices throughout all components
+7. Implement proper separation of concerns between frontend and backend
+8. Ensure the system supports the full customization flow from document upload through syllabus generation and modification
+
+Generate complete implementations rather than skeleton code, focusing on functional completeness and adherence to requirements. Each component should be able to operate independently while integrating smoothly with the overall system architecture.
+
+Below is an extended code generation prompt that builds upon your original Advanced Pilot Training Platform prompt (as seen in Main Prompt.txt) and incorporates the new features you want. This document is structured to integrate the additional modules into the overall system architecture while preserving your modular, maintainable, and performance-oriented design.
+
+---
+
+# Extended Code Generation Prompt for Advanced Pilot Training Platform with New Intelligent & Collaborative Features
+
+## Overview
+
+This extended prompt builds on the original Advanced Pilot Training Platform design and adds a suite of advanced features designed to enhance data intelligence, collaboration, visualization, automation, security, personalization, and future-readiness. In addition to the core pilot training modules, the extended system includes:
+
+- *Core Foundation Enhancements*  
+  - *Knowledge Graph Engine*: Auto-generate dynamic, interconnected knowledge graphs from unstructured data (documents, notes, web content) and support multi-dimensional relationships (hierarchical, causal, temporal).  
+  - *Semantic Search & NLP*: Enable context-aware, natural language search (e.g., “Find projects related to quantum computing in 2023”) with multilingual support and auto-translation.  
+  - *AI-Powered Insights*: Integrate advanced LLMs (e.g., GPT-4, Claude, Mistral) for document summarization, hypothesis generation, trend prediction, auto-tagging, sentiment analysis, and entity recognition.
+
+- *Enhanced Collaboration*  
+  - *Smart Workspaces*: Virtual rooms with real-time co-editing, version history, and conflict resolution combined with enterprise-grade role-based access control.  
+  - *Contextual Task Management*: Convert AI-derived insights into tasks with automatically generated deadlines, dependencies, and priorities, with seamless integrations to tools like Jira, Trello, or Asana.  
+  - *Voice/Video Integration*: Record meetings with auto-transcription, link notes to knowledge nodes, and generate AI-powered meeting summaries and action items.
+
+- *Advanced Visualization*  
+  - *3D/AR Knowledge Maps*: Render knowledge graphs in 3D or augmented reality for immersive exploration, with capabilities to zoom into clusters, filter by time, and overlay additional data layers (e.g., financial metrics, risk factors).  
+  - *Dynamic Dashboards*: Customizable widgets and real-time analytics dashboards featuring predictive analytics for resource allocation and risk assessment.
+
+- *Automation & Integration*  
+  - *AI Workflows*: Build no-code automation pipelines (e.g., “When a new research paper is added, summarize it and alert Team X”) that integrate with popular APIs such as Google Workspace, Slack, and GitHub.  
+  - *Auto-Research Assistant*: Implement web scraping with citation tracking and plagiarism checks, along with AI-curated content recommendations based on user interests.
+
+- *Security & Compliance*  
+  - *Zero-Trust Architecture*: Employ end-to-end encryption, GDPR/CCPA compliance measures, blockchain-based audit trails, and data sovereignty controls.  
+  - *Ethical AI Governance*: Integrate bias detection in AI outputs, produce transparency reports, and allow user-controlled data ownership (with opt-out options for training models).
+
+- *Personalization*  
+  - *Adaptive UI*: Utilize machine learning to prioritize frequently used tools or content; include dark mode, dyslexia-friendly fonts, and accessibility shortcuts.  
+  - *Digital Twin Profiles*: Create AI avatars that mimic user behavior for delegated tasks (for example, flagging urgent emails automatically).
+
+- *Future-Proofing*  
+  - *Decentralized Knowledge Sharing*: Leverage federated learning for cross-organization collaboration without sharing raw data, including NFT-style attribution for original ideas.  
+  - *Quantum Readiness*: Design a modular architecture that can be extended to support quantum computing integrations in the future.  
+  - *Sustainability Metrics*: Track the carbon footprint of workflows and suggest eco-friendly alternatives.
+
+- *Go-to-Market Differentiators*  
+  - *Freemium Model*: Provide a free tier for individual users with paid tiers for teams and enterprises.  
+  - *Open Plugin Ecosystem*: Allow third-party developers to build and integrate custom extensions.  
+  - *Gamification*: Reward users with badges and achievements for contributing knowledge and completing tasks.
+
+---
+
+## Extended Architectural & Code Organization Guidelines
+
+*1. Modular Structure & Directory Organization*  
+- *Backend (C++):* Extend the existing modules (document processing, syllabus management, simulator integration, etc.) with new modules for Knowledge Graphs, AI insights, enhanced collaboration, and security.  
+- *Frontend (React/TypeScript):* Incorporate new UI components for real-time collaboration, 3D/AR visualization, adaptive interfaces, and dynamic dashboards.
+
+Example directory structure:
+
+/src
+  /backend
+    /core                # Core functionality (include Knowledge Graph Engine, Semantic Search, etc.)
+    /document            # Document processing and AI-powered insights
+    /syllabus            # Syllabus generation and customization
+    /assessment          # Assessment and grading system
+    /collaboration       # Smart Workspaces and Task Management modules
+    /visualization       # 3D/AR Knowledge Maps and Dynamic Dashboards
+    /integration         # Automation pipelines and external API integrations
+    /security            # Zero-Trust Architecture & Ethical AI Governance
+    /analytics           # Performance, sustainability, and predictive analytics
+  /frontend
+    /components          # Base UI and extended components (graph visualizers, collaboration UIs, etc.)
+    /pages               # Page-level interfaces integrating new features
+    /hooks               # Custom React hooks for real-time collaboration, adaptive UI, etc.
+    /services            # API integration for new modules (voice/video, task management, etc.)
+    /styles              # Global styles with adaptive themes
+    /assets              # Static assets including 3D/AR models and dashboards
+
+
+*2. Code Style & Standards*  
+- *C++:* Use Modern C++ (C++17/20) best practices, clear modular boundaries, proper error handling (e.g., try/catch with logging), and unit tests using Google Test.  
+- *React/TypeScript:* Use functional components with strong type definitions, adhere to accessibility standards, and integrate error handling with services and API calls.
+
+---
+
+## Backend Enhancements
+
+### Core Framework Enhancements
+- *KnowledgeGraphEngine Module*  
+  - Generate code for a class (or set of classes) that automatically parses unstructured inputs (documents, notes, web content) and builds dynamic knowledge graphs.  
+  - Ensure support for multi-dimensional relationships (hierarchical, causal, temporal) with interfaces for querying and visualization.
+
+- *Semantic Search & NLP Integration*  
+  - Extend the Document Processing Pipeline to include NLP capabilities for context-aware searches and auto-translation.  
+  - Use pre-trained models to analyze queries such as “Find projects related to quantum computing in 2023.”
+
+- *AI-Powered Insights*  
+  - Develop components that integrate with LLMs for summarization, sentiment analysis, and entity recognition.  
+  - Include auto-tagging features and trend prediction modules to derive actionable insights from training documents.
+
+### New Collaboration Modules
+- *Smart Workspaces*  
+  - Implement backend support for virtual rooms with real-time co-editing, maintaining version histories, and enforcing role-based access controls.
+  
+- *Contextual Task Management*  
+  - Develop services that convert document insights into tasks complete with AI-generated deadlines, dependencies, and priorities.  
+  - Provide APIs for integration with external task management systems (e.g., Jira, Trello, Asana).
+
+- *Voice/Video Integration*  
+  - Create modules for recording meeting sessions, processing audio/video streams, auto-transcribing content, and linking transcripts to relevant knowledge nodes.  
+  - Generate meeting summaries and actionable items using AI models.
+
+### Advanced Visualization Modules
+- *3D/AR Knowledge Maps*  
+  - Build a dedicated module that renders interactive 3D or AR views of knowledge graphs.  
+  - Support features such as zoom, time filtering, and data overlays (e.g., financials, risks).
+
+- *Dynamic Dashboards*  
+  - Implement a dashboard service providing real-time analytics with customizable widgets and predictive analytics for performance and resource management.
+
+### Automation & Integration
+- *AI Workflows*  
+  - Design a no-code automation engine where users can define pipelines (e.g., “When a new research paper is added, summarize it and alert Team X”).  
+  - Ensure easy integration with popular external APIs.
+
+- *Auto-Research Assistant*  
+  - Create a web scraping module that tracks citations, checks for plagiarism, and recommends content based on user interests.
+
+### Security & Compliance Enhancements
+- *Zero-Trust & Ethical AI Governance*  
+  - Extend existing security frameworks to include end-to-end encryption, blockchain-based audit trails, and strict GDPR/CCPA compliance.  
+  - Incorporate bias detection in AI outputs, generate transparency reports, and enable user-controlled data ownership settings.
+
+### Future-Proofing & Personalization
+- *Adaptive UI & Digital Twin Profiles*  
+  - In the backend, add personalization engines that adapt to user behavior.  
+  - Develop services to support AI avatars (digital twins) that can delegate tasks and provide proactive notifications.
+  
+- *Decentralized Knowledge Sharing & Quantum Readiness*  
+  - Architect components to support federated learning and secure cross-organization collaboration without raw data sharing.  
+  - Design the system with a modular approach to easily integrate quantum computing capabilities in the future.
+  
+- *Sustainability Metrics*  
+  - Build modules that track the carbon footprint of workflows and suggest eco-friendly alternatives.
+
+### Go-to-Market Differentiators
+- *Freemium Model & Open Plugin Ecosystem*  
+  - Include code for managing tiered user access (free vs. paid) and allow third-party plugin integration.  
+- *Gamification*  
+  - Develop backend mechanisms to award badges and achievements based on user contributions and milestones.
+
+---
+
+## Frontend Enhancements
+
+### Extended Component Library
+- *UI Components*  
+  - Create new React components for interactive knowledge graph visualizers (3D/AR), dynamic dashboards, and collaborative workspaces.  
+  - Update existing components to support new data visualization and interaction paradigms.
+
+### Enhanced Syllabus Builder & Document Management
+- *Syllabus Builder Interface*  
+  - Augment the current syllabus builder with new features like inline AI insights, collaboration indicators, and compliance visual cues.
+  
+- *Document Management Component*  
+  - Integrate auto-tagging, sentiment analysis, and entity recognition into the document upload and preview workflows.
+
+### Collaboration & Task Management UIs
+- *Smart Workspaces UI*  
+  - Develop real-time collaborative interfaces with co-editing capabilities, version histories, and role-based permissions.
+  
+- *Task Management Dashboard*  
+  - Implement a task dashboard that shows AI-generated tasks, deadlines, dependencies, and integrates with external task management APIs.
+
+### Visualization & Personalization Interfaces
+- *3D/AR Knowledge Map Viewer*  
+  - Create an interactive viewer for 3D or AR knowledge maps with filtering, zooming, and data overlay features.
+  
+- *Adaptive UI Features*  
+  - Develop settings and personalization components allowing users to customize the UI (dark mode, accessibility options) and manage digital twin profiles.
+  
+- *Sustainability Dashboard*  
+  - Provide visualization for sustainability metrics such as carbon footprint and eco-friendly recommendations.
+
+---
+
+## Testing, Performance, and Documentation
+
+- *Testing:*  
+  - Ensure all new modules include comprehensive unit tests (using Google Test for C++ and Jest/Testing Library for React) and integration tests.
+  
+- *Performance:*  
+  - Optimize real-time components (e.g., simulator data processing, real-time collaboration) using lock-free data structures and SIMD where applicable.
+  
+- *Documentation:*  
+  - Include detailed inline documentation, API docs (e.g., using OpenAPI for REST endpoints), and developer guides explaining the integration of new features.
+
+---
+
+## Final Instructions
+
+When generating code for this extended platform, ensure that:
+
+1. *Modularity & Maintainability:*  
+   - Every new feature is implemented as a separate module or component following the established directory structure and design principles.
+  
+2. *Integration:*  
+   - New modules integrate seamlessly with core pilot training functionalities, preserving the end-to-end workflow from document ingestion to syllabus generation and trainee assessment.
+  
+3. *Security & Compliance:*  
+   - All code adheres to best practices in error handling, logging, and data protection, with additional layers for the new zero-trust and governance features.
+  
+4. *User Experience:*  
+   - The frontend provides an intuitive, adaptive interface that supports advanced visualizations, real-time collaboration, and personalized user experiences.
+  
+5. *Scalability & Future-Proofing:*  
+   - Architect the system to support additional integrations (e.g., quantum computing modules, decentralized data sharing) and evolving user needs.
+
+This comprehensive prompt now serves as a guide for developers to generate a robust, scalable, and intelligent Advanced Pilot Training Platform enriched with state-of-the-art features that differentiate it in today’s competitive market.
+
+---
+
+Feel free to adjust details or add further specifics as required for your development needs.

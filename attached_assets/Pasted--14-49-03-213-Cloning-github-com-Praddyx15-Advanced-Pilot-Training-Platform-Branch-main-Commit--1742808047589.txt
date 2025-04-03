@@ -1,0 +1,454 @@
+[14:49:03.213] Cloning github.com/Praddyx15/Advanced-Pilot-Training-Platform (Branch: main, Commit: 45a6757)
+[14:49:03.511] Previous build caches not available
+[14:49:04.054] Cloning completed: 841.000ms
+[14:49:04.140] Found .vercelignore
+[14:49:04.177] Removed 50 ignored files defined in .vercelignore
+[14:49:04.335] Running build in Washington, D.C., USA (East) – iad1
+[14:49:04.548] Running "vercel build"
+[14:49:05.003] Vercel CLI 41.4.1
+[14:49:06.314] Running "install" command: `npm install`...
+[14:49:10.633] npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+[14:49:11.300] npm warn deprecated npmlog@5.0.1: This package is no longer supported.
+[14:49:11.515] npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+[14:49:11.561] npm warn deprecated lodash.get@4.4.2: This package is deprecated. Use the optional chaining (?.) operator instead.
+[14:49:11.737] npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+[14:49:12.552] npm warn deprecated gauge@3.0.2: This package is no longer supported.
+[14:49:13.013] npm warn deprecated are-we-there-yet@2.0.0: This package is no longer supported.
+[14:49:14.270] npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+[14:49:14.319] npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+[14:49:14.650] npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+[14:49:14.672] npm warn deprecated glob@7.1.6: Glob versions prior to v9 are no longer supported
+[14:49:26.393] 
+[14:49:26.394] added 796 packages, and audited 797 packages in 20s
+[14:49:26.394] 
+[14:49:26.394] 81 packages are looking for funding
+[14:49:26.394]   run `npm fund` for details
+[14:49:26.434] 
+[14:49:26.435] 9 vulnerabilities (8 moderate, 1 high)
+[14:49:26.435] 
+[14:49:26.435] To address issues that do not require attention, run:
+[14:49:26.435]   npm audit fix
+[14:49:26.435] 
+[14:49:26.436] To address all issues possible (including breaking changes), run:
+[14:49:26.436]   npm audit fix --force
+[14:49:26.436] 
+[14:49:26.436] Some issues need review, and may require choosing
+[14:49:26.436] a different dependency.
+[14:49:26.436] 
+[14:49:26.436] Run `npm audit` for details.
+[14:49:27.815] Starting Vercel build process...
+[14:49:27.815] Building server-side TypeScript...
+[14:49:27.816] Executing: npx tsc --project tsconfig.json
+[14:49:51.262] client/src/App.tsx(46,43): error TS2322: Type 'FC<{}>' is not assignable to type '() => Element'.
+[14:49:51.263]   Target signature provides too few arguments. Expected 1 or more, but got 0.
+[14:49:51.263] client/src/App.tsx(47,53): error TS2322: Type 'FC<{}>' is not assignable to type '() => Element'.
+[14:49:51.264]   Target signature provides too few arguments. Expected 1 or more, but got 0.
+[14:49:51.267] client/src/App.tsx(48,51): error TS2322: Type 'FC<{}>' is not assignable to type '() => Element'.
+[14:49:51.267]   Target signature provides too few arguments. Expected 1 or more, but got 0.
+[14:49:51.267] client/src/App.tsx(49,55): error TS2322: Type 'FC<{}>' is not assignable to type '() => Element'.
+[14:49:51.267]   Target signature provides too few arguments. Expected 1 or more, but got 0.
+[14:49:51.267] client/src/components/analytics/performance-metrics-chart.tsx(77,57): error TS2339: Property 'length' does not exist on type '{}'.
+[14:49:51.267] client/src/components/analytics/performance-metrics-chart.tsx(78,26): error TS7053: Element implicitly has an 'any' type because expression of type '0' can't be used to index type '{}'.
+[14:49:51.267]   Property '0' does not exist on type '{}'.
+[14:49:51.268] client/src/components/analytics/performance-metrics-chart.tsx(84,39): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ source: string; id: number; value: number; sessionId: number; traineeId: number; confidence: number | null; timestamp: Date; metricType: string; context: unknown; }[]'.
+[14:49:51.268]   Type '{}' is missing the following properties from type '{ source: string; id: number; value: number; sessionId: number; traineeId: number; confidence: number | null; timestamp: Date; metricType: string; context: unknown; }[]': length, pop, push, concat, and 35 more.
+[14:49:51.268] client/src/components/analytics/performance-metrics-chart.tsx(112,26): error TS2339: Property 'map' does not exist on type '{}'.
+[14:49:51.268] client/src/components/analytics/performance-metrics-chart.tsx(112,31): error TS7006: Parameter 'trainee' implicitly has an 'any' type.
+[14:49:51.268] client/src/components/analytics/session-analysis-table.tsx(108,67): error TS2322: Type 'string[]' is not assignable to type 'string'.
+[14:49:51.268] client/src/components/analytics/skill-decay-prediction.tsx(54,57): error TS2339: Property 'length' does not exist on type '{}'.
+[14:49:51.268] client/src/components/analytics/skill-decay-prediction.tsx(55,26): error TS7053: Element implicitly has an 'any' type because expression of type '0' can't be used to index type '{}'.
+[14:49:51.268]   Property '0' does not exist on type '{}'.
+[14:49:51.268] client/src/components/analytics/skill-decay-prediction.tsx(59,52): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ id: number; createdAt: Date; updatedAt: Date; traineeId: number; competencyId: string; initialProficiency: number; currentPrediction: number; lastAssessedDate: Date; predictedDecayRate: number; recommendedRefresherDate: Date; modelId: number; }[]'.
+[14:49:51.269]   Type '{}' is missing the following properties from type '{ id: number; createdAt: Date; updatedAt: Date; traineeId: number; competencyId: string; initialProficiency: number; currentPrediction: number; lastAssessedDate: Date; predictedDecayRate: number; recommendedRefresherDate: Date; modelId: number; }[]': length, pop, push, concat, and 35 more.
+[14:49:51.269] client/src/components/analytics/skill-decay-prediction.tsx(75,26): error TS2339: Property 'map' does not exist on type '{}'.
+[14:49:51.269] client/src/components/analytics/skill-decay-prediction.tsx(75,31): error TS7006: Parameter 'trainee' implicitly has an 'any' type.
+[14:49:51.269] client/src/components/analytics/skill-decay-prediction.tsx(97,62): error TS2339: Property 'toFixed' does not exist on type 'ValueType'.
+[14:49:51.269]   Property 'toFixed' does not exist on type 'string'.
+[14:49:51.269] client/src/components/analytics/skill-decay-prediction.tsx(98,68): error TS2339: Property 'toFixed' does not exist on type 'ValueType'.
+[14:49:51.269]   Property 'toFixed' does not exist on type 'string'.
+[14:49:51.269] client/src/components/analytics/skill-decay-prediction.tsx(99,67): error TS2339: Property 'toFixed' does not exist on type 'ValueType'.
+[14:49:51.269]   Property 'toFixed' does not exist on type 'string'.
+[14:49:51.269] client/src/components/analytics/trainee-comparison-chart.tsx(47,30): error TS2339: Property 'length' does not exist on type '{}'.
+[14:49:51.269] client/src/components/analytics/trainee-comparison-chart.tsx(49,36): error TS2339: Property 'slice' does not exist on type '{}'.
+[14:49:51.269] client/src/components/analytics/trainee-comparison-chart.tsx(49,66): error TS2339: Property 'length' does not exist on type '{}'.
+[14:49:51.269] client/src/components/analytics/trainee-comparison-chart.tsx(49,79): error TS7006: Parameter 't' implicitly has an 'any' type.
+[14:49:51.269] client/src/components/analytics/trainee-comparison-chart.tsx(64,23): error TS2802: Type 'Set<unknown>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+[14:49:51.269] client/src/components/analytics/trainee-comparison-chart.tsx(115,30): error TS2339: Property 'find' does not exist on type '{}'.
+[14:49:51.270] client/src/components/analytics/trainee-comparison-chart.tsx(142,9): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+[14:49:51.270] client/src/components/analytics/trainee-comparison-chart.tsx(142,31): error TS2339: Property 'length' does not exist on type '{}'.
+[14:49:51.270] client/src/components/analytics/trainee-comparison-chart.tsx(144,23): error TS2339: Property 'map' does not exist on type '{}'.
+[14:49:51.270] client/src/components/assessments/assessment-form.tsx(60,32): error TS2339: Property 'grades' does not exist on type '{ id: number; status: string; date: Date; moduleId: number; instructorId: number; sessionId: number; traineeId: number; }'.
+[14:49:51.270] client/src/components/assessments/assessment-form.tsx(100,50): error TS2339: Property 'grades' does not exist on type '{ id: number; status: string; date: Date; moduleId: number; instructorId: number; sessionId: number; traineeId: number; }'.
+[14:49:51.270] client/src/components/assessments/assessment-form.tsx(100,63): error TS7006: Parameter 'g' implicitly has an 'any' type.
+[14:49:51.270] client/src/components/dashboards/admin-dashboard.tsx(298,41): error TS7006: Parameter 'program' implicitly has an 'any' type.
+[14:49:51.270] client/src/components/dashboards/admin-dashboard.tsx(298,50): error TS7006: Parameter 'i' implicitly has an 'any' type.
+[14:49:51.270] client/src/components/dashboards/admin-dashboard.tsx(318,47): error TS7006: Parameter 'day' implicitly has an 'any' type.
+[14:49:51.270] client/src/components/dashboards/admin-dashboard.tsx(318,52): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.270] client/src/components/dashboards/admin-dashboard.tsx(322,39): error TS7006: Parameter 'slot' implicitly has an 'any' type.
+[14:49:51.270] client/src/components/dashboards/admin-dashboard.tsx(322,45): error TS7006: Parameter 'slotIndex' implicitly has an 'any' type.
+[14:49:51.270] client/src/components/dashboards/admin-dashboard.tsx(353,41): error TS7006: Parameter 'session' implicitly has an 'any' type.
+[14:49:51.270] client/src/components/dashboards/admin-dashboard.tsx(353,50): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.270] client/src/components/dashboards/admin-dashboard.tsx(392,44): error TS7006: Parameter 'resource' implicitly has an 'any' type.
+[14:49:51.270] client/src/components/dashboards/admin-dashboard.tsx(392,54): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.271] client/src/components/dashboards/airline-dashboard.tsx(254,23): error TS7006: Parameter 'dateString' implicitly has an 'any' type.
+[14:49:51.271] client/src/components/dashboards/airline-dashboard.tsx(264,31): error TS7006: Parameter 'complianceRate' implicitly has an 'any' type.
+[14:49:51.271] client/src/components/dashboards/airline-dashboard.tsx(271,27): error TS7006: Parameter 'status' implicitly has an 'any' type.
+[14:49:51.271] client/src/components/dashboards/airline-dashboard.tsx(417,43): error TS7006: Parameter 'entry' implicitly has an 'any' type.
+[14:49:51.271] client/src/components/dashboards/airline-dashboard.tsx(417,50): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.271] client/src/components/dashboards/airline-dashboard.tsx(439,41): error TS7006: Parameter 'item' implicitly has an 'any' type.
+[14:49:51.271] client/src/components/dashboards/airline-dashboard.tsx(439,47): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.271] client/src/components/dashboards/airline-dashboard.tsx(457,50): error TS7006: Parameter 'reg' implicitly has an 'any' type.
+[14:49:51.271] client/src/components/dashboards/airline-dashboard.tsx(457,55): error TS7006: Parameter 'idx' implicitly has an 'any' type.
+[14:49:51.272] client/src/components/dashboards/airline-dashboard.tsx(498,34): error TS7006: Parameter 'audit' implicitly has an 'any' type.
+[14:49:51.272] client/src/components/dashboards/airline-dashboard.tsx(498,41): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.272] client/src/components/dashboards/airline-dashboard.tsx(546,37): error TS7006: Parameter 'program' implicitly has an 'any' type.
+[14:49:51.272] client/src/components/dashboards/airline-dashboard.tsx(546,46): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.272] client/src/components/dashboards/ato-dashboard.tsx(266,64): error TS7006: Parameter 'program' implicitly has an 'any' type.
+[14:49:51.272] client/src/components/dashboards/ato-dashboard.tsx(266,73): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.272] client/src/components/dashboards/ato-dashboard.tsx(316,97): error TS7006: Parameter 'entry' implicitly has an 'any' type.
+[14:49:51.272] client/src/components/dashboards/ato-dashboard.tsx(316,104): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.272] client/src/components/dashboards/ato-dashboard.tsx(351,70): error TS7006: Parameter 'segment' implicitly has an 'any' type.
+[14:49:51.272] client/src/components/dashboards/ato-dashboard.tsx(351,79): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.272] client/src/components/dashboards/ato-dashboard.tsx(395,63): error TS7006: Parameter 'resource' implicitly has an 'any' type.
+[14:49:51.272] client/src/components/dashboards/ato-dashboard.tsx(395,73): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.272] client/src/components/dashboards/ato-dashboard.tsx(430,61): error TS7006: Parameter 'cert' implicitly has an 'any' type.
+[14:49:51.272] client/src/components/dashboards/ato-dashboard.tsx(430,67): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.272] client/src/components/dashboards/examiner-dashboard.tsx(413,40): error TS7006: Parameter 'exam' implicitly has an 'any' type.
+[14:49:51.272] client/src/components/dashboards/examiner-dashboard.tsx(413,46): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.273] client/src/components/dashboards/examiner-dashboard.tsx(455,40): error TS7006: Parameter 'result' implicitly has an 'any' type.
+[14:49:51.273] client/src/components/dashboards/examiner-dashboard.tsx(455,48): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.273] client/src/components/dashboards/examiner-dashboard.tsx(485,35): error TS7006: Parameter 'item' implicitly has an 'any' type.
+[14:49:51.273] client/src/components/dashboards/examiner-dashboard.tsx(485,41): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.273] client/src/components/dashboards/examiner-dashboard.tsx(514,57): error TS7006: Parameter 'area' implicitly has an 'any' type.
+[14:49:51.273] client/src/components/dashboards/examiner-dashboard.tsx(514,63): error TS7006: Parameter 'i' implicitly has an 'any' type.
+[14:49:51.273] client/src/components/dashboards/examiner-dashboard.tsx(528,52): error TS7006: Parameter '_' implicitly has an 'any' type.
+[14:49:51.273] client/src/components/dashboards/examiner-dashboard.tsx(528,55): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.273] client/src/components/dashboards/instructor-dashboard.tsx(173,32): error TS2345: Argument of type '{ id: number; type: string; time: string; }' is not assignable to parameter of type 'never'.
+[14:49:51.273] client/src/components/dashboards/instructor-dashboard.tsx(174,32): error TS2345: Argument of type '{ id: number; type: string; time: string; }' is not assignable to parameter of type 'never'.
+[14:49:51.273] client/src/components/dashboards/instructor-dashboard.tsx(175,32): error TS2345: Argument of type '{ id: number; type: string; time: string; }' is not assignable to parameter of type 'never'.
+[14:49:51.273] client/src/components/dashboards/instructor-dashboard.tsx(176,32): error TS2345: Argument of type '{ id: number; type: string; time: string; }' is not assignable to parameter of type 'never'.
+[14:49:51.273] client/src/components/dashboards/instructor-dashboard.tsx(177,32): error TS2345: Argument of type '{ id: number; type: string; time: string; }' is not assignable to parameter of type 'never'.
+[14:49:51.274] client/src/components/dashboards/instructor-dashboard.tsx(178,32): error TS2345: Argument of type '{ id: number; type: string; time: string; }' is not assignable to parameter of type 'never'.
+[14:49:51.276] client/src/components/dashboards/instructor-dashboard.tsx(321,39): error TS7006: Parameter 'session' implicitly has an 'any' type.
+[14:49:51.276] client/src/components/dashboards/instructor-dashboard.tsx(321,48): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/instructor-dashboard.tsx(363,48): error TS7006: Parameter 'trainee' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/instructor-dashboard.tsx(363,57): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/instructor-dashboard.tsx(413,48): error TS7006: Parameter 'entry' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/instructor-dashboard.tsx(413,55): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/instructor-dashboard.tsx(446,43): error TS7006: Parameter 'gradesheet' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/instructor-dashboard.tsx(446,55): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/instructor-dashboard.tsx(483,39): error TS7006: Parameter 'day' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/instructor-dashboard.tsx(483,44): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/instructor-dashboard.tsx(490,39): error TS7006: Parameter 'day' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/instructor-dashboard.tsx(490,44): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/instructor-dashboard.tsx(492,37): error TS7006: Parameter 'slot' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/instructor-dashboard.tsx(492,43): error TS7006: Parameter 'slotIndex' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/trainee-dashboard.tsx(258,23): error TS7006: Parameter 'dateString' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/trainee-dashboard.tsx(268,20): error TS7006: Parameter 'dateString' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/trainee-dashboard.tsx(433,41): error TS7006: Parameter 'item' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/trainee-dashboard.tsx(433,47): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/trainee-dashboard.tsx(491,42): error TS7006: Parameter 'resource' implicitly has an 'any' type.
+[14:49:51.277] client/src/components/dashboards/trainee-dashboard.tsx(491,52): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.278] client/src/components/dashboards/trainee-dashboard.tsx(555,41): error TS7006: Parameter 'goal' implicitly has an 'any' type.
+[14:49:51.278] client/src/components/dashboards/trainee-dashboard.tsx(555,47): error TS7006: Parameter 'index' implicitly has an 'any' type.
+[14:49:51.278] client/src/components/dashboards/trainee-dashboard.tsx(602,43): error TS7006: Parameter 'achievement' implicitly has an 'any' type.
+[14:49:51.278] client/src/components/document-processor/DocumentAnalysisTab.tsx(101,87): error TS2554: Expected 2-3 arguments, but got 4.
+[14:49:51.278] client/src/components/document-processor/DocumentAnalysisTab.tsx(861,34): error TS2322: Type '"destructive" | "warning" | "success"' is not assignable to type '"default" | "destructive" | "outline" | "secondary" | null | undefined'.
+[14:49:51.278]   Type '"warning"' is not assignable to type '"default" | "destructive" | "outline" | "secondary" | null | undefined'.
+[14:49:51.278] client/src/components/document-processor/DocumentAnalysisTab.tsx(884,34): error TS2322: Type '"success"' is not assignable to type '"default" | "destructive" | "outline" | "secondary" | null | undefined'.
+[14:49:51.278] client/src/components/document-processor/DocumentAnalysisTab.tsx(981,38): error TS2322: Type '"destructive" | "warning" | "success"' is not assignable to type '"default" | "destructive" | "outline" | "secondary" | null | undefined'.
+[14:49:51.278]   Type '"warning"' is not assignable to type '"default" | "destructive" | "outline" | "secondary" | null | undefined'.
+[14:49:51.278] client/src/components/document-processor/DocumentAnalysisTab.tsx(1039,38): error TS2322: Type '"destructive" | "warning" | "success"' is not assignable to type '"default" | "destructive" | "outline" | "secondary" | null | undefined'.
+[14:49:51.278]   Type '"warning"' is not assignable to type '"default" | "destructive" | "outline" | "secondary" | null | undefined'.
+[14:49:51.278] client/src/components/document-processor/SyllabusGenerationTab.tsx(152,87): error TS2554: Expected 2-3 arguments, but got 4.
+[14:49:51.278] client/src/components/document-processor/SyllabusGenerationTab.tsx(948,34): error TS2322: Type '"destructive" | "warning" | "success"' is not assignable to type '"default" | "destructive" | "outline" | "secondary" | null | undefined'.
+[14:49:51.278]   Type '"warning"' is not assignable to type '"default" | "destructive" | "outline" | "secondary" | null | undefined'.
+[14:49:51.278] client/src/components/document-processor/SyllabusGenerationTab.tsx(1252,38): error TS2322: Type '"success"' is not assignable to type '"default" | "destructive" | "outline" | "secondary" | null | undefined'.
+[14:49:51.278] client/src/components/document-processor/SyllabusGenerationTab.tsx(1279,40): error TS2322: Type '"warning"' is not assignable to type '"default" | "destructive" | "outline" | "secondary" | null | undefined'.
+[14:49:51.279] client/src/components/documents/document-card.tsx(39,43): error TS18047: 'document.fileName' is possibly 'null'.
+[14:49:51.279] client/src/components/documents/document-card.tsx(101,65): error TS2322: Type 'string | null' is not assignable to type 'string | undefined'.
+[14:49:51.279]   Type 'null' is not assignable to type 'string | undefined'.
+[14:49:51.279] client/src/components/documents/document-card.tsx(127,25): error TS2339: Property 'externalUrl' does not exist on type '{ title: string; id: number; url: string; description: string | null; createdAt: Date; updatedAt: Date; fileType: string; uploadedById: number; fileName: string | null; fileSize: number | null; tags: string[] | null; currentVersionId: number | null; }'.
+[14:49:51.279] client/src/components/documents/document-card.tsx(128,71): error TS2339: Property 'externalUrl' does not exist on type '{ title: string; id: number; url: string; description: string | null; createdAt: Date; updatedAt: Date; fileType: string; uploadedById: number; fileName: string | null; fileSize: number | null; tags: string[] | null; currentVersionId: number | null; }'.
+[14:49:51.279] client/src/components/documents/document-card.tsx(156,52): error TS18047: 'document.fileName' is possibly 'null'.
+[14:49:51.279] client/src/components/documents/document-card.tsx(165,40): error TS2339: Property 'uploadedAt' does not exist on type '{ title: string; id: number; url: string; description: string | null; createdAt: Date; updatedAt: Date; fileType: string; uploadedById: number; fileName: string | null; fileSize: number | null; tags: string[] | null; currentVersionId: number | null; }'.
+[14:49:51.279] client/src/components/documents/document-detail.tsx(219,31): error TS2339: Property 'documentAnalysisId' does not exist on type '{ title: string; id: number; url: string; description: string | null; createdAt: Date; updatedAt: Date; fileType: string; uploadedById: number; fileName: string | null; fileSize: number | null; tags: string[] | null; currentVersionId: number | null; }'.
+[14:49:51.279] client/src/components/documents/document-detail.tsx(223,75): error TS2339: Property 'documentAnalysisId' does not exist on type '{ title: string; id: number; url: string; description: string | null; createdAt: Date; updatedAt: Date; fileType: string; uploadedById: number; fileName: string | null; fileSize: number | null; tags: string[] | null; currentVersionId: number | null; }'.
+[14:49:51.279] client/src/components/documents/document-versions.tsx(105,10): error TS18046: 'versions' is of type 'unknown'.
+[14:49:51.279] client/src/components/documents/document-versions.tsx(122,16): error TS18046: 'versions' is of type 'unknown'.
+[14:49:51.279] client/src/components/documents/document-versions.tsx(164,18): error TS18046: 'versions' is of type 'unknown'.
+[14:49:51.279] client/src/components/documents/document-versions.tsx(165,21): error TS18046: 'versions' is of type 'unknown'.
+[14:49:51.279] client/src/components/documents/document-versions.tsx(165,104): error TS18046: 'versions' is of type 'unknown'.
+[14:49:51.279] client/src/components/documents/document-versions.tsx(171,46): error TS18046: 'versions' is of type 'unknown'.
+[14:49:51.279] client/src/components/documents/document-versions.tsx(176,18): error TS18046: 'versions' is of type 'unknown'.
+[14:49:51.279] client/src/components/documents/document-versions.tsx(177,32): error TS18046: 'versions' is of type 'unknown'.
+[14:49:51.280] client/src/components/gamification/leaderboard.tsx(26,5): error TS2769: No overload matches this call.
+[14:49:51.280]   Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.280]     Object literal may only specify known properties, and 'onError' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.280]   Overload 2 of 3, '(options: UndefinedInitialDataOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.280]     Object literal may only specify known properties, and 'onError' does not exist in type 'UndefinedInitialDataOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.280]   Overload 3 of 3, '(options: UseQueryOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.280]     Object literal may only specify known properties, and 'onError' does not exist in type 'UseQueryOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.280] client/src/components/gamification/leaderboard.tsx(37,35): error TS2339: Property 'find' does not exist on type '{}'.
+[14:49:51.280] client/src/components/gamification/leaderboard.tsx(38,36): error TS2339: Property 'indexOf' does not exist on type '{}'.
+[14:49:51.280] client/src/components/gamification/leaderboard.tsx(97,15): error TS2322: Type '{ children: Element[]; value: string; onValueChange: Dispatch<SetStateAction<string>>; className: string; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
+[14:49:51.280]   Property 'className' does not exist on type 'IntrinsicAttributes & SelectProps'.
+[14:49:51.280] client/src/components/gamification/leaderboard.tsx(116,41): error TS2339: Property 'length' does not exist on type '{}'.
+[14:49:51.280] client/src/components/gamification/leaderboard.tsx(123,16): error TS2339: Property 'slice' does not exist on type '{}'.
+[14:49:51.280] client/src/components/gamification/leaderboard.tsx(149,37): error TS2339: Property 'length' does not exist on type '{}'.
+[14:49:51.280] client/src/components/knowledge-graph/KnowledgeGraphVisualization.tsx(97,25): error TS2802: Type 'Set<string>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+[14:49:51.280] client/src/components/knowledge-graph/KnowledgeGraphVisualization.tsx(639,42): error TS18048: 'sourceNode.content.length' is possibly 'undefined'.
+[14:49:51.280] client/src/components/knowledge-graph/KnowledgeGraphVisualization.tsx(656,42): error TS18048: 'targetNode.content.length' is possibly 'undefined'.
+[14:49:51.280] client/src/components/knowledge-graph/graph-visualization.tsx(119,25): error TS2802: Type 'Set<string>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+[14:49:51.281] client/src/components/knowledge-graph/graph-visualization.tsx(120,33): error TS2802: Type 'Set<string>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+[14:49:51.281] client/src/components/knowledge-graph/graph-visualization.tsx(146,36): error TS2769: No overload matches this call.
+[14:49:51.281]   Overload 1 of 2, '(nodesData?: SimulationNodeDatum[] | undefined): Simulation<SimulationNodeDatum, undefined>', gave the following error.
+[14:49:51.281]     Argument of type 'GraphNode[]' is not assignable to parameter of type 'SimulationNodeDatum[]'.
+[14:49:51.281]       Type 'GraphNode' has no properties in common with type 'SimulationNodeDatum'.
+[14:49:51.281]   Overload 2 of 2, '(nodesData?: SimulationNodeDatum[] | undefined): Simulation<SimulationNodeDatum, SimulationLinkDatum<SimulationNodeDatum>>', gave the following error.
+[14:49:51.281]     Argument of type 'GraphNode[]' is not assignable to parameter of type 'SimulationNodeDatum[]'.
+[14:49:51.281]       Type 'GraphNode' has no properties in common with type 'SimulationNodeDatum'.
+[14:49:51.281] client/src/components/knowledge-graph/graph-visualization.tsx(194,51): error TS18046: 'd' is of type 'unknown'.
+[14:49:51.281] client/src/components/knowledge-graph/graph-visualization.tsx(199,51): error TS18046: 'd' is of type 'unknown'.
+[14:49:51.281] client/src/components/knowledge-graph/graph-visualization.tsx(267,25): error TS2339: Property 'id' does not exist on type 'string'.
+[14:49:51.281] client/src/components/knowledge-graph/graph-visualization.tsx(267,52): error TS2339: Property 'id' does not exist on type 'string'.
+[14:49:51.281] client/src/components/knowledge-graph/graph-visualization.tsx(270,32): error TS2339: Property 'id' does not exist on type 'string'.
+[14:49:51.281] client/src/components/knowledge-graph/graph-visualization.tsx(270,59): error TS2339: Property 'id' does not exist on type 'string'.
+[14:49:51.281] client/src/components/knowledge-graph/graph-visualization.tsx(276,28): error TS2339: Property 'id' does not exist on type 'string'.
+[14:49:51.281] client/src/components/knowledge-graph/graph-visualization.tsx(276,55): error TS2339: Property 'id' does not exist on type 'string'.
+[14:49:51.281] client/src/components/knowledge-graph/graph-visualization.tsx(277,28): error TS2339: Property 'id' does not exist on type 'string'.
+[14:49:51.281] client/src/components/knowledge-graph/graph-visualization.tsx(277,55): error TS2339: Property 'id' does not exist on type 'string'.
+[14:49:51.282] client/src/components/knowledge-graph/graph-visualization.tsx(351,11): error TS18046: 'd' is of type 'unknown'.
+[14:49:51.282] client/src/components/knowledge-graph/graph-visualization.tsx(351,18): error TS18046: 'd' is of type 'unknown'.
+[14:49:51.282] client/src/components/knowledge-graph/graph-visualization.tsx(352,11): error TS18046: 'd' is of type 'unknown'.
+[14:49:51.282] client/src/components/knowledge-graph/graph-visualization.tsx(352,18): error TS18046: 'd' is of type 'unknown'.
+[14:49:51.282] client/src/components/knowledge-graph/graph-visualization.tsx(355,11): error TS18046: 'd' is of type 'unknown'.
+[14:49:51.282] client/src/components/knowledge-graph/graph-visualization.tsx(356,11): error TS18046: 'd' is of type 'unknown'.
+[14:49:51.282] client/src/components/knowledge-graph/graph-visualization.tsx(360,11): error TS18046: 'd' is of type 'unknown'.
+[14:49:51.282] client/src/components/knowledge-graph/graph-visualization.tsx(361,11): error TS18046: 'd' is of type 'unknown'.
+[14:49:51.282] client/src/components/knowledge-graph/graph-visualization.tsx(368,35): error TS2339: Property 'x' does not exist on type 'string'.
+[14:49:51.282] client/src/components/knowledge-graph/graph-visualization.tsx(369,35): error TS2339: Property 'y' does not exist on type 'string'.
+[14:49:51.282] client/src/components/knowledge-graph/graph-visualization.tsx(370,35): error TS2339: Property 'x' does not exist on type 'string'.
+[14:49:51.282] client/src/components/knowledge-graph/graph-visualization.tsx(371,35): error TS2339: Property 'y' does not exist on type 'string'.
+[14:49:51.288] client/src/components/knowledge-graph/graph-visualization.tsx(374,28): error TS2339: Property 'x' does not exist on type 'GraphNode'.
+[14:49:51.288] client/src/components/knowledge-graph/graph-visualization.tsx(375,28): error TS2339: Property 'y' does not exist on type 'GraphNode'.
+[14:49:51.288] client/src/components/knowledge-graph/graph-visualization.tsx(379,27): error TS18046: 'd' is of type 'unknown'.
+[14:49:51.288] client/src/components/knowledge-graph/graph-visualization.tsx(380,27): error TS18046: 'd' is of type 'unknown'.
+[14:49:51.288] client/src/components/knowledge-graph/graph-visualization.tsx(383,28): error TS18046: 'd' is of type 'unknown'.
+[14:49:51.288] client/src/components/knowledge-graph/graph-visualization.tsx(383,41): error TS18046: 'd' is of type 'unknown'.
+[14:49:51.288] client/src/components/knowledge-graph/graph-visualization.tsx(384,28): error TS18046: 'd' is of type 'unknown'.
+[14:49:51.288] client/src/components/knowledge-graph/graph-visualization.tsx(384,41): error TS18046: 'd' is of type 'unknown'.
+[14:49:51.288] client/src/components/knowledge-graph/knowledge-graph-viewer.tsx(826,15): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+[14:49:51.288] client/src/components/notification/notification-provider.tsx(2,24): error TS2305: Module '"@/hooks/use-websocket"' has no exported member 'WebSocketMessage'.
+[14:49:51.288] client/src/components/notification/notification-provider.tsx(34,5): error TS2339: Property 'isConnected' does not exist on type '{ connected: boolean; lastMessage: any; socket: WebSocket | null; subscribe: (channel: string) => () => void; unsubscribe: (channel: string) => void; sendMessage: (message: any) => boolean; connect: () => void; disconnect: () => void; }'.
+[14:49:51.288] client/src/components/notification/websocket-status.tsx(14,5): error TS2339: Property 'isConnected' does not exist on type '{ connected: boolean; lastMessage: any; socket: WebSocket | null; subscribe: (channel: string) => () => void; unsubscribe: (channel: string) => void; sendMessage: (message: any) => boolean; connect: () => void; disconnect: () => void; }'.
+[14:49:51.288] client/src/components/notification/websocket-status.tsx(18,5): error TS2339: Property 'ping' does not exist on type '{ connected: boolean; lastMessage: any; socket: WebSocket | null; subscribe: (channel: string) => () => void; unsubscribe: (channel: string) => void; sendMessage: (message: any) => boolean; connect: () => void; disconnect: () => void; }'.
+[14:49:51.288] client/src/components/programs/program-card.tsx(22,23): error TS18046: 'data' is of type 'unknown'.
+[14:49:51.288] client/src/components/programs/program-card.tsx(27,6): error TS7006: Parameter 'sum' implicitly has an 'any' type.
+[14:49:51.289] client/src/components/programs/program-card.tsx(27,11): error TS7006: Parameter 'module' implicitly has an 'any' type.
+[14:49:51.289] client/src/components/regulatory/compliance-status.tsx(45,44): error TS2339: Property 'compliantRequirementIds' does not exist on type '{ metadata: unknown; id: number; status: string; createdAt: Date; updatedAt: Date; programId: number; requirementId: number; evidence: string | null; notes: string | null; checkedBy: number | null; checkedAt: Date | null; }'.
+[14:49:51.289] client/src/components/regulatory/compliance-status.tsx(46,42): error TS2339: Property 'partiallyCompliantRequirementIds' does not exist on type '{ metadata: unknown; id: number; status: string; createdAt: Date; updatedAt: Date; programId: number; requirementId: number; evidence: string | null; notes: string | null; checkedBy: number | null; checkedAt: Date | null; }'.
+[14:49:51.289] client/src/components/regulatory/compliance-status.tsx(47,47): error TS2339: Property 'nonCompliantRequirementIds' does not exist on type '{ metadata: unknown; id: number; status: string; createdAt: Date; updatedAt: Date; programId: number; requirementId: number; evidence: string | null; notes: string | null; checkedBy: number | null; checkedAt: Date | null; }'.
+[14:49:51.289] client/src/components/regulatory/compliance-status.tsx(209,32): error TS2339: Property 'lastUpdated' does not exist on type '{ metadata: unknown; id: number; status: string; createdAt: Date; updatedAt: Date; programId: number; requirementId: number; evidence: string | null; notes: string | null; checkedBy: number | null; checkedAt: Date | null; }'.
+[14:49:51.289] client/src/components/regulatory/compliance-status.tsx(211,59): error TS2339: Property 'lastUpdated' does not exist on type '{ metadata: unknown; id: number; status: string; createdAt: Date; updatedAt: Date; programId: number; requirementId: number; evidence: string | null; notes: string | null; checkedBy: number | null; checkedAt: Date | null; }'.
+[14:49:51.289] client/src/components/regulatory/compliance-status.tsx(215,32): error TS2339: Property 'nonCompliantRequirementIds' does not exist on type '{ metadata: unknown; id: number; status: string; createdAt: Date; updatedAt: Date; programId: number; requirementId: number; evidence: string | null; notes: string | null; checkedBy: number | null; checkedAt: Date | null; }'.
+[14:49:51.289] client/src/components/regulatory/compliance-status.tsx(216,32): error TS2339: Property 'nonCompliantRequirementIds' does not exist on type '{ metadata: unknown; id: number; status: string; createdAt: Date; updatedAt: Date; programId: number; requirementId: number; evidence: string | null; notes: string | null; checkedBy: number | null; checkedAt: Date | null; }'.
+[14:49:51.289] client/src/components/regulatory/compliance-status.tsx(223,38): error TS2339: Property 'nonCompliantRequirementIds' does not exist on type '{ metadata: unknown; id: number; status: string; createdAt: Date; updatedAt: Date; programId: number; requirementId: number; evidence: string | null; notes: string | null; checkedBy: number | null; checkedAt: Date | null; }'.
+[14:49:51.289] client/src/components/regulatory/compliance-status.tsx(223,69): error TS7006: Parameter 'reqId' implicitly has an 'any' type.
+[14:49:51.289] client/src/components/regulatory/requirements-table.tsx(167,29): error TS2339: Property 'url' does not exist on type '{ code: string; title: string; metadata: unknown; text: string; id: number; version: string; description: string; createdAt: Date; updatedAt: Date; authority: string; effectiveDate: string; expirationDate: string | null; parentId: number | null; }'.
+[14:49:51.289] client/src/components/regulatory/requirements-table.tsx(168,75): error TS2339: Property 'url' does not exist on type '{ code: string; title: string; metadata: unknown; text: string; id: number; version: string; description: string; createdAt: Date; updatedAt: Date; authority: string; effectiveDate: string; expirationDate: string | null; parentId: number | null; }'.
+[14:49:51.289] client/src/components/regulatory/requirements-table.tsx(187,34): error TS2802: Type 'Set<string>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+[14:49:51.290] client/src/components/resources/resource-list.tsx(146,16): error TS2345: Argument of type '{ name: string; type: string; location: string; capacity: number; }' is not assignable to parameter of type '{ type: "simulator" | "classroom"; name: string; location: string; capacity: number; } | { type?: "simulator" | "classroom" | undefined; name?: string | undefined; location?: string | undefined; capacity?: number | undefined; } | ResetAction<...> | undefined'.
+[14:49:51.290]   Types of property 'type' are incompatible.
+[14:49:51.290]     Type 'string' is not assignable to type '"simulator" | "classroom" | undefined'.
+[14:49:51.290] client/src/components/session-replay/replay-viewer.tsx(27,5): error TS2769: No overload matches this call.
+[14:49:51.290]   Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, (string | number)[]>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.290]     Object literal may only specify known properties, and 'onError' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, (string | number)[]>'.
+[14:49:51.290]   Overload 2 of 3, '(options: UndefinedInitialDataOptions<unknown, Error, unknown, (string | number)[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.290]     Object literal may only specify known properties, and 'onError' does not exist in type 'UndefinedInitialDataOptions<unknown, Error, unknown, (string | number)[]>'.
+[14:49:51.290]   Overload 3 of 3, '(options: UseQueryOptions<unknown, Error, unknown, (string | number)[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.290]     Object literal may only specify known properties, and 'onError' does not exist in type 'UseQueryOptions<unknown, Error, unknown, (string | number)[]>'.
+[14:49:51.290] client/src/components/session-replay/replay-viewer.tsx(40,5): error TS2769: No overload matches this call.
+[14:49:51.290]   Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, (string | number | null)[]>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.290]     Object literal may only specify known properties, and 'onError' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, (string | number | null)[]>'.
+[14:49:51.290]   Overload 2 of 3, '(options: UndefinedInitialDataOptions<unknown, Error, unknown, (string | number | null)[]>, queryClient?: QueryClient | undefined): UseQueryResult<...>', gave the following error.
+[14:49:51.290]     Object literal may only specify known properties, and 'onError' does not exist in type 'UndefinedInitialDataOptions<unknown, Error, unknown, (string | number | null)[]>'.
+[14:49:51.290]   Overload 3 of 3, '(options: UseQueryOptions<unknown, Error, unknown, (string | number | null)[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.290]     Object literal may only specify known properties, and 'onError' does not exist in type 'UseQueryOptions<unknown, Error, unknown, (string | number | null)[]>'.
+[14:49:51.291] client/src/components/session-replay/replay-viewer.tsx(50,28): error TS2339: Property 'length' does not exist on type '{}'.
+[14:49:51.291] client/src/components/session-replay/replay-viewer.tsx(51,27): error TS7053: Element implicitly has an 'any' type because expression of type '0' can't be used to index type '{}'.
+[14:49:51.291]   Property '0' does not exist on type '{}'.
+[14:49:51.291] client/src/components/session-replay/replay-viewer.tsx(152,27): error TS2339: Property 'length' does not exist on type '{}'.
+[14:49:51.291] client/src/components/session-replay/replay-viewer.tsx(165,34): error TS2339: Property 'find' does not exist on type '{}'.
+[14:49:51.291] client/src/components/session-replay/replay-viewer.tsx(165,39): error TS7006: Parameter 'r' implicitly has an 'any' type.
+[14:49:51.291] client/src/components/session-replay/replay-viewer.tsx(250,35): error TS2339: Property 'length' does not exist on type '{}'.
+[14:49:51.291] client/src/components/session-replay/replay-viewer.tsx(256,25): error TS2339: Property 'map' does not exist on type '{}'.
+[14:49:51.291] client/src/components/sessions/session-detail.tsx(38,23): error TS2339: Property 'modules' does not exist on type '{ id: number; name: string; status: string | null; description: string | null; programType: string | null; aircraftType: string | null; regulatoryAuthority: string | null; durationDays: number | null; createdById: number; createdAt: Date | null; updatedAt: Date | null; }'.
+[14:49:51.291] client/src/components/sessions/session-detail.tsx(38,37): error TS7006: Parameter 'm' implicitly has an 'any' type.
+[14:49:51.291] client/src/components/sessions/session-detail.tsx(73,27): error TS2339: Property 'modules' does not exist on type '{ id: number; name: string; status: string | null; description: string | null; programType: string | null; aircraftType: string | null; regulatoryAuthority: string | null; durationDays: number | null; createdById: number; createdAt: Date | null; updatedAt: Date | null; }'.
+[14:49:51.291] client/src/components/sessions/session-detail.tsx(73,41): error TS7006: Parameter 'm' implicitly has an 'any' type.
+[14:49:51.291] client/src/components/sessions/session-table.tsx(38,29): error TS2339: Property 'modules' does not exist on type '{ id: number; name: string; status: string | null; description: string | null; programType: string | null; aircraftType: string | null; regulatoryAuthority: string | null; durationDays: number | null; createdById: number; createdAt: Date | null; updatedAt: Date | null; }'.
+[14:49:51.291] client/src/components/sessions/session-table.tsx(38,44): error TS7006: Parameter 'm' implicitly has an 'any' type.
+[14:49:51.291] client/src/components/sessions/sessions-list.tsx(37,52): error TS2339: Property 'modules' does not exist on type '{ id: number; name: string; status: string | null; description: string | null; programType: string | null; aircraftType: string | null; regulatoryAuthority: string | null; durationDays: number | null; createdById: number; createdAt: Date | null; updatedAt: Date | null; }'.
+[14:49:51.291] client/src/components/sessions/sessions-list.tsx(38,18): error TS7006: Parameter 'm' implicitly has an 'any' type.
+[14:49:51.291] client/src/components/syllabus/syllabus-generator.tsx(19,69): error TS2345: Argument of type '{ programType: "initial_type_rating"; includeSimulatorExercises: true; includeClassroomModules: true; includeAssessments: true; customizationLevel: "moderate"; defaultDuration: number; }' is not assignable to parameter of type '{ programType: "custom" | "instructor" | "initial_type_rating" | "recurrent" | "joc_mcc" | "type_conversion"; includeSimulatorExercises: boolean; includeClassroomModules: boolean; ... 9 more ...; applyRegulationVersion?: string | undefined; } | (() => { ...; })'.
+[14:49:51.291]   Type '{ programType: "initial_type_rating"; includeSimulatorExercises: true; includeClassroomModules: true; includeAssessments: true; customizationLevel: "moderate"; defaultDuration: number; }' is missing the following properties from type '{ programType: "custom" | "instructor" | "initial_type_rating" | "recurrent" | "joc_mcc" | "type_conversion"; includeSimulatorExercises: boolean; includeClassroomModules: boolean; ... 9 more ...; applyRegulationVersion?: string | undefined; }': enableComplianceTracking, knowledgeGraphGeneration
+[14:49:51.291] client/src/pages/achievements-page.tsx(27,5): error TS2769: No overload matches this call.
+[14:49:51.291]   Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.291]     Object literal may only specify known properties, and 'onError' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.291]   Overload 2 of 3, '(options: UndefinedInitialDataOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.292]     Object literal may only specify known properties, and 'onError' does not exist in type 'UndefinedInitialDataOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.292]   Overload 3 of 3, '(options: UseQueryOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.292]     Object literal may only specify known properties, and 'onError' does not exist in type 'UseQueryOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.292] client/src/pages/achievements-page.tsx(40,5): error TS2769: No overload matches this call.
+[14:49:51.292]   Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, (string | number | undefined)[]>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<...>', gave the following error.
+[14:49:51.292]     Object literal may only specify known properties, and 'onError' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, (string | number | undefined)[]>'.
+[14:49:51.299]   Overload 2 of 3, '(options: UndefinedInitialDataOptions<unknown, Error, unknown, (string | number | undefined)[]>, queryClient?: QueryClient | undefined): UseQueryResult<...>', gave the following error.
+[14:49:51.299]     Object literal may only specify known properties, and 'onError' does not exist in type 'UndefinedInitialDataOptions<unknown, Error, unknown, (string | number | undefined)[]>'.
+[14:49:51.299]   Overload 3 of 3, '(options: UseQueryOptions<unknown, Error, unknown, (string | number | undefined)[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.299]     Object literal may only specify known properties, and 'onError' does not exist in type 'UseQueryOptions<unknown, Error, unknown, (string | number | undefined)[]>'.
+[14:49:51.299] client/src/pages/achievements-page.tsx(53,5): error TS2769: No overload matches this call.
+[14:49:51.299]   Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.300]     Object literal may only specify known properties, and 'onError' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.300]   Overload 2 of 3, '(options: UndefinedInitialDataOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.300]     Object literal may only specify known properties, and 'onError' does not exist in type 'UndefinedInitialDataOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.300]   Overload 3 of 3, '(options: UseQueryOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.300]     Object literal may only specify known properties, and 'onError' does not exist in type 'UseQueryOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.300] client/src/pages/achievements-page.tsx(66,10): error TS2339: Property 'filter' does not exist on type '{}'.
+[14:49:51.300] client/src/pages/achievements-page.tsx(69,53): error TS2339: Property 'some' does not exist on type '{}'.
+[14:49:51.300] client/src/pages/achievements-page.tsx(70,52): error TS2339: Property 'some' does not exist on type '{}'.
+[14:49:51.300] client/src/pages/achievements-page.tsx(81,32): error TS2339: Property 'length' does not exist on type '{}'.
+[14:49:51.300] client/src/pages/achievements-page.tsx(82,39): error TS2339: Property 'length' does not exist on type '{}'.
+[14:49:51.300] client/src/pages/achievements-page.tsx(173,60): error TS2339: Property 'find' does not exist on type '{}'.
+[14:49:51.300] client/src/pages/achievements-page.tsx(197,60): error TS2339: Property 'find' does not exist on type '{}'.
+[14:49:51.300] client/src/pages/achievements-page.tsx(221,60): error TS2339: Property 'find' does not exist on type '{}'.
+[14:49:51.300] client/src/pages/achievements-page.tsx(246,45): error TS2339: Property 'length' does not exist on type '{}'.
+[14:49:51.300] client/src/pages/achievements-page.tsx(252,30): error TS2339: Property 'map' does not exist on type '{}'.
+[14:49:51.300] client/src/pages/compliance-page.tsx(55,5): error TS2769: No overload matches this call.
+[14:49:51.300]   Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.300]     Object literal may only specify known properties, and 'onError' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.300]   Overload 2 of 3, '(options: UndefinedInitialDataOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.300]     Object literal may only specify known properties, and 'onError' does not exist in type 'UndefinedInitialDataOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.300]   Overload 3 of 3, '(options: UseQueryOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.300]     Object literal may only specify known properties, and 'onError' does not exist in type 'UseQueryOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.300] client/src/pages/compliance-page.tsx(68,5): error TS2769: No overload matches this call.
+[14:49:51.300]   Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.300]     Object literal may only specify known properties, and 'onError' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.300]   Overload 2 of 3, '(options: UndefinedInitialDataOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.300]     Object literal may only specify known properties, and 'onError' does not exist in type 'UndefinedInitialDataOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.300]   Overload 3 of 3, '(options: UseQueryOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.301]     Object literal may only specify known properties, and 'onError' does not exist in type 'UseQueryOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.301] client/src/pages/compliance-page.tsx(81,5): error TS2769: No overload matches this call.
+[14:49:51.301]   Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, (string | number | null)[]>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.301]     Object literal may only specify known properties, and 'onError' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, (string | number | null)[]>'.
+[14:49:51.301]   Overload 2 of 3, '(options: UndefinedInitialDataOptions<unknown, Error, unknown, (string | number | null)[]>, queryClient?: QueryClient | undefined): UseQueryResult<...>', gave the following error.
+[14:49:51.301]     Object literal may only specify known properties, and 'onError' does not exist in type 'UndefinedInitialDataOptions<unknown, Error, unknown, (string | number | null)[]>'.
+[14:49:51.301]   Overload 3 of 3, '(options: UseQueryOptions<unknown, Error, unknown, (string | number | null)[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.301]     Object literal may only specify known properties, and 'onError' does not exist in type 'UseQueryOptions<unknown, Error, unknown, (string | number | null)[]>'.
+[14:49:51.301] client/src/pages/compliance-page.tsx(94,5): error TS2769: No overload matches this call.
+[14:49:51.301]   Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, (string | number | null)[]>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.301]     Object literal may only specify known properties, and 'onError' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, (string | number | null)[]>'.
+[14:49:51.301]   Overload 2 of 3, '(options: UndefinedInitialDataOptions<unknown, Error, unknown, (string | number | null)[]>, queryClient?: QueryClient | undefined): UseQueryResult<...>', gave the following error.
+[14:49:51.301]     Object literal may only specify known properties, and 'onError' does not exist in type 'UndefinedInitialDataOptions<unknown, Error, unknown, (string | number | null)[]>'.
+[14:49:51.301]   Overload 3 of 3, '(options: UseQueryOptions<unknown, Error, unknown, (string | number | null)[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.301]     Object literal may only specify known properties, and 'onError' does not exist in type 'UseQueryOptions<unknown, Error, unknown, (string | number | null)[]>'.
+[14:49:51.301] client/src/pages/compliance-page.tsx(200,53): error TS2339: Property 'length' does not exist on type '{}'.
+[14:49:51.301] client/src/pages/compliance-page.tsx(206,34): error TS2339: Property 'map' does not exist on type '{}'.
+[14:49:51.301] client/src/pages/compliance-page.tsx(279,29): error TS2322: Type 'unknown' is not assignable to type '{ metadata: unknown; id: number; status: string; createdAt: Date; updatedAt: Date; programId: number; requirementId: number; evidence: string | null; notes: string | null; checkedBy: number | null; checkedAt: Date | null; } | undefined'.
+[14:49:51.301] client/src/pages/compliance-page.tsx(280,29): error TS2322: Type 'unknown' is not assignable to type '{ code: string; title: string; metadata: unknown; text: string; id: number; version: string; description: string; createdAt: Date; updatedAt: Date; authority: string; effectiveDate: string; expirationDate: string | null; parentId: number | null; }[] | undefined'.
+[14:49:51.301] client/src/pages/compliance-page.tsx(301,58): error TS2339: Property 'lastAuditDate' does not exist on type '{}'.
+[14:49:51.301] client/src/pages/compliance-page.tsx(302,70): error TS2339: Property 'lastAuditDate' does not exist on type '{}'.
+[14:49:51.301] client/src/pages/compliance-page.tsx(309,58): error TS2339: Property 'lastAuditBy' does not exist on type '{}'.
+[14:49:51.301] client/src/pages/compliance-page.tsx(315,58): error TS2339: Property 'nextAuditDate' does not exist on type '{}'.
+[14:49:51.301] client/src/pages/compliance-page.tsx(316,70): error TS2339: Property 'nextAuditDate' does not exist on type '{}'.
+[14:49:51.301] client/src/pages/compliance-page.tsx(342,63): error TS2339: Property 'nonCompliantRequirementIds' does not exist on type '{}'.
+[14:49:51.301] client/src/pages/compliance-page.tsx(343,42): error TS2339: Property 'nonCompliantRequirementIds' does not exist on type '{}'.
+[14:49:51.301] client/src/pages/compliance-page.tsx(357,52): error TS2339: Property 'nonCompliantRequirementIds' does not exist on type '{}'.
+[14:49:51.301] client/src/pages/compliance-page.tsx(357,83): error TS7006: Parameter 'reqId' implicitly has an 'any' type.
+[14:49:51.302] client/src/pages/compliance-page.tsx(358,61): error TS2339: Property 'find' does not exist on type '{}'.
+[14:49:51.302] client/src/pages/compliance-page.tsx(358,66): error TS7006: Parameter 'r' implicitly has an 'any' type.
+[14:49:51.302] client/src/pages/compliance-page.tsx(394,23): error TS2740: Type '{}' is missing the following properties from type '{ code: string; title: string; metadata: unknown; text: string; id: number; version: string; description: string; createdAt: Date; updatedAt: Date; authority: string; effectiveDate: string; expirationDate: string | null; parentId: number | null; }[]': length, pop, push, concat, and 35 more.
+[14:49:51.302] client/src/pages/compliance-page.tsx(395,56): error TS2339: Property 'compliantRequirementIds' does not exist on type '{}'.
+[14:49:51.302] client/src/pages/compliance-page.tsx(396,54): error TS2339: Property 'partiallyCompliantRequirementIds' does not exist on type '{}'.
+[14:49:51.302] client/src/pages/compliance-page.tsx(397,59): error TS2339: Property 'nonCompliantRequirementIds' does not exist on type '{}'.
+[14:49:51.302] client/src/pages/compliance-page.tsx(409,63): error TS2339: Property 'length' does not exist on type '{}'.
+[14:49:51.302] client/src/pages/compliance-page.tsx(421,42): error TS2339: Property 'map' does not exist on type '{}'.
+[14:49:51.302] client/src/pages/compliance-page.tsx(446,61): error TS2339: Property 'find' does not exist on type '{}'.
+[14:49:51.302] client/src/pages/compliance-page.tsx(446,66): error TS7006: Parameter 'r' implicitly has an 'any' type.
+[14:49:51.302] client/src/pages/compliance-page.tsx(503,36): error TS2339: Property 'url' does not exist on type '{ code: string; title: string; metadata: unknown; text: string; id: number; version: string; description: string; createdAt: Date; updatedAt: Date; authority: string; effectiveDate: string; expirationDate: string | null; parentId: number | null; }'.
+[14:49:51.302] client/src/pages/compliance-page.tsx(509,68): error TS2339: Property 'url' does not exist on type '{ code: string; title: string; metadata: unknown; text: string; id: number; version: string; description: string; createdAt: Date; updatedAt: Date; authority: string; effectiveDate: string; expirationDate: string | null; parentId: number | null; }'.
+[14:49:51.302] client/src/pages/compliance-page.tsx(511,22): error TS2552: Cannot find name 'ExternalLink'. Did you mean 'External'?
+[14:49:51.302] client/src/pages/documents-page.tsx(77,5): error TS2769: No overload matches this call.
+[14:49:51.302]   Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.302]     Object literal may only specify known properties, and 'onError' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.302]   Overload 2 of 3, '(options: UndefinedInitialDataOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.302]     Object literal may only specify known properties, and 'onError' does not exist in type 'UndefinedInitialDataOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.305]   Overload 3 of 3, '(options: UseQueryOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.305]     Object literal may only specify known properties, and 'onError' does not exist in type 'UseQueryOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.305] client/src/pages/documents-page.tsx(89,79): error TS2554: Expected 2-3 arguments, but got 4.
+[14:49:51.305] client/src/pages/documents-page.tsx(159,17): error TS2339: Property 'filter' does not exist on type '{}'.
+[14:49:51.306] client/src/pages/documents-page.tsx(161,11): error TS18047: 'doc.fileName' is possibly 'null'.
+[14:49:51.306] client/src/pages/documents-page.tsx(170,45): error TS2339: Property 'documentAnalysisId' does not exist on type '{ title: string; id: number; url: string; description: string | null; createdAt: Date; updatedAt: Date; fileType: string; uploadedById: number; fileName: string | null; fileSize: number | null; tags: string[] | null; currentVersionId: number | null; }'.
+[14:49:51.306] client/src/pages/knowledge-graph-page.tsx(208,44): error TS7006: Parameter 'doc' implicitly has an 'any' type.
+[14:49:51.306] client/src/pages/knowledge-graph-page.tsx(262,43): error TS7006: Parameter 'program' implicitly has an 'any' type.
+[14:49:51.306] client/src/pages/messaging-page.tsx(722,9): error TS2345: Argument of type '(oldConversations?: Conversation[] | undefined) => (Conversation | { id: number; type: "group" | "private"; name: string | undefined; participants: (Participant | { ...; })[]; unreadCount: number; isStarred: boolean; isPinned: boolean; })[]' is not assignable to parameter of type 'Updater<Conversation[] | undefined, Conversation[] | undefined>'.
+[14:49:51.307]   Type '(oldConversations?: Conversation[] | undefined) => (Conversation | { id: number; type: "group" | "private"; name: string | undefined; participants: (Participant | { ...; })[]; unreadCount: number; isStarred: boolean; isPinned: boolean; })[]' is not assignable to type '(input: Conversation[] | undefined) => Conversation[] | undefined'.
+[14:49:51.307]     Type '(Conversation | { id: number; type: "group" | "private"; name: string | undefined; participants: (Participant | { id: number; name: string; email: string; status: string; })[]; unreadCount: number; isStarred: boolean; isPinned: boolean; })[]' is not assignable to type 'Conversation[]'.
+[14:49:51.307]       Type 'Conversation | { id: number; type: "group" | "private"; name: string | undefined; participants: (Participant | { id: number; name: string; email: string; status: string; })[]; unreadCount: number; isStarred: boolean; isPinned: boolean; }' is not assignable to type 'Conversation'.
+[14:49:51.307]         Type '{ id: number; type: "group" | "private"; name: string | undefined; participants: (Participant | { id: number; name: string; email: string; status: string; })[]; unreadCount: number; isStarred: boolean; isPinned: boolean; }' is not assignable to type 'Conversation'.
+[14:49:51.307]           Types of property 'participants' are incompatible.
+[14:49:51.307]             Type '(Participant | { id: number; name: string; email: string; status: string; })[]' is not assignable to type 'Participant[]'.
+[14:49:51.308]               Type 'Participant | { id: number; name: string; email: string; status: string; }' is not assignable to type 'Participant'.
+[14:49:51.308]                 Type '{ id: number; name: string; email: string; status: string; }' is not assignable to type 'Participant'.
+[14:49:51.308]                   Types of property 'status' are incompatible.
+[14:49:51.308]                     Type 'string' is not assignable to type '"offline" | "online" | "away" | undefined'.
+[14:49:51.308] client/src/pages/messaging-page.tsx(734,31): error TS2345: Argument of type '{ id: number; type: "group" | "private"; name: string | undefined; participants: (Participant | { id: number; name: string; email: string; status: string; })[]; unreadCount: number; isStarred: boolean; isPinned: boolean; }' is not assignable to parameter of type 'SetStateAction<Conversation | null>'.
+[14:49:51.309]   Type '{ id: number; type: "group" | "private"; name: string | undefined; participants: (Participant | { id: number; name: string; email: string; status: string; })[]; unreadCount: number; isStarred: boolean; isPinned: boolean; }' is not assignable to type 'Conversation'.
+[14:49:51.309]     Types of property 'participants' are incompatible.
+[14:49:51.309]       Type '(Participant | { id: number; name: string; email: string; status: string; })[]' is not assignable to type 'Participant[]'.
+[14:49:51.309]         Type 'Participant | { id: number; name: string; email: string; status: string; }' is not assignable to type 'Participant'.
+[14:49:51.309]           Type '{ id: number; name: string; email: string; status: string; }' is not assignable to type 'Participant'.
+[14:49:51.310]             Types of property 'status' are incompatible.
+[14:49:51.310]               Type 'string' is not assignable to type '"offline" | "online" | "away" | undefined'.
+[14:49:51.320] client/src/pages/schedule-page.tsx(374,45): error TS2339: Property 'find' does not exist on type '{}'.
+[14:49:51.320] client/src/pages/schedule-page.tsx(392,16): error TS2339: Property 'forEach' does not exist on type '{}'.
+[14:49:51.320] client/src/pages/schedule-page.tsx(507,38): error TS2339: Property 'map' does not exist on type '{}'.
+[14:49:51.320] client/src/pages/schedule-page.tsx(610,36): error TS2339: Property 'map' does not exist on type '{}'.
+[14:49:51.320] client/src/pages/schedule-page.tsx(646,37): error TS2339: Property 'map' does not exist on type '{}'.
+[14:49:51.320] client/src/pages/schedule-page.tsx(730,32): error TS2339: Property 'find' does not exist on type '{}'.
+[14:49:51.320] client/src/pages/schedule-page.tsx(760,36): error TS2339: Property 'find' does not exist on type '{}'.
+[14:49:51.320] client/src/pages/schedule-page.tsx(761,36): error TS2339: Property 'find' does not exist on type '{}'.
+[14:49:51.320] client/src/pages/schedule-page.tsx(774,53): error TS2339: Property 'find' does not exist on type '{}'.
+[14:49:51.320] client/src/pages/schedule-page.tsx(792,37): error TS2339: Property 'find' does not exist on type '{}'.
+[14:49:51.320] client/src/pages/session-replay-page.tsx(22,5): error TS2769: No overload matches this call.
+[14:49:51.320]   Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.320]     Object literal may only specify known properties, and 'onError' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.320]   Overload 2 of 3, '(options: UndefinedInitialDataOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.320]     Object literal may only specify known properties, and 'onError' does not exist in type 'UndefinedInitialDataOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.320]   Overload 3 of 3, '(options: UseQueryOptions<unknown, Error, unknown, string[]>, queryClient?: QueryClient | undefined): UseQueryResult<unknown, Error>', gave the following error.
+[14:49:51.320]     Object literal may only specify known properties, and 'onError' does not exist in type 'UseQueryOptions<unknown, Error, unknown, string[]>'.
+[14:49:51.320] client/src/pages/session-replay-page.tsx(64,37): error TS2339: Property 'length' does not exist on type '{}'.
+[14:49:51.320] client/src/pages/session-replay-page.tsx(89,31): error TS2339: Property 'map' does not exist on type '{}'.
+[14:49:51.320] client/src/pages/session-replay-page.tsx(100,29): error TS2339: Property 'map' does not exist on type '{}'.
+[14:49:51.320] client/src/pages/syllabus-generator-page.tsx(865,99): error TS7006: Parameter 'c' implicitly has an 'any' type.
+[14:49:51.320] client/src/pages/test-notification-page.tsx(22,11): error TS2339: Property 'isConnected' does not exist on type '{ connected: boolean; lastMessage: any; socket: WebSocket | null; subscribe: (channel: string) => () => void; unsubscribe: (channel: string) => void; sendMessage: (message: any) => boolean; connect: () => void; disconnect: () => void; }'.
+[14:49:51.356] Command failed: npx tsc --project tsconfig.json
+[14:49:51.357] Error: Command failed: npx tsc --project tsconfig.json
+[14:49:51.357]     at genericNodeError (node:internal/errors:983:15)
+[14:49:51.358]     at wrappedFn (node:internal/errors:537:14)
+[14:49:51.358]     at checkExecSyncError (node:child_process:882:11)
+[14:49:51.358]     at execSync (node:child_process:954:15)
+[14:49:51.358]     at exec (file:///vercel/path0/api/build.js:20:5)
+[14:49:51.358]     at file:///vercel/path0/api/build.js:45:1
+[14:49:51.358]     at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+[14:49:51.359]     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+[14:49:51.359]     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5) {
+[14:49:51.359]   status: 2,
+[14:49:51.359]   signal: null,
+[14:49:51.359]   output: [ null, null, null ],
+[14:49:51.360]   pid: 272,
+[14:49:51.360]   stdout: null,
+[14:49:51.360]   stderr: null
+[14:49:51.360] }
+[14:49:51.365] Error: Command "node api/build.js" exited with 1
+[14:49:51.851] 

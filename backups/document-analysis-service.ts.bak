@@ -1,0 +1,568 @@
+import { Logger } from '../utils/logger';
+import { v4 as uuidv4 } from 'uuid';
+import nlpService, { Entity, EntityType, Relationship } from './nlp-service';
+import { Document, DocumentContent, DocumentType } from '../../shared/document-types';
+import documentService from './document-service';
+import { removeStopwords } from 'stopword';
+import compromise from 'compromise';
+
+/**
+ * Document analysis result
+ */
+export interface AnalysisResult {
+  documentId: string;
+  entities: Entity[];
+  relationships: Relationship[];
+  topics: string[];
+  summary: string;
+  keyInsights: string[];
+  metadata: {
+    wordCount: number;
+    entityCount: number;
+    relationshipCount: number;
+    processingTime: number;
+    confidence: number;
+  };
+}
+
+/**
+ * Document insight - key information extracted from document
+ */
+export interface DocumentInsight {
+  id: string;
+  documentId: string;
+  type: string;
+  content: string;
+  importance: number;
+  context?: string;
+  relatedEntities?: string[];
+}
+
+/**
+ * Service for analyzing document content
+ */
+export class DocumentAnalysisService {
+  private logger: Logger;
+  
+  constructor() {
+    this.logger = new Logger('DocumentAnalysisService');
+  }
+  
+  /**
+   * Analyze a document and extract structured information
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Analysis result
+   */
+  public async analyzeDocument(documentId: string, userId: number): Promise<AnalysisResult | undefined> {
+    try {
+      this.logger.info(`Analyzing document ${documentId}`);
+      const startTime = Date.now();
+      
+      // Get document content
+      const documentContent = await documentService.getDocumentContent(documentId, userId);
+      if (!documentContent) {
+        this.logger.error(`Document content not found for ${documentId}`);
+        return undefined;
+      }
+      
+      // Extract entities and relationships
+      const nerResult = await nlpService.extractEntitiesAndRelationships(documentContent);
+      
+      // Extract topics
+      const topics = this.extractTopics(documentContent.rawText);
+      
+      // Generate summary
+      const summary = await this.generateSummary(documentContent);
+      
+      // Extract key insights
+      const keyInsights = await this.extractKeyInsights(documentContent, nerResult.entities, nerResult.relationships);
+      
+      // Calculate metadata
+      const wordCount = documentContent.rawText.split(/\s+/).filter(Boolean).length;
+      const processingTime = Date.now() - startTime;
+      
+      // Calculate confidence
+      const confidence = this.calculateConfidence(
+        nerResult.entities.length,
+        nerResult.relationships.length,
+        wordCount,
+        processingTime
+      );
+      
+      // Update document metadata
+      await documentService.updateDocumentMetadata(
+        documentId,
+        {
+          isAnalyzed: true,
+          entityCount: nerResult.entities.length,
+          wordCount,
+          processingTimeMs: processingTime,
+          topics: topics.slice(0, 10)
+        },
+        userId
+      );
+      
+      // Return analysis result
+      return {
+        documentId,
+        entities: nerResult.entities,
+        relationships: nerResult.relationships,
+        topics,
+        summary,
+        keyInsights,
+        metadata: {
+          wordCount,
+          entityCount: nerResult.entities.length,
+          relationshipCount: nerResult.relationships.length,
+          processingTime,
+          confidence
+        }
+      };
+    } catch (error) {
+      this.logger.error(`Error analyzing document: ${error instanceof Error ? error.message : String(error)}`);
+      return undefined;
+    }
+  }
+  
+  /**
+   * Extract topics from document text
+   * @param text - Document text
+   * @returns Array of topics
+   */
+  private extractTopics(text: string): string[] {
+    try {
+      const doc = compromise(text);
+      
+      // Extract noun phrases
+      const phrases = doc.match('#Noun+').out('array');
+      
+      // Count phrase occurrences and calculate importance
+      const phraseCounts = new Map<string, number>();
+      
+      for (const phrase of phrases) {
+        const normalized = phrase.toLowerCase().trim();
+        if (normalized.length < 3) continue;
+        
+        // Increment count
+        phraseCounts.set(normalized, (phraseCounts.get(normalized) || 0) + 1);
+      }
+      
+      // Filter stopwords
+      const filteredPhrases = Array.from(phraseCounts.entries())
+        .filter(([phrase, _]) => {
+          // Skip common words and short phrases
+          if (phrase.length < 3) return false;
+          if (['the', 'a', 'an', 'this', 'that', 'these', 'those'].includes(phrase)) return false;
+          
+          // Remove phrases with stopwords
+          const words = phrase.split(/\s+/);
+          if (words.length !== removeStopwords(words).length) return false;
+          
+          return true;
+        });
+      
+      // Sort by frequency
+      return filteredPhrases
+        .sort((a, b) => b[1] - a[1])
+        .map(([phrase, _]) => phrase)
+        .slice(0, 20); // Return top 20 topics
+    } catch (error) {
+      this.logger.error(`Error extracting topics: ${error instanceof Error ? error.message : String(error)}`);
+      return [];
+    }
+  }
+  
+  /**
+   * Generate a summary of the document
+   * @param documentContent - Document content
+   * @returns Summary text
+   */
+  private async generateSummary(documentContent: DocumentContent): Promise<string> {
+    try {
+      const doc = compromise(documentContent.rawText);
+      
+      // Extract sentences
+      const sentences = doc.sentences().out('array');
+      
+      // If document is short, return first couple of sentences
+      if (sentences.length <= 5) {
+        return sentences.join(' ');
+      }
+      
+      // Extract important sentences
+      const importantSentences = this.extractImportantSentences(sentences, 5);
+      
+      return importantSentences.join(' ');
+    } catch (error) {
+      this.logger.error(`Error generating summary: ${error instanceof Error ? error.message : String(error)}`);
+      return '';
+    }
+  }
+  
+  /**
+   * Extract important sentences from text
+   * @param sentences - Array of sentences
+   * @param count - Number of sentences to extract
+   * @returns Array of important sentences
+   */
+  private extractImportantSentences(sentences: string[], count: number): string[] {
+    try {
+      // Create a map of sentence importance
+      const sentenceImportance = new Map<string, number>();
+      
+      // Calculate importance based on heuristics
+      for (const sentence of sentences) {
+        let importance = 0;
+        
+        // Length-based importance (prefer medium-length sentences)
+        const wordCount = sentence.split(/\s+/).length;
+        if (wordCount > 5 && wordCount < 30) {
+          importance += 0.5;
+        } else if (wordCount >= 30) {
+          importance -= 0.3; // Penalize very long sentences
+        }
+        
+        // Position-based importance (prefer early sentences)
+        const position = sentences.indexOf(sentence);
+        if (position === 0) {
+          importance += 1; // First sentence
+        } else if (position < sentences.length * 0.2) {
+          importance += 0.5; // Early in the document
+        } else if (position > sentences.length * 0.8) {
+          importance += 0.3; // Late in the document (conclusion)
+        }
+        
+        // Content-based importance
+        const containsKeyPhrases = /important|significant|critical|essential|key|primary|main|major|fundamental|vital/i.test(sentence);
+        if (containsKeyPhrases) {
+          importance += 0.5;
+        }
+        
+        // Contains numbers or percentages
+        const containsNumbers = /\d+%|\d+\.\d+|\b\d+\b/g.test(sentence);
+        if (containsNumbers) {
+          importance += 0.3;
+        }
+        
+        sentenceImportance.set(sentence, importance);
+      }
+      
+      // Sort sentences by importance and take the requested count
+      return Array.from(sentenceImportance.entries())
+        .sort((a, b) => b[1] - a[1])
+        .map(([sentence, _]) => sentence)
+        .slice(0, count);
+    } catch (error) {
+      this.logger.error(`Error extracting important sentences: ${error instanceof Error ? error.message : String(error)}`);
+      return sentences.slice(0, Math.min(count, sentences.length));
+    }
+  }
+  
+  /**
+   * Extract key insights from document
+   * @param documentContent - Document content
+   * @param entities - Extracted entities
+   * @param relationships - Extracted relationships
+   * @returns Array of key insights
+   */
+  private async extractKeyInsights(
+    documentContent: DocumentContent,
+    entities: Entity[],
+    relationships: Relationship[]
+  ): Promise<string[]> {
+    try {
+      const insights: string[] = [];
+      
+      // Find key entities (high importance)
+      const keyEntities = entities
+        .filter(entity => entity.importance > 0.7)
+        .slice(0, 5);
+      
+      // Add insights about key entities
+      for (const entity of keyEntities) {
+        insights.push(`${entity.name} is an important ${entity.type.toLowerCase()} mentioned in the document.`);
+      }
+      
+      // Find key relationships (high confidence)
+      const keyRelationships = relationships
+        .filter(rel => rel.confidence > 0.7)
+        .slice(0, 5);
+      
+      // Add insights about key relationships
+      for (const relationship of keyRelationships) {
+        const source = entities.find(e => e.id === relationship.sourceId);
+        const target = entities.find(e => e.id === relationship.targetId);
+        
+        if (source && target) {
+          insights.push(`${source.name} ${relationship.type.replace('_', ' ')} ${target.name}.`);
+        }
+      }
+      
+      // Add insights from key sentences
+      const doc = compromise(documentContent.rawText);
+      const sentences = doc.sentences().out('array');
+      const importantSentences = this.extractImportantSentences(sentences, 3);
+      
+      for (const sentence of importantSentences) {
+        if (!insights.some(insight => sentence.includes(insight))) {
+          insights.push(sentence);
+        }
+      }
+      
+      return insights;
+    } catch (error) {
+      this.logger.error(`Error extracting key insights: ${error instanceof Error ? error.message : String(error)}`);
+      return [];
+    }
+  }
+  
+  /**
+   * Calculate confidence score for analysis
+   * @param entityCount - Number of entities found
+   * @param relationshipCount - Number of relationships found
+   * @param wordCount - Document word count
+   * @param processingTime - Processing time in milliseconds
+   * @returns Confidence score (0-1)
+   */
+  private calculateConfidence(
+    entityCount: number,
+    relationshipCount: number,
+    wordCount: number,
+    processingTime: number
+  ): number {
+    // Base confidence
+    let confidence = 0.6;
+    
+    // Entity density factor
+    const entityDensity = wordCount > 0 ? entityCount / wordCount : 0;
+    if (entityDensity > 0.01) {
+      confidence += 0.1;
+    } else if (entityDensity < 0.001) {
+      confidence -= 0.1;
+    }
+    
+    // Relationship factor
+    const relationshipDensity = entityCount > 0 ? relationshipCount / entityCount : 0;
+    if (relationshipDensity > 0.5) {
+      confidence += 0.1;
+    } else if (relationshipDensity < 0.1) {
+      confidence -= 0.1;
+    }
+    
+    // Processing time factor (penalize very quick or very slow processing)
+    const expectedTime = wordCount * 0.5; // 0.5ms per word as a rough estimate
+    const timeFactor = Math.min(Math.abs(processingTime - expectedTime) / expectedTime, 1);
+    confidence -= timeFactor * 0.1;
+    
+    // Ensure confidence is within range
+    return Math.min(Math.max(confidence, 0), 1);
+  }
+  
+  /**
+   * Extract entities from document by type
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @param type - Entity type to extract
+   * @returns Array of entities
+   */
+  public async extractEntitiesByType(documentId: string, userId: number, type: EntityType): Promise<Entity[]> {
+    try {
+      const analysisResult = await this.analyzeDocument(documentId, userId);
+      if (!analysisResult) {
+        return [];
+      }
+      
+      return analysisResult.entities.filter(entity => entity.type === type);
+    } catch (error) {
+      this.logger.error(`Error extracting entities by type: ${error instanceof Error ? error.message : String(error)}`);
+      return [];
+    }
+  }
+  
+  /**
+   * Find related documents based on shared entities
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @param threshold - Minimum number of shared entities
+   * @returns Array of related documents with similarity scores
+   */
+  public async findRelatedDocuments(
+    documentId: string,
+    userId: number,
+    threshold = 3
+  ): Promise<Array<{ documentId: string; similarity: number }>> {
+    try {
+      // Get analysis for the source document
+      const sourceAnalysis = await this.analyzeDocument(documentId, userId);
+      if (!sourceAnalysis) {
+        return [];
+      }
+      
+      // Get all user documents
+      const userDocuments = await documentService.listDocuments(userId);
+      
+      // Filter out the source document
+      const otherDocuments = userDocuments.filter(doc => doc.id !== documentId);
+      
+      const results: Array<{ documentId: string; similarity: number }> = [];
+      
+      // For each document, calculate similarity
+      for (const document of otherDocuments) {
+        // Get analysis for the target document
+        const targetAnalysis = await this.analyzeDocument(document.id, userId);
+        if (!targetAnalysis) continue;
+        
+        // Create maps of entity names to entities for quick lookup
+        const sourceEntityMap = new Map<string, Entity>();
+        const targetEntityMap = new Map<string, Entity>();
+        
+        for (const entity of sourceAnalysis.entities) {
+          sourceEntityMap.set(entity.name.toLowerCase(), entity);
+        }
+        
+        for (const entity of targetAnalysis.entities) {
+          targetEntityMap.set(entity.name.toLowerCase(), entity);
+        }
+        
+        // Find shared entities
+        const sharedEntities: Entity[] = [];
+        
+        for (const [name, entity] of sourceEntityMap.entries()) {
+          if (targetEntityMap.has(name)) {
+            sharedEntities.push(entity);
+          }
+        }
+        
+        // If there are enough shared entities, add to results
+        if (sharedEntities.length >= threshold) {
+          // Calculate similarity score
+          const totalUniqueEntities = new Set([
+            ...sourceAnalysis.entities.map(e => e.name.toLowerCase()),
+            ...targetAnalysis.entities.map(e => e.name.toLowerCase())
+          ]).size;
+          
+          const similarity = sharedEntities.length / totalUniqueEntities;
+          
+          results.push({
+            documentId: document.id,
+            similarity
+          });
+        }
+      }
+      
+      // Sort by similarity (descending)
+      return results.sort((a, b) => b.similarity - a.similarity);
+    } catch (error) {
+      this.logger.error(`Error finding related documents: ${error instanceof Error ? error.message : String(error)}`);
+      return [];
+    }
+  }
+  
+  /**
+   * Compare two documents to find similarities and differences
+   * @param document1Id - ID of first document
+   * @param document2Id - ID of second document
+   * @param userId - User ID for authorization
+   * @returns Comparison result
+   */
+  public async compareDocuments(
+    document1Id: string,
+    document2Id: string,
+    userId: number
+  ): Promise<{
+    sharedEntities: Entity[];
+    uniqueEntities1: Entity[];
+    uniqueEntities2: Entity[];
+    sharedTopics: string[];
+    uniqueTopics1: string[];
+    uniqueTopics2: string[];
+    similarityScore: number;
+  } | undefined> {
+    try {
+      // Get analysis for both documents
+      const analysis1 = await this.analyzeDocument(document1Id, userId);
+      const analysis2 = await this.analyzeDocument(document2Id, userId);
+      
+      if (!analysis1 || !analysis2) {
+        return undefined;
+      }
+      
+      // Create maps of entity names to entities for quick lookup
+      const entityMap1 = new Map<string, Entity>();
+      const entityMap2 = new Map<string, Entity>();
+      
+      for (const entity of analysis1.entities) {
+        entityMap1.set(entity.name.toLowerCase(), entity);
+      }
+      
+      for (const entity of analysis2.entities) {
+        entityMap2.set(entity.name.toLowerCase(), entity);
+      }
+      
+      // Find shared and unique entities
+      const sharedEntities: Entity[] = [];
+      const uniqueEntities1: Entity[] = [];
+      const uniqueEntities2: Entity[] = [];
+      
+      for (const [name, entity] of entityMap1.entries()) {
+        if (entityMap2.has(name)) {
+          sharedEntities.push(entity);
+        } else {
+          uniqueEntities1.push(entity);
+        }
+      }
+      
+      for (const [name, entity] of entityMap2.entries()) {
+        if (!entityMap1.has(name)) {
+          uniqueEntities2.push(entity);
+        }
+      }
+      
+      // Find shared and unique topics
+      const topicSet1 = new Set(analysis1.topics.map(t => t.toLowerCase()));
+      const topicSet2 = new Set(analysis2.topics.map(t => t.toLowerCase()));
+      
+      const sharedTopics: string[] = [];
+      const uniqueTopics1: string[] = [];
+      const uniqueTopics2: string[] = [];
+      
+      for (const topic of topicSet1) {
+        if (topicSet2.has(topic)) {
+          sharedTopics.push(topic);
+        } else {
+          uniqueTopics1.push(topic);
+        }
+      }
+      
+      for (const topic of topicSet2) {
+        if (!topicSet1.has(topic)) {
+          uniqueTopics2.push(topic);
+        }
+      }
+      
+      // Calculate similarity score
+      const totalUniqueEntities = entityMap1.size + entityMap2.size - sharedEntities.length;
+      const similarityScore = totalUniqueEntities > 0 
+        ? sharedEntities.length / totalUniqueEntities 
+        : 0;
+      
+      return {
+        sharedEntities,
+        uniqueEntities1,
+        uniqueEntities2,
+        sharedTopics,
+        uniqueTopics1,
+        uniqueTopics2,
+        similarityScore
+      };
+    } catch (error) {
+      this.logger.error(`Error comparing documents: ${error instanceof Error ? error.message : String(error)}`);
+      return undefined;
+    }
+  }
+}
+
+// Create and export singleton instance
+const documentAnalysisService = new DocumentAnalysisService();
+export default documentAnalysisService;

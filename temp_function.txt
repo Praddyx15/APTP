@@ -1,0 +1,9 @@
+  /**
+   * Alias for getDocument to match route naming
+   * @param documentId - Document ID
+   * @param userId - User ID for authorization
+   * @returns Document if found and user is authorized
+   */
+  public async getDocumentById(documentId: string, userId: number): Promise<Document | undefined> {
+    return this.getDocument(documentId, userId);
+  }

@@ -1,0 +1,526 @@
+import { Logger } from '../utils/logger';
+import { DocumentService } from './document-service';
+import nlpService, { Entity, Relationship } from './nlp-service';
+import documentAnalysisService from './document-analysis-service';
+import { v4 as uuidv4 } from 'uuid';
+
+export interface KnowledgeNode {
+  id: string;
+  name: string;
+  type: string;
+  properties: Record<string, any>;
+  documentIds: string[];
+}
+
+export interface KnowledgeEdge {
+  id: string;
+  source: string;
+  target: string;
+  type: string;
+  properties: Record<string, any>;
+}
+
+export interface KnowledgeGraph {
+  id: string;
+  name: string;
+  description: string;
+  nodes: KnowledgeNode[];
+  edges: KnowledgeEdge[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export class KnowledgeGraphService {
+  private logger: Logger;
+  private documentService: DocumentService;
+  
+  // In-memory storage (would be replaced with database storage in production)
+  private knowledgeGraphs: Map<string, KnowledgeGraph> = new Map();
+  private documentGraphs: Map<string, string> = new Map(); // documentId -> graphId
+  private entityNodes: Map<string, KnowledgeNode> = new Map(); // entityKey -> node
+  
+  constructor() {
+    this.logger = new Logger('KnowledgeGraphService');
+    this.documentService = new DocumentService();
+  }
+
+  /**
+   * Generate a knowledge graph from a document
+   * @param documentId - ID of the document to process
+   * @param userId - User ID for authorization
+   * @returns Success status
+   */
+  public async generateKnowledgeGraph(documentId: string, userId: number): Promise<boolean> {
+    try {
+      this.logger.info(`Generating knowledge graph for document ${documentId}`);
+      
+      // Check if document exists and is accessible
+      const document = await this.documentService.getDocumentById(documentId, userId);
+      
+      if (!document) {
+        this.logger.error(`Document ${documentId} not found or not accessible`);
+        return false;
+      }
+      
+      // Get document content
+      const content = await this.documentService.getDocumentContent(documentId, userId);
+      
+      if (!content) {
+        this.logger.error(`Could not retrieve content for document ${documentId}`);
+        return false;
+      }
+      
+      // Check if graph already exists for this document
+      if (this.documentGraphs.has(documentId)) {
+        this.logger.info(`Knowledge graph already exists for document ${documentId}, updating it`);
+        // For simplicity, we'll just regenerate the graph
+        const existingGraphId = this.documentGraphs.get(documentId)!;
+        this.knowledgeGraphs.delete(existingGraphId);
+      }
+      
+      // Analyze document and extract entities and relationships
+      const analysis = await documentAnalysisService.analyzeDocument(documentId, userId);
+      
+      if (!analysis.success) {
+        this.logger.error(`Failed to analyze document: ${analysis.error}`);
+        return false;
+      }
+      
+      const { entities, structure } = analysis;
+      
+      // Get relationships from NLP service
+      const { relationships } = await nlpService.extractEntitiesAndRelationships(content);
+      
+      // Create a new knowledge graph
+      let graph: KnowledgeGraph = {
+        id: `graph_${uuidv4()}`,
+        name: structure.title || document.name,
+        description: structure.summary || `Knowledge graph for ${document.name}`,
+        nodes: [],
+        edges: [],
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      
+      // Add entities to graph
+      for (const entity of entities) {
+        this.addEntityToGraph(entity, documentId, graph);
+      }
+      
+      // Add relationships to graph
+      for (const relationship of relationships) {
+        this.addRelationshipToGraph(relationship, documentId, graph);
+      }
+      
+      // Store the graph
+      this.knowledgeGraphs.set(graph.id, graph);
+      this.documentGraphs.set(documentId, graph.id);
+      
+      this.logger.info(`Knowledge graph ${graph.id} generated with ${graph.nodes.length} nodes and ${graph.edges.length} edges`);
+      
+      return true;
+    } catch (error) {
+      this.logger.error(`Error generating knowledge graph: ${error instanceof Error ? error.message : String(error)}`);
+      return false;
+    }
+  }
+
+  /**
+   * Get a knowledge graph for a document
+   * @param documentId - ID of the document
+   * @param userId - User ID for authorization
+   * @returns Knowledge graph or null if not found
+   */
+  public async getDocumentKnowledgeGraph(documentId: string, userId: number): Promise<KnowledgeGraph | null> {
+    try {
+      // Check if document exists and is accessible
+      const document = await this.documentService.getDocumentById(documentId, userId);
+      
+      if (!document) {
+        this.logger.error(`Document ${documentId} not found or not accessible`);
+        return null;
+      }
+      
+      // Get graph ID for document
+      const graphId = this.documentGraphs.get(documentId);
+      
+      if (!graphId) {
+        this.logger.info(`No knowledge graph found for document ${documentId}, generating one`);
+        const success = await this.generateKnowledgeGraph(documentId, userId);
+        
+        if (!success) {
+          return null;
+        }
+        
+        const newGraphId = this.documentGraphs.get(documentId);
+        return this.knowledgeGraphs.get(newGraphId!)!;
+      }
+      
+      // Return the graph
+      return this.knowledgeGraphs.get(graphId)!;
+    } catch (error) {
+      this.logger.error(`Error getting knowledge graph: ${error instanceof Error ? error.message : String(error)}`);
+      return null;
+    }
+  }
+
+  /**
+   * Search for entities in knowledge graphs
+   * @param query - Search query
+   * @param userId - User ID for authorization
+   * @param limit - Maximum number of results
+   * @returns List of matching entities
+   */
+  public async searchKnowledgeGraph(query: string, userId: number, limit: number = 10): Promise<any[]> {
+    try {
+      const results: Array<{
+        node: KnowledgeNode;
+        graphId: string;
+        score: number;
+      }> = [];
+      
+      const queryLower = query.toLowerCase();
+      const queryTerms = queryLower.split(/\s+/);
+      
+      // Search through all graphs
+      for (const [graphId, graph] of this.knowledgeGraphs.entries()) {
+        // For each node, calculate a relevance score
+        for (const node of graph.nodes) {
+          const nameLower = node.name.toLowerCase();
+          
+          // Simple scoring: exact match gets highest score
+          let score = 0;
+          
+          if (nameLower === queryLower) {
+            score = 1.0;
+          } else if (nameLower.includes(queryLower)) {
+            score = 0.8;
+          } else {
+            // Score based on term matches
+            const termMatches = queryTerms.filter(term => 
+              nameLower.includes(term)
+            ).length;
+            
+            if (termMatches > 0) {
+              score = 0.5 * (termMatches / queryTerms.length);
+            }
+            
+            // Boost score for aviation entity types
+            const aviationTypes = ['procedure', 'regulation', 'equipment', 'aircraft', 'maneuver', 'checklist', 'training', 'emergency'];
+            if (aviationTypes.includes(node.type)) {
+              score += 0.1;
+            }
+          }
+          
+          if (score > 0) {
+            results.push({
+              node,
+              graphId,
+              score
+            });
+          }
+        }
+      }
+      
+      // Sort by score (descending) and limit results
+      return results
+        .sort((a, b) => b.score - a.score)
+        .slice(0, limit);
+    } catch (error) {
+      this.logger.error(`Error searching knowledge graph: ${error instanceof Error ? error.message : String(error)}`);
+      return [];
+    }
+  }
+
+  /**
+   * Merge multiple knowledge graphs
+   * @param graphIds - IDs of the graphs to merge
+   * @param name - Name for the merged graph
+   * @param description - Description for the merged graph
+   * @param userId - User ID for authorization
+   * @returns ID of the merged graph or null on failure
+   */
+  public async mergeKnowledgeGraphs(
+    graphIds: string[],
+    name: string,
+    description: string,
+    userId: number
+  ): Promise<string | null> {
+    try {
+      this.logger.info(`Merging knowledge graphs: ${graphIds.join(', ')}`);
+      
+      // Check if all graphs exist
+      const graphs: KnowledgeGraph[] = [];
+      
+      for (const graphId of graphIds) {
+        const graph = this.knowledgeGraphs.get(graphId);
+        
+        if (!graph) {
+          this.logger.error(`Knowledge graph ${graphId} not found`);
+          return null;
+        }
+        
+        graphs.push(graph);
+      }
+      
+      // Create a new merged graph
+      const mergedGraph: KnowledgeGraph = {
+        id: `graph_${uuidv4()}`,
+        name,
+        description,
+        nodes: [],
+        edges: [],
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      
+      // Track nodes to avoid duplicates
+      const nodeMap: Map<string, KnowledgeNode> = new Map();
+      const edgeSet: Set<string> = new Set();
+      
+      // Merge nodes and edges from all graphs
+      for (const graph of graphs) {
+        for (const node of graph.nodes) {
+          // Check if equivalent node already exists (by name and type)
+          const nodeKey = `${node.name.toLowerCase()}_${node.type}`;
+          
+          if (nodeMap.has(nodeKey)) {
+            // Merge document IDs and properties
+            const existingNode = nodeMap.get(nodeKey)!;
+            
+            // Combine document IDs
+            for (const docId of node.documentIds) {
+              if (!existingNode.documentIds.includes(docId)) {
+                existingNode.documentIds.push(docId);
+              }
+            }
+            
+            // Merge properties (simple approach)
+            existingNode.properties = { ...existingNode.properties, ...node.properties };
+          } else {
+            // Create a copy of the node for the merged graph
+            const nodeCopy: KnowledgeNode = {
+              ...node,
+              id: `node_${uuidv4()}` // Generate new ID to avoid conflicts
+            };
+            
+            mergedGraph.nodes.push(nodeCopy);
+            nodeMap.set(nodeKey, nodeCopy);
+          }
+        }
+        
+        // Add edges
+        for (const edge of graph.edges) {
+          // Find corresponding nodes in merged graph
+          const sourceNode = graph.nodes.find(n => n.id === edge.source);
+          const targetNode = graph.nodes.find(n => n.id === edge.target);
+          
+          if (!sourceNode || !targetNode) continue;
+          
+          const sourceKey = `${sourceNode.name.toLowerCase()}_${sourceNode.type}`;
+          const targetKey = `${targetNode.name.toLowerCase()}_${targetNode.type}`;
+          
+          const mergedSource = nodeMap.get(sourceKey);
+          const mergedTarget = nodeMap.get(targetKey);
+          
+          if (!mergedSource || !mergedTarget) continue;
+          
+          // Check if equivalent edge already exists
+          const edgeKey = `${mergedSource.id}_${mergedTarget.id}_${edge.type}`;
+          
+          if (!edgeSet.has(edgeKey)) {
+            const newEdge: KnowledgeEdge = {
+              id: `edge_${uuidv4()}`,
+              source: mergedSource.id,
+              target: mergedTarget.id,
+              type: edge.type,
+              properties: { ...edge.properties }
+            };
+            
+            mergedGraph.edges.push(newEdge);
+            edgeSet.add(edgeKey);
+          }
+        }
+      }
+      
+      // Store the merged graph
+      this.knowledgeGraphs.set(mergedGraph.id, mergedGraph);
+      
+      this.logger.info(`Merged graph ${mergedGraph.id} created with ${mergedGraph.nodes.length} nodes and ${mergedGraph.edges.length} edges`);
+      
+      return mergedGraph.id;
+    } catch (error) {
+      this.logger.error(`Error merging knowledge graphs: ${error instanceof Error ? error.message : String(error)}`);
+      return null;
+    }
+  }
+
+  /**
+   * Add an entity to a knowledge graph
+   * @param entity - Entity to add
+   * @param documentId - Source document ID
+   * @param graph - Knowledge graph to update
+   * @returns ID of the node
+   */
+  private addEntityToGraph(entity: Entity, documentId: string, graph: KnowledgeGraph): string {
+    const entityKey = `${entity.name.toLowerCase()}_${entity.type}`;
+    
+    // Check if entity already exists in this graph
+    const existingNodeIndex = graph.nodes.findIndex(node => 
+      node.name.toLowerCase() === entity.name.toLowerCase() && node.type === entity.type
+    );
+    
+    if (existingNodeIndex !== -1) {
+      // Update existing node
+      const existingNode = graph.nodes[existingNodeIndex];
+      
+      // Add document ID if not already present
+      if (!existingNode.documentIds.includes(documentId)) {
+        existingNode.documentIds.push(documentId);
+        
+        // Update properties
+        existingNode.properties = { ...existingNode.properties, ...entity.properties };
+      }
+      
+      return existingNode.id;
+    }
+    
+    // Check if this entity has been seen across any graph
+    if (this.entityNodes.has(entityKey)) {
+      const existingNode = this.entityNodes.get(entityKey)!;
+      
+      // Create a copy of the node for this graph
+      const nodeCopy: KnowledgeNode = {
+        ...existingNode,
+        id: `node_${uuidv4()}`, // Generate new ID to avoid conflicts
+        documentIds: [documentId]
+      };
+      
+      graph.nodes.push(nodeCopy);
+      
+      return nodeCopy.id;
+    }
+    
+    // Create new node
+    const node: KnowledgeNode = {
+      id: `node_${uuidv4()}`,
+      name: entity.name,
+      type: entity.type,
+      properties: { ...entity.properties },
+      documentIds: [documentId]
+    };
+    
+    graph.nodes.push(node);
+    this.entityNodes.set(entityKey, node);
+    
+    return node.id;
+  }
+
+  /**
+   * Add a relationship to a knowledge graph
+   * @param relationship - Relationship to add
+   * @param documentId - Source document ID
+   * @param graph - Knowledge graph to update
+   */
+  private addRelationshipToGraph(relationship: Relationship, documentId: string, graph: KnowledgeGraph): void {
+    // Find corresponding nodes in graph
+    const sourceNode = graph.nodes.find(node => node.id === relationship.sourceId);
+    const targetNode = graph.nodes.find(node => node.id === relationship.targetId);
+    
+    if (!sourceNode || !targetNode) {
+      return; // Skip if nodes not found
+    }
+    
+    // Check if relationship already exists
+    const existingEdgeIndex = graph.edges.findIndex(edge => 
+      edge.source === sourceNode.id && 
+      edge.target === targetNode.id && 
+      edge.type === relationship.type
+    );
+    
+    if (existingEdgeIndex !== -1) {
+      // Update existing edge
+      const existingEdge = graph.edges[existingEdgeIndex];
+      
+      // Update properties
+      existingEdge.properties = { 
+        ...existingEdge.properties, 
+        ...relationship.properties,
+        documentIds: [...(existingEdge.properties.documentIds || []), documentId]
+      };
+      
+      return;
+    }
+    
+    // Create new edge
+    const edge: KnowledgeEdge = {
+      id: `edge_${uuidv4()}`,
+      source: sourceNode.id,
+      target: targetNode.id,
+      type: relationship.type,
+      properties: { 
+        ...relationship.properties,
+        documentIds: [documentId]
+      }
+    };
+    
+    graph.edges.push(edge);
+  }
+
+  /**
+   * Get statistics about all knowledge graphs
+   * @returns Statistics about all knowledge graphs
+   */
+  public getKnowledgeGraphStats(): any {
+    try {
+      const graphCount = this.knowledgeGraphs.size;
+      let totalNodes = 0;
+      let totalEdges = 0;
+      let entityTypes: Record<string, number> = {};
+      let relationshipTypes: Record<string, number> = {};
+      let documentsWithGraphs = new Set<string>();
+      
+      // Collect stats from all graphs
+      for (const graph of this.knowledgeGraphs.values()) {
+        totalNodes += graph.nodes.length;
+        totalEdges += graph.edges.length;
+        
+        // Entity type distribution
+        for (const node of graph.nodes) {
+          entityTypes[node.type] = (entityTypes[node.type] || 0) + 1;
+          
+          // Count unique documents
+          for (const docId of node.documentIds) {
+            documentsWithGraphs.add(docId);
+          }
+        }
+        
+        // Relationship type distribution
+        for (const edge of graph.edges) {
+          relationshipTypes[edge.type] = (relationshipTypes[edge.type] || 0) + 1;
+        }
+      }
+      
+      return {
+        graphCount,
+        documentCount: documentsWithGraphs.size,
+        totalNodes,
+        totalEdges,
+        entityTypeDistribution: entityTypes,
+        relationshipTypeDistribution: relationshipTypes,
+        avgNodesPerGraph: graphCount > 0 ? totalNodes / graphCount : 0,
+        avgEdgesPerGraph: graphCount > 0 ? totalEdges / graphCount : 0,
+        avgEdgesPerNode: totalNodes > 0 ? totalEdges / totalNodes : 0
+      };
+    } catch (error) {
+      this.logger.error(`Error getting knowledge graph stats: ${error instanceof Error ? error.message : String(error)}`);
+      return {
+        error: 'Failed to calculate knowledge graph statistics'
+      };
+    }
+  }
+}
+
+// Create and export singleton instance
+const knowledgeGraphService = new KnowledgeGraphService();
+export default knowledgeGraphService;

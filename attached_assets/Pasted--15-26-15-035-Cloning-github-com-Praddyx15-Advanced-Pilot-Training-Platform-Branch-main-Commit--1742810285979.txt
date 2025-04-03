@@ -1,0 +1,366 @@
+[15:26:15.035] Cloning github.com/Praddyx15/Advanced-Pilot-Training-Platform (Branch: main, Commit: 03087d8)
+[15:26:15.228] Previous build caches not available
+[15:26:15.681] Cloning completed: 646.000ms
+[15:26:15.832] Found .vercelignore
+[15:26:15.842] Removed 50 ignored files defined in .vercelignore
+[15:26:15.983] Running build in Washington, D.C., USA (East) – iad1
+[15:26:16.160] Running "vercel build"
+[15:26:16.556] Vercel CLI 41.4.1
+[15:26:17.306] Running "install" command: `npm install`...
+[15:26:21.033] npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+[15:26:21.586] npm warn deprecated npmlog@5.0.1: This package is no longer supported.
+[15:26:21.830] npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+[15:26:21.831] npm warn deprecated lodash.get@4.4.2: This package is deprecated. Use the optional chaining (?.) operator instead.
+[15:26:22.135] npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+[15:26:22.631] npm warn deprecated gauge@3.0.2: This package is no longer supported.
+[15:26:22.993] npm warn deprecated are-we-there-yet@2.0.0: This package is no longer supported.
+[15:26:23.937] npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+[15:26:23.979] npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+[15:26:24.306] npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+[15:26:24.370] npm warn deprecated glob@7.1.6: Glob versions prior to v9 are no longer supported
+[15:26:33.267] 
+[15:26:33.268] added 796 packages, and audited 797 packages in 15s
+[15:26:33.268] 
+[15:26:33.268] 81 packages are looking for funding
+[15:26:33.268]   run `npm fund` for details
+[15:26:33.296] 
+[15:26:33.296] 9 vulnerabilities (8 moderate, 1 high)
+[15:26:33.296] 
+[15:26:33.296] To address issues that do not require attention, run:
+[15:26:33.297]   npm audit fix
+[15:26:33.297] 
+[15:26:33.297] To address all issues possible (including breaking changes), run:
+[15:26:33.297]   npm audit fix --force
+[15:26:33.297] 
+[15:26:33.297] Some issues need review, and may require choosing
+[15:26:33.297] a different dependency.
+[15:26:33.297] 
+[15:26:33.297] Run `npm audit` for details.
+[15:26:33.494] Starting Vercel build process...
+[15:26:33.495] Compiling schema utility files...
+[15:26:33.495] Executing: npx tsc shared/schema-build-fix.ts --skipLibCheck --allowJs --noImplicitAny false --strictNullChecks false --strictPropertyInitialization false --noEmit false --declaration false
+[15:26:35.604] Building server-side TypeScript using transpile-only mode...
+[15:26:35.604] Executing: npx tsc --project ../tsconfig.build.json --transpileOnly --skipLibCheck
+[15:26:36.031] error TS5023: Unknown compiler option '--transpileOnly'.
+[15:26:36.048] Command failed: npx tsc --project ../tsconfig.build.json --transpileOnly --skipLibCheck
+[15:26:36.050] Error: Command failed: npx tsc --project ../tsconfig.build.json --transpileOnly --skipLibCheck
+[15:26:36.050]     at genericNodeError (node:internal/errors:983:15)
+[15:26:36.050]     at wrappedFn (node:internal/errors:537:14)
+[15:26:36.050]     at checkExecSyncError (node:child_process:882:11)
+[15:26:36.050]     at execSync (node:child_process:954:15)
+[15:26:36.050]     at exec (file:///vercel/path0/api/build.js:20:5)
+[15:26:36.050]     at file:///vercel/path0/api/build.js:55:32
+[15:26:36.050]     at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+[15:26:36.050]     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+[15:26:36.050]     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5) {
+[15:26:36.050]   status: 1,
+[15:26:36.051]   signal: null,
+[15:26:36.051]   output: [ null, null, null ],
+[15:26:36.051]   pid: 267,
+[15:26:36.051]   stdout: null,
+[15:26:36.051]   stderr: null
+[15:26:36.051] }
+[15:26:36.051] TypeScript compilation failed with project reference, trying alternative approach...
+[15:26:36.051] Executing: npx tsc server/**/*.ts shared/**/*.ts shared/**/*.tsx --outDir dist --skipLibCheck --esModuleInterop --allowJs --resolveJsonModule --noImplicitAny false --strictNullChecks false --downlevelIteration --moduleResolution node --target ESNext --module ESNext
+[15:26:38.671] error TS6053: File 'server/**/*.ts' not found.
+[15:26:38.672]   The file is in the program because:
+[15:26:38.672]     Root file specified for compilation
+[15:26:38.672] error TS6053: File 'shared/**/*.ts' not found.
+[15:26:38.673]   The file is in the program because:
+[15:26:38.673]     Root file specified for compilation
+[15:26:38.673] error TS6053: File 'shared/**/*.tsx' not found.
+[15:26:38.673]   The file is in the program because:
+[15:26:38.673]     Root file specified for compilation
+[15:26:38.694] Command failed: npx tsc server/**/*.ts shared/**/*.ts shared/**/*.tsx --outDir dist --skipLibCheck --esModuleInterop --allowJs --resolveJsonModule --noImplicitAny false --strictNullChecks false --downlevelIteration --moduleResolution node --target ESNext --module ESNext
+[15:26:38.694] Error: Command failed: npx tsc server/**/*.ts shared/**/*.ts shared/**/*.tsx --outDir dist --skipLibCheck --esModuleInterop --allowJs --resolveJsonModule --noImplicitAny false --strictNullChecks false --downlevelIteration --moduleResolution node --target ESNext --module ESNext
+[15:26:38.695]     at genericNodeError (node:internal/errors:983:15)
+[15:26:38.695]     at wrappedFn (node:internal/errors:537:14)
+[15:26:38.695]     at checkExecSyncError (node:child_process:882:11)
+[15:26:38.695]     at execSync (node:child_process:954:15)
+[15:26:38.695]     at exec (file:///vercel/path0/api/build.js:20:5)
+[15:26:38.695]     at file:///vercel/path0/api/build.js:61:8
+[15:26:38.696]     at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+[15:26:38.696]     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+[15:26:38.696]     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5) {
+[15:26:38.696]   status: 2,
+[15:26:38.696]   signal: null,
+[15:26:38.696]   output: [ null, null, null ],
+[15:26:38.697]   pid: 287,
+[15:26:38.697]   stdout: null,
+[15:26:38.697]   stderr: null
+[15:26:38.697] }
+[15:26:38.697] Failed to compile TypeScript files directly.
+[15:26:38.697] Creating minimal structure to allow deployment to proceed...
+[15:26:38.697] Building client-side Vite app...
+[15:26:38.698] Executing: npx vite build --outDir dist/public
+[15:26:40.298] [36mvite v5.4.14 [32mbuilding for production...[36m[39m
+[15:26:40.406] transforming...
+[15:26:51.312] [32m✓[39m 3890 modules transformed.
+[15:26:52.361] rendering chunks...
+[15:26:52.384] computing gzip size...
+[15:26:52.425] [2mdist/public/[22m[32mindex.html                 [39m[1m[2m    3.28 kB[22m[1m[22m[2m │ gzip:   0.94 kB[22m
+[15:26:52.426] [2mdist/public/[22m[2massets/[22m[35mindex-DaCZ89JS.css  [39m[1m[2m   90.51 kB[22m[1m[22m[2m │ gzip:  14.87 kB[22m
+[15:26:52.428] [2mdist/public/[22m[2massets/[22m[36mindex-BRQHUwPq.js   [39m[1m[33m1,652.42 kB[39m[22m[2m │ gzip: 443.28 kB[22m
+[15:26:52.429] [32m✓ built in 12.10s[39m
+[15:26:52.429] [33m
+[15:26:52.429] (!) Some chunks are larger than 500 kB after minification. Consider:
+[15:26:52.429] - Using dynamic import() to code-split the application
+[15:26:52.430] - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+[15:26:52.430] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[15:26:52.487] Preparing files for Vercel deployment...
+[15:26:52.487] Handling schema files to fix TypeScript errors...
+[15:26:52.488] Using optimized schema-build process...
+[15:26:52.488] Executing: npx tsc shared/schema-build.ts --skipLibCheck --allowJs --noImplicitAny false --strictNullChecks false --strictPropertyInitialization false --noPropertyAccessFromIndexSignature false --downlevelIteration true
+[15:26:56.830] shared/schema.ts(25,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.831] shared/schema.ts(26,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.831] shared/schema.ts(27,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.831] shared/schema.ts(28,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.831] shared/schema.ts(29,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.831] shared/schema.ts(30,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.831] shared/schema.ts(31,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.831] shared/schema.ts(32,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.831] shared/schema.ts(33,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.832] shared/schema.ts(34,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.832] shared/schema.ts(35,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.832] shared/schema.ts(36,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.833] shared/schema.ts(37,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.833] shared/schema.ts(38,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.833] shared/schema.ts(57,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.833] shared/schema.ts(58,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.833] shared/schema.ts(59,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.833] shared/schema.ts(60,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.834] shared/schema.ts(61,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.834] shared/schema.ts(62,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.834] shared/schema.ts(63,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.834] shared/schema.ts(64,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.834] shared/schema.ts(75,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.835] shared/schema.ts(76,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.835] shared/schema.ts(89,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.835] shared/schema.ts(90,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.835] shared/schema.ts(91,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.835] shared/schema.ts(92,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.836] shared/schema.ts(108,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.836] shared/schema.ts(109,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.836] shared/schema.ts(110,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.836] shared/schema.ts(111,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.836] shared/schema.ts(112,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.836] shared/schema.ts(113,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.836] shared/schema.ts(114,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.836] shared/schema.ts(125,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.836] shared/schema.ts(126,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.836] shared/schema.ts(141,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.836] shared/schema.ts(142,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.836] shared/schema.ts(143,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(144,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(145,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(146,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(159,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(160,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(161,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(162,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(182,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(183,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(184,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(185,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(186,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(187,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(188,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(189,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(205,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(206,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(207,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(208,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(209,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(210,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(211,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(224,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(225,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(226,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(227,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.837] shared/schema.ts(241,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.838] shared/schema.ts(242,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.838] shared/schema.ts(243,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.838] shared/schema.ts(244,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.838] shared/schema.ts(245,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.838] shared/schema.ts(260,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.838] shared/schema.ts(261,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.838] shared/schema.ts(262,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.838] shared/schema.ts(263,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.838] shared/schema.ts(264,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.838] shared/schema.ts(265,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.838] shared/schema.ts(280,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.838] shared/schema.ts(281,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.838] shared/schema.ts(282,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.838] shared/schema.ts(283,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.838] shared/schema.ts(284,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.839] shared/schema.ts(285,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.839] shared/schema.ts(303,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.839] shared/schema.ts(304,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.839] shared/schema.ts(305,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.839] shared/schema.ts(306,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.839] shared/schema.ts(307,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.839] shared/schema.ts(308,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.839] shared/schema.ts(309,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(310,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(311,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(332,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(333,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(334,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(335,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(336,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(337,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(338,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(339,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(340,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(341,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(342,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(343,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(362,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(363,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(364,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(365,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(366,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(367,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(368,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(369,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(370,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(371,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(390,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(391,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(392,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.840] shared/schema.ts(393,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(394,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(395,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(396,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(397,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(398,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(399,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(416,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(417,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(418,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(419,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(420,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(421,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(422,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(423,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(442,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(443,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(444,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(445,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(446,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(447,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(448,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(449,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(450,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(451,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(470,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.841] shared/schema.ts(471,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(472,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(473,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(474,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(475,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(476,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(477,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(478,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(479,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(495,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(496,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(497,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(498,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(499,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(500,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(501,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(517,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(518,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(519,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(520,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(521,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(522,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(523,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(541,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(542,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(543,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(544,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(545,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(546,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(547,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(548,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.842] shared/schema.ts(549,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(563,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(564,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(565,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(566,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(567,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(584,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(585,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(586,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(587,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(588,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(589,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(590,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(591,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(606,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(607,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(608,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(609,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(610,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(611,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(633,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(634,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(635,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(636,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(637,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(638,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(639,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(640,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.843] shared/schema.ts(641,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.844] shared/schema.ts(642,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.844] shared/schema.ts(643,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.844] shared/schema.ts(644,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.844] shared/schema.ts(645,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.844] shared/schema.ts(669,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.844] shared/schema.ts(670,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.844] shared/schema.ts(671,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.844] shared/schema.ts(672,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.844] shared/schema.ts(673,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.844] shared/schema.ts(674,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.844] shared/schema.ts(675,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.844] shared/schema.ts(676,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.844] shared/schema.ts(677,3): error TS2322: Type 'boolean' is not assignable to type 'never'.
+[15:26:56.871] Command failed: npx tsc shared/schema-build.ts --skipLibCheck --allowJs --noImplicitAny false --strictNullChecks false --strictPropertyInitialization false --noPropertyAccessFromIndexSignature false --downlevelIteration true
+[15:26:56.872] Error: Command failed: npx tsc shared/schema-build.ts --skipLibCheck --allowJs --noImplicitAny false --strictNullChecks false --strictPropertyInitialization false --noPropertyAccessFromIndexSignature false --downlevelIteration true
+[15:26:56.872]     at genericNodeError (node:internal/errors:983:15)
+[15:26:56.872]     at wrappedFn (node:internal/errors:537:14)
+[15:26:56.873]     at checkExecSyncError (node:child_process:882:11)
+[15:26:56.873]     at execSync (node:child_process:954:15)
+[15:26:56.873]     at exec (file:///vercel/path0/api/build.js:20:5)
+[15:26:56.873]     at file:///vercel/path0/api/build.js:122:6
+[15:26:56.873]     at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+[15:26:56.873]     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+[15:26:56.874]     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5) {
+[15:26:56.874]   status: 2,
+[15:26:56.874]   signal: null,
+[15:26:56.874]   output: [ null, null, null ],
+[15:26:56.874]   pid: 386,
+[15:26:56.874]   stdout: null,
+[15:26:56.874]   stderr: null
+[15:26:56.874] }
+[15:26:56.875] Failed to compile schema-build.ts, but continuing...
+[15:26:56.875] Build process completed with fallback measures in place!
+[15:26:56.906] Installing dependencies...
+[15:26:58.101] 
+[15:26:58.102] up to date in 1s
+[15:26:58.102] 
+[15:26:58.102] 81 packages are looking for funding
+[15:26:58.102]   run `npm fund` for details
+[15:26:59.230] Using TypeScript 5.6.3 (local user-provided)
+[15:27:02.359] api/index.ts(14,32): error TS2307: Cannot find module '../server/routes' or its corresponding type declarations.
+[15:27:02.359] api/index.ts(15,25): error TS2307: Cannot find module '../server/storage' or its corresponding type declarations.
+[15:27:02.360] 
+[15:27:03.266] Using TypeScript 5.6.3 (local user-provided)
+[15:27:03.270] api/storage.ts(6,25): error TS2307: Cannot find module '../server/storage' or its corresponding type declarations.
+[15:27:03.270] 
+[15:27:03.343] Build Completed in /vercel/output [46s]
+[15:27:03.564] Deploying outputs...
+[15:27:07.644] 
+[15:27:07.912] Deployment completed

@@ -1,0 +1,45 @@
+/advanced-pilot-training-platform
+├── /backend
+│   ├── /core                # Shared utilities and core framework components
+│   ├── /document            # Document processing pipeline and content extraction
+│   ├── /syllabus            # Syllabus generation engine
+│   ├── /assessment          # Competency-based assessment and biometric integrations
+│   ├── /user-management     # Authentication, digital logbooks, role-based dashboards
+│   ├── /scheduler           # AI-driven scheduling and resource optimization
+│   ├── /analytics           # Real-time performance analytics and predictive insights
+│   ├── /compliance          # Regulatory compliance engine and audit trails
+│   ├── /collaboration       # Virtual workspaces and messaging 
+│   ├── /visualization       # Data services for 3D/AR knowledge maps
+│   ├── /integration         # Connectors for simulators and external systems
+│   ├── /security            # Zero-trust security and blockchain audit trails
+│   ├── /Dockerfile          # Backend microservices containerization
+│   ├── /docker-compose.yml  # Local development environment setup
+│   └── /requirements.txt    # Python dependencies
+├── /frontend
+│   ├── /components          # Reusable UI components
+│   ├── /pages               # Page-level components
+│   ├── /hooks               # Custom React hooks
+│   ├── /services            # API service integrations
+│   ├── /styles              # Global styles, Tailwind configurations, MUI themes
+│   ├── /assets              # Static assets (images, icons, 3D models)
+│   ├── /visualizations      # Components for 3D/AR views
+│   ├── /collaboration       # UI components for smart workspaces
+│   ├── /public              # Static files served directly
+│   ├── /next.config.js      # Next.js configuration
+│   ├── /package.json        # Frontend dependencies
+│   └── /tailwind.config.js  # Tailwind CSS configuration
+├── /microservices           # Additional AI/ML modules
+│   ├── /document-intelligence
+│   ├── /predictive-analytics
+│   ├── /adaptive-learning
+│   └── /gamification
+├── /mobile                  # Cross-platform mobile app code
+├── /tests                   # Integration and end-to-end tests
+├── /docs                    # API documentation and guides
+├── /.github                 # CI/CD workflows
+│   └── /workflows           # GitHub Actions definition files
+├── /vercel.json             # Vercel deployment configuration
+├── /.gitignore              # Git ignore rules
+├── /.env.example            # Example environment variables
+├── /docker-compose.yml      # Full-stack local development
+└── /README.md               # Project overview and setup instructions

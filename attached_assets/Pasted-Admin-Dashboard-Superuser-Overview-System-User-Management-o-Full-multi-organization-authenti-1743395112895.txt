@@ -1,0 +1,133 @@
+Admin Dashboard (Superuser Overview)
+•	System & User Management
+o	Full multi-organization authentication controls (ATO, Airline, Flight School)
+o	Role-based access control management, including creation/deletion of user accounts
+o	Email pattern detection and auto-routing configuration
+o	Test account management and automated test scripts for all roles
+•	Global Analytics & Monitoring
+o	Comprehensive real-time dashboards (KPIs, performance metrics, compliance graphs)
+o	3D risk assessment matrix with drill-down details (Occurrence, Severity, Detection)
+o	Historical data analysis and predictive risk forecasting
+o	Full view of performance metrics (reaction times, fatigue risk, SOP compliance)
+•	Infrastructure & API Administration
+o	API integration management (document extraction, multi-factor authentication endpoints, cross-reference resolver, terminology standardization)
+o	CI/CD pipeline monitoring, database health (PostgreSQL, TimescaleDB, MongoDB), and performance benchmarks
+•	Regulatory Compliance & Security
+o	Automated compliance tracking, audit logs, and blockchain-backed audit trails
+o	Zero-trust security settings, AI-driven anomaly and intrusion detection
+o	GDPR-compliant data lifecycle and deletion policies
+•	Knowledge Graph & Data Insights
+o	Administration of knowledge graph generation and semantic search APIs
+o	Full access to cross-reference resolution and terminology standardization controls
+•	System Configuration & Extensions
+o	Configuration of open plugin ecosystem, third-party connectors, and enterprise integrations
+o	Overarching dashboard that aggregates all modules and provides drill-downs into each functionality
+─────────────────────────────
+ATO (Approved Training Organization) Dashboard
+•	Compliance & Regulatory Oversight
+o	Regulatory compliance tracking with real-time alerts and historical audit logs
+o	Certification status distributions and blockchain-backed audit trails
+o	Automated regulatory gap analysis and risk matrix overviews
+•	Resource, Scheduling & Operations
+o	High-level scheduling for instructors, trainees, aircraft, and simulators
+o	Integration with external calendars (Google, Outlook) and automated conflict detection
+o	Maintenance and inspection tracking (flight records, MRO system integration)
+•	Global Performance Analytics
+o	3D risk assessment matrix (interactive, with drill-down risk details)
+o	Trend analysis for safety, compliance, and performance metrics
+o	Aggregated KPI dashboards for organization-wide training effectiveness
+•	Document & Knowledge Management
+o	Access to e-manual uploads, AI-powered document extraction, and compliance mapping
+o	High-level view of syllabus generation status and regulatory mapping
+•	Shared Knowledge Graph
+o	Overview of semantic search and knowledge graph outputs relevant to regulatory standards
+•	Communication & Notifications
+o	Organization-level messaging and real-time notification systems for operational updates
+─────────────────────────────
+Instructor Dashboard
+•	Session & Syllabus Management
+o	AI-powered drag-and-drop syllabus builder with inline compliance indicators
+o	Tools for module/lesson extraction, competency analysis, and scheduling of training sessions
+o	Real-time session planning with automated conflict detection and calendar integration
+•	Assessment & Grading Tools
+o	Competency-based assessment system with one-click grading and gradesheet management
+o	Real-time performance evaluation and AI-driven adaptive assessment recommendations
+o	Instructor feedback tools with speech-to-text integration and visual analytics (spider/radar charts)
+•	Performance Monitoring
+o	Live trainee analytics with performance heatmaps and trend charts
+o	3D risk matrix insights relevant to session outcomes (drill-down for incident logs)
+o	Adaptive learning path recommendations based on individual trainee performance
+•	Document & Resource Access
+o	Upload and share training guides, e-manuals, and session-specific documents
+o	Access to AI-extracted content for syllabus enhancement and compliance review
+•	Collaboration & Communication
+o	In-app messaging, group chats, and video conferencing for real-time debriefs
+o	Collaborative editing in shared workspaces (syllabus, assessments)
+•	Knowledge Graph Insights
+o	Access to curated knowledge graph views linking training modules to regulatory references
+─────────────────────────────
+Examiner Dashboard
+•	Detailed Assessment & Grading
+o	Comprehensive performance evaluation tools with one-click grading
+o	Automated feedback summaries (speech-to-text, AI-generated reports)
+o	Detailed gradesheets and competency breakdowns via interactive charts
+•	Debriefing & Reporting Tools
+o	Session replay with timestamped event tagging for post-training analysis
+o	Tools for flagging deviations, inconsistencies, and generating custom debrief reports
+•	Visual Analytics
+o	Performance heatmaps, competency dashboards, and risk analysis charts
+o	Integration of 3D risk matrix visualizations focused on trainee performance
+•	Communication & Collaboration
+o	Direct messaging with trainees and instructors for evaluation feedback
+o	Shared dashboards for collaborative reviews of assessment trends
+•	Knowledge Graph Access
+o	View semantic relationships among training content, regulatory standards, and assessment outcomes
+─────────────────────────────
+Student Dashboard
+•	Personalized Learning & Syllabus Access
+o	Customized syllabus display with progress tracking and competency indicators
+o	Access to interactive e-learning modules (video tutorials, quizzes, interactive lessons)
+o	Downloadable training guides and compliance checklists
+•	Schedule & Session Overview
+o	Calendar view of upcoming training sessions, assignments, and notifications
+o	Automated session reminders and conflict alerts
+•	Assessment Results & Feedback
+o	Detailed performance reports with visual charts (radar charts, progress bars)
+o	Instructor feedback summaries and AI-driven recommendations for improvement
+•	Resource & Document Repository
+o	Centralized access to training documents, videos, and supplementary materials
+o	Searchable document library powered by AI-driven extraction and knowledge graph queries
+•	Communication Tools
+o	In-app messaging for direct contact with instructors and examiners
+o	Q&A forums or interactive discussion boards for peer support
+•	Simplified Risk & Performance Insights
+o	Basic risk indicators and performance trends to guide self-assessment
+o	AI-driven recommendations for additional practice based on progress
+─────────────────────────────
+Shared/General Features (Accessible by All Roles, with Role-Based Detail Levels)
+•	Real-Time Communication & Collaboration
+o	Messaging system, group chats, and notification subscriptions
+o	Video conferencing and collaborative document editing
+•	Document Management & Analysis
+o	Drag-and-drop file uploads, AI-based document extraction, OCR, and compliance mapping
+•	Analytics & Visualizations
+o	Interactive dashboards with live data feeds, performance metrics, and trend graphs
+o	3D risk assessment matrix available at varying detail levels
+•	Knowledge Graph & Semantic Search
+o	AI-powered knowledge graphs for quick reference and in-depth training insights
+o	Semantic search across documents and training modules
+•	Offline & Mobile Support
+o	PWA capabilities with offline caching, background sync, and mobile-responsive design
+•	API & External Integrations
+o	Endpoints for document extraction, multi-factor authentication, simulator telemetry, and external data feeds
+•	Continuous Updates & Notifications
+o	Automated notifications for regulatory changes, new documents, and training updates
+o	Real-time alert systems integrated across dashboards
+─────────────────────────────
+Usage & Implementation Notes:
+•	Admin sees an extensive menu with high-level management, system configuration, and full access to every module.
+•	ATO focuses on compliance, scheduling, and organizational performance with regulatory oversight.
+•	Instructors receive tools for session planning, syllabus management, assessments, and real-time student monitoring.
+•	Examiners have dedicated assessment, debriefing, and detailed performance reporting features along with communication tools for evaluation.
+•	Students see a streamlined dashboard focused on their learning path, schedules, performance feedback, and resource access.
+•	Shared modules (e.g., real-time communication, document management, knowledge graphs) appear across multiple dashboards but may present different levels of detail based on the role.

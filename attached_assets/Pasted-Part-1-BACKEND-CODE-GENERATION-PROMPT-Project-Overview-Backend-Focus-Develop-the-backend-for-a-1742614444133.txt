@@ -1,0 +1,137 @@
+Part 1: BACKEND CODE GENERATION PROMPT
+Project Overview (Backend Focus):
+Develop the backend for a next-generation flight training management system that surpasses current solutions (e.g., Hinfact, SimOrg) by offering intelligent scheduling, document processing, compliance, real-time analytics, adaptive assessments, and advanced AI integrations. The backend is built as a set of microservices using Modern C++ (C++17/20) with the Drogon framework and Python for AI/ML tasks. It must support high performance, low latency (including real-time simulator telemetry at 1000Hz), robust security (AES-256, TLS 1.3, zero-trust), and scalable API endpoints. The overall repository structure for the 
+Instructions:
+1.	Core Framework Components:
+o	Generate a ConfigurationManager class to load settings from environment, files, and database with type-safe access and change notifications.
+o	Include robust logging (structured and contextual) and thread-safe error handling using modern C++ practices.
+2.	Document Processing Pipeline:
+o	Create an abstract DocumentProcessor interface with concrete implementations for handling PDF, DOCX, XLSX, HTML, and PPTX.
+o	Integrate OCR (e.g., via Tesseract), ML-based structure recognition, and entity extraction.
+o	Implement asynchronous processing with progress tracking and error reporting.
+o	Ensure the pipeline supports regulatory mapping and audit logging.
+3.	Syllabus Generation Engine:
+o	Develop a SyllabusGenerator class that processes document analyses to extract learning objectives, competency areas, and training requirements.
+o	Support template-based syllabus creation with customization, version control, and audit trails.
+o	Map regulatory standards (FAA, EASA, ICAO) to syllabus components.
+4.	Real-Time Data Processing:
+o	Create a SimulatorDataProcessor that handles high-frequency telemetry (1000Hz) using lock-free queues and multithreading.
+o	Integrate SIMD optimizations for processing simulator data.
+o	Provide both real-time and historical data access along with anomaly detection.
+5.	API Gateway and RESTful Endpoints:
+o	Build a comprehensive API gateway using the Drogon framework with: 
+	JWT-based authentication, input validation, and rate limiting.
+	Modular controllers for each backend module (document, syllabus, assessment, scheduler, etc.).
+	Auto-generated OpenAPI/Swagger documentation.
+o	Ensure detailed error handling, logging, and monitoring.
+6.	Database Access Layer:
+o	Implement a DatabaseManager with connection pooling for PostgreSQL (and TimescaleDB for time-series data).
+o	Include prepared statement caching, transaction management, and migration support.
+o	Support structured queries and time-series data operations.
+7.	AI & ML Modules (Python):
+o	Develop pipelines for document understanding: 
+	Document classification, text summarization, named entity recognition, and relationship extraction using transformer models.
+o	Create performance prediction models (using TensorFlow/PyTorch) to forecast trainee outcomes and suggest adaptive interventions.
+o	Build no-code automation workflows (e.g., auto-generation of tasks from document insights) and auto-research assistant modules with web scraping, citation tracking, and plagiarism checks.
+8.	Security & Compliance:
+o	Integrate zero-trust security measures: AES-256 encryption, TLS 1.3 for data in transit, multi-factor authentication (MFA), and blockchain-backed audit trails.
+o	Implement ethical AI governance with bias detection, transparency reporting, and user-controlled data ownership.
+o	Ensure comprehensive audit logging for regulatory compliance.
+9.	Testing and Performance:
+o	Include unit tests (using Google Test) for each module.
+o	Write integration tests covering end-to-end workflows (document ingestion through syllabus generation).
+o	Benchmark real-time components and optimize for latency (target <5ms response for high-frequency data APIs).
+10.	Documentation and CI/CD:
+o	Provide inline documentation and developer guides for each module.
+o	Generate API documentation using OpenAPI standards.
+o	Set up CI/CD pipelines (via GitHub Actions) for automated testing, linting, and deployment to Vercel (if containerized microservices are deployed there).
+Final Note:
+The backend code generated should be fully modular, thoroughly tested, and follow best practices in error handling, performance optimization, and security. Once complete, this code will integrate seamlessly with the frontend services.
+
+
+
+
+
+
+
+Missed:
+Advanced Pilot Training Platform - Missing Features Backend Prompt
+Project Overview (Backend Focus)
+Develop backend services to enhance the Advanced Pilot Training Platform by integrating missing features across training content intelligence, predictive analytics, advanced compliance tracking, and adaptive learning. The backend should be modular, using C++ (Drogon framework) and Python (for AI/ML) to support high-performance, low-latency processing. Secure data handling, AI-driven insights, and compliance with regulatory standards (FAA, EASA, ICAO) are key priorities.
+________________________________________
+1. Training Content Intelligence & Syllabus Processing
+Document Intelligence
+•	Extend Document Processing Microservice to support: 
+o	Context-aware parsing and classification.
+o	Knowledge graph construction from document relationships.
+o	Document completeness verification.
+o	Multi-language document handling with NLP-based translation.
+o	Cross-document reference resolution.
+o	Terminology standardization and glossary auto-generation.
+Syllabus Template System
+•	Expand Syllabus Management Microservice to include: 
+o	Pre-configured syllabus templates (JOC/MCC, Type Rating).
+o	Versioning with impact analysis for regulatory compliance.
+o	AI-assisted evolution tracking for best practice recommendations.
+o	Compliance impact visualization for modified syllabi.
+________________________________________
+2. Advanced Analytics & Adaptive Learning
+Predictive Analytics Engine
+•	Enhance AI & Analytics Microservice with: 
+o	Skill decay prediction using Bayesian Knowledge Tracing.
+o	Fatigue risk modeling with duty cycle analysis.
+o	Training effectiveness forecasting via multivariate regression.
+o	Performance consistency assessment with variance detection models.
+o	Syllabus optimization based on machine-learning-driven outcome analysis.
+Real-Time Performance Analytics
+•	Extend Analytics Microservice to: 
+o	Track reaction time, cognitive workload, procedural compliance.
+o	Implement automation awareness scoring.
+o	Provide real-time SOP compliance analytics.
+o	Generate early intervention alerts for struggling trainees.
+________________________________________
+3. Compliance, Security & Access Control Enhancements
+Audit & Regulatory Compliance
+•	Integrate within Compliance Microservice: 
+o	Comprehensive audit logging with blockchain-backed verification.
+o	Regulatory compliance matrices with auto-traceability.
+o	Automated compliance change tracking and impact alerts.
+Security & Authentication Enhancements
+•	Strengthen Security Microservice: 
+o	Zero-trust security policies with role-based API access control.
+o	Multi-factor authentication (MFA) with biometric authentication support.
+o	Advanced encryption: AES-256 for data at rest, TLS 1.3 for data in transit.
+o	GDPR compliance framework with automated data lifecycle management.
+________________________________________
+4. Instructor & Management Backend Features
+Debriefing & Session Analytics Backend
+•	Extend Debriefing Microservice: 
+o	Session replay with timestamped event tagging.
+o	Automated flagging of critical performance deviations.
+o	API for generating customized debrief reports with AI insights.
+Administrative Dashboard Enhancements
+•	Expand Admin & Management API Services: 
+o	Training effectiveness monitoring via AI-based intervention tracking.
+o	Fleet-wide KPI dashboards for instructor oversight.
+o	Automated resource utilization forecasting based on training data.
+________________________________________
+5. Gamification & Community Collaboration Backend
+Community Knowledge Sharing Backend
+•	Implement in Collaboration Microservice: 
+o	API-driven peer learning networks with anonymized benchmarking.
+o	Scenario sharing marketplace for customized training modules.
+o	Best practice content tagging with instructor validation.
+Gamification System API
+•	Extend Gamification Microservice: 
+o	Achievement tracking via training progression milestones.
+o	AI-driven personalized training challenges.
+o	Real-time leaderboards with role-based score normalization.
+________________________________________
+Final Notes & Integration Guidelines
+•	Ensure microservices remain modular and adhere to existing repository architecture.
+•	Maintain API consistency for seamless frontend integration.
+•	Write unit tests (Google Test for C++ / PyTest for Python).
+•	Provide Swagger/OpenAPI documentation for all new API endpoints.
+•	Optimize AI/ML models for real-time execution to prevent bottlenecks.
+Upon completion, the backend services will provide intelligent training data processing, advanced analytics, compliance tracking, and a structured gamification system, ensuring a future-proof and AI-driven flight training ecosystem.
+

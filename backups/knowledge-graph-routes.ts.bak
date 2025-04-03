@@ -1,0 +1,196 @@
+import { Router, Request, Response } from 'express';
+import { authenticateUser } from '../middleware/auth-middleware';
+import knowledgeGraphService from '../services/knowledge-graph-service';
+import documentAnalysisService from '../services/document-analysis-service';
+import { Logger } from '../utils/logger';
+
+const router = Router();
+const logger = new Logger('KnowledgeGraphRoutes');
+
+/**
+ * Helper function to get user ID from request
+ */
+function getUserId(req: Request): number {
+  // @ts-ignore - user is added by auth middleware
+  return req.user?.id;
+}
+
+/**
+ * Generate a knowledge graph from a document
+ * POST /api/knowledge-graph/generate/:documentId
+ */
+router.post('/generate/:documentId', authenticateUser, async (req: Request, res: Response) => {
+  try {
+    const documentId = req.params.documentId;
+    const userId = getUserId(req);
+    
+    if (!documentId) {
+      return res.status(400).json({ error: 'Document ID is required' });
+    }
+    
+    const success = await knowledgeGraphService.generateKnowledgeGraph(documentId, userId);
+    
+    if (success) {
+      res.status(200).json({ success: true, message: 'Knowledge graph generated successfully' });
+    } else {
+      res.status(500).json({ success: false, error: 'Failed to generate knowledge graph' });
+    }
+  } catch (error) {
+    logger.error(`Error generating knowledge graph: ${error instanceof Error ? error.message : String(error)}`);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+/**
+ * Get knowledge graph for a document
+ * GET /api/knowledge-graph/document/:documentId
+ */
+router.get('/document/:documentId', authenticateUser, async (req: Request, res: Response) => {
+  try {
+    const documentId = req.params.documentId;
+    const userId = getUserId(req);
+    
+    if (!documentId) {
+      return res.status(400).json({ error: 'Document ID is required' });
+    }
+    
+    const graph = await knowledgeGraphService.getDocumentKnowledgeGraph(documentId, userId);
+    
+    if (graph) {
+      res.status(200).json({ success: true, graph });
+    } else {
+      res.status(404).json({ success: false, error: 'Knowledge graph not found' });
+    }
+  } catch (error) {
+    logger.error(`Error retrieving knowledge graph: ${error instanceof Error ? error.message : String(error)}`);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+/**
+ * Get knowledge graph statistics
+ * GET /api/knowledge-graph/stats
+ */
+router.get('/stats', authenticateUser, async (req: Request, res: Response) => {
+  try {
+    const stats = knowledgeGraphService.getKnowledgeGraphStats();
+    res.status(200).json({ success: true, stats });
+  } catch (error) {
+    logger.error(`Error retrieving knowledge graph stats: ${error instanceof Error ? error.message : String(error)}`);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+/**
+ * Search knowledge graph
+ * GET /api/knowledge-graph/search
+ */
+router.get('/search', authenticateUser, async (req: Request, res: Response) => {
+  try {
+    const query = req.query.q as string;
+    const limitParam = req.query.limit as string;
+    const limit = limitParam ? parseInt(limitParam, 10) : 10;
+    const userId = getUserId(req);
+    
+    if (!query) {
+      return res.status(400).json({ error: 'Search query is required' });
+    }
+    
+    const results = await knowledgeGraphService.searchKnowledgeGraph(query, userId, limit);
+    res.status(200).json({ success: true, results });
+  } catch (error) {
+    logger.error(`Error searching knowledge graph: ${error instanceof Error ? error.message : String(error)}`);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+/**
+ * Merge multiple knowledge graphs
+ * POST /api/knowledge-graph/merge
+ * Request body: { graphIds: string[], name: string, description: string }
+ */
+router.post('/merge', authenticateUser, async (req: Request, res: Response) => {
+  try {
+    const { graphIds, name, description } = req.body;
+    const userId = getUserId(req);
+    
+    if (!graphIds || !Array.isArray(graphIds) || graphIds.length < 2) {
+      return res.status(400).json({ error: 'At least two graph IDs are required' });
+    }
+    
+    if (!name) {
+      return res.status(400).json({ error: 'Name is required for the merged graph' });
+    }
+    
+    const mergedGraphId = await knowledgeGraphService.mergeKnowledgeGraphs(
+      graphIds,
+      name,
+      description || `Merged graph created on ${new Date().toISOString()}`,
+      userId
+    );
+    
+    if (mergedGraphId) {
+      res.status(200).json({ success: true, graphId: mergedGraphId });
+    } else {
+      res.status(500).json({ success: false, error: 'Failed to merge knowledge graphs' });
+    }
+  } catch (error) {
+    logger.error(`Error merging knowledge graphs: ${error instanceof Error ? error.message : String(error)}`);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+/**
+ * Analyze a document
+ * POST /api/knowledge-graph/analyze/:documentId
+ */
+router.post('/analyze/:documentId', authenticateUser, async (req: Request, res: Response) => {
+  try {
+    const documentId = req.params.documentId;
+    const userId = getUserId(req);
+    
+    if (!documentId) {
+      return res.status(400).json({ error: 'Document ID is required' });
+    }
+    
+    const analysis = await documentAnalysisService.analyzeDocument(documentId, userId);
+    
+    if (analysis.success) {
+      res.status(200).json({ success: true, analysis });
+    } else {
+      res.status(500).json({ success: false, error: analysis.error });
+    }
+  } catch (error) {
+    logger.error(`Error analyzing document: ${error instanceof Error ? error.message : String(error)}`);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+/**
+ * Compare two documents
+ * POST /api/knowledge-graph/compare
+ * Request body: { documentId1: string, documentId2: string }
+ */
+router.post('/compare', authenticateUser, async (req: Request, res: Response) => {
+  try {
+    const { documentId1, documentId2 } = req.body;
+    const userId = getUserId(req);
+    
+    if (!documentId1 || !documentId2) {
+      return res.status(400).json({ error: 'Both document IDs are required' });
+    }
+    
+    const comparison = await documentAnalysisService.compareDocuments(documentId1, documentId2, userId);
+    
+    if (comparison.success) {
+      res.status(200).json({ success: true, comparison });
+    } else {
+      res.status(500).json({ success: false, error: comparison.error });
+    }
+  } catch (error) {
+    logger.error(`Error comparing documents: ${error instanceof Error ? error.message : String(error)}`);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+export default router;

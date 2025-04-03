@@ -1,0 +1,191 @@
+/**
+ * documentUploadFix.js - Fix for document upload validation issues
+ * 
+ * This is a standalone Node.js solution to address the "Expected array, received string"
+ * validation error for tags when uploading documents.
+ */
+
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+// Create upload directory if it doesn't exist
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = `${Date.now()}-${file.originalname}`;
+    cb(null, uniqueName);
+  }
+});
+
+// File filter to accept only specified formats
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = [
+    'application/pdf',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'image/jpeg',
+    'image/png'
+  ];
+  
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Invalid file type. Only PDF, DOCX, XLSX, PPTX, JPG, and PNG files are allowed.'), false);
+  }
+};
+
+// Configure multer upload settings
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 20 * 1024 * 1024 } // 20MB limit
+});
+
+// Create Express router
+const router = express.Router();
+
+/**
+ * Middleware to fix tags format
+ * This converts string tags to array format before processing
+ */
+const fixTagsFormat = (req, res, next) => {
+  try {
+    // Check if tags exist and fix the format if needed
+    if (req.body.tags) {
+      // If tags is a string (comes as 'tag1,tag2,tag3')
+      if (typeof req.body.tags === 'string') {
+        // Convert comma-separated string to array
+        req.body.tags = req.body.tags
+          .split(',')
+          .map(tag => tag.trim())
+          .filter(tag => tag.length > 0);
+      }
+      // If tags comes as tags[]=tag1&tags[]=tag2 (already an array), multer/body-parser will handle it correctly
+    } else {
+      // If no tags provided, set as empty array
+      req.body.tags = [];
+    }
+    
+    next();
+  } catch (error) {
+    console.error('Error processing tags:', error);
+    next(error);
+  }
+};
+
+/**
+ * Document upload route with fixed tags processing
+ * POST /api/documents/upload
+ */
+router.post('/upload', upload.single('file'), fixTagsFormat, async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ 
+        message: 'Upload failed', 
+        errors: [{ field: 'file', message: 'No file uploaded' }] 
+      });
+    }
+    
+    // Log the corrected format to verify
+    console.log('Processed document upload with tags:', req.body.tags);
+    
+    // Here you would normally save to your database
+    // This is a placeholder for your existing document processing logic
+    const documentData = {
+      title: req.body.title || 'Untitled Document',
+      description: req.body.description || '',
+      category: req.body.category || '',
+      tags: req.body.tags || [],
+      isPublic: req.body.isPublic === 'true' || req.body.isPublic === true,
+      fileName: req.file.filename,
+      originalName: req.file.originalname,
+      mimeType: req.file.mimetype,
+      filePath: req.file.path,
+      fileSize: req.file.size,
+      uploadDate: new Date()
+    };
+    
+    // Return successful response
+    res.status(201).json({
+      message: 'Document uploaded successfully',
+      document: {
+        id: 'placeholder-id', // Replace with actual DB ID
+        title: documentData.title,
+        fileName: documentData.fileName,
+        tags: documentData.tags
+      }
+    });
+  } catch (error) {
+    console.error('Document upload error:', error);
+    res.status(500).json({ 
+      message: 'Upload failed',
+      errors: [{ 
+        field: error.field || 'general', 
+        message: error.message || 'An unexpected error occurred' 
+      }]
+    });
+  }
+});
+
+/**
+ * Error handler middleware
+ */
+router.use((err, req, res, next) => {
+  console.error('Error in document upload route:', err);
+  
+  // Handle multer errors specifically
+  if (err instanceof multer.MulterError) {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({
+        message: 'Upload failed',
+        errors: [{ field: 'file', message: 'File size exceeds the 20MB limit' }]
+      });
+    }
+  }
+  
+  // Handle validation errors
+  if (err.name === 'ValidationError') {
+    return res.status(400).json({
+      message: 'Validation failed',
+      errors: Object.keys(err.errors).map(field => ({
+        field,
+        message: err.errors[field].message
+      }))
+    });
+  }
+  
+  // Default error response
+  res.status(500).json({
+    message: 'Upload failed',
+    errors: [{ message: err.message || 'An unexpected error occurred' }]
+  });
+});
+
+/**
+ * IMPLEMENTATION INSTRUCTIONS:
+ * 
+ * 1. Save this file as 'documentUploadFix.js' in your project
+ * 
+ * 2. In your main Express app file, add:
+ *    const documentUploadRoutes = require('./documentUploadFix');
+ *    app.use('/api/documents', documentUploadRoutes);
+ *
+ * 3. Make sure you have these dependencies installed:
+ *    npm install express multer
+ *
+ * 4. If you need to adapt this for PostgreSQL, modify the route handler
+ *    to save documentData to your PostgreSQL database
+ */
+
+module.exports = router;

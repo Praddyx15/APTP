@@ -1,0 +1,251 @@
+# Complete Guide to Aviation Training Document Management System Integration
+
+## System Overview
+
+This codebase implements a comprehensive Aviation Training Document Management System designed to transform aviation training manuals into structured training materials. It automates the extraction of content, identification of compliance procedures, creation of session plans, and generation of assessment forms.
+
+## Architecture & Technology Stack
+
+- **Backend**: Node.js/Express.js RESTful API
+- **Frontend**: React with Material-UI components
+- **Document Processing**: PDF.js and Mammoth for document parsing
+- **Export Generation**: DOCX for document export
+- **Database**: Currently uses MongoDB (requires adaptation for PostgreSQL)
+
+## Core Capabilities
+
+1. **Intelligent Document Analysis**:
+   - Extracts text and structure from aviation manuals (PDF/DOCX)
+   - Identifies document hierarchy, sections, and subsections
+   - Recognizes compliance procedures and safety-critical content
+   - Extracts key terminology and definitions
+
+2. **Training Materials Generation**:
+   - Creates structured instructor and student session plans
+   - Generates knowledge assessment questions 
+   - Builds practical skill evaluation forms
+   - Produces compliance verification checklists
+   - Maintains regulatory references throughout all materials
+
+3. **User Interface Components**:
+   - Document upload with processing options
+   - Content visualization with organized tabs
+   - Session plan editor with activity management
+   - Training form editor with question types
+   - Export functionality for all generated materials
+
+## Code Structure Explanation
+
+The codebase is organized into:
+
+```
+project-root/
+├── client/                     # React frontend
+├── models/                     # Data models 
+├── routes/                     # API endpoints
+├── services/                   # Core business logic
+│   ├── DocumentProcessor.js    # Document parsing & analysis
+│   ├── SessionPlanGenerator.js # Session plan creation
+│   └── TrainingFormGenerator.js # Assessment form generation
+├── uploads/                    # File storage
+└── index.js                    # Server entry point
+```
+
+## PostgreSQL Integration Requirements
+
+The current implementation uses MongoDB, which needs adaptation for PostgreSQL:
+
+1. **Model Conversion**: Replace document-based schemas with relational ones:
+   - Convert nested structures to normalized tables
+   - Implement proper foreign key relationships
+   - Replace MongoDB queries with SQL equivalents
+
+2. **Data Access Layer**: Update in these key areas:
+   - `routes/documents.js` - Document upload and processing
+   - `routes/sessionPlans.js` - Session plan operations
+   - `routes/trainingForms.js` - Training form operations
+
+3. **Connection Logic**: Replace MongoDB connection with PostgreSQL:
+   - Update dependencies to include pg/sequelize/typeorm
+   - Modify connection parameters in configuration
+
+## Core Algorithms & Implementation Details
+
+1. **Document Processing Pipeline**:
+   - Text extraction from PDF/DOCX files
+   - Document structure analysis using pattern matching
+   - Metadata extraction including title, author, date
+   - Section identification with time estimation
+   - Compliance and safety content recognition using regulatory patterns
+
+2. **Session Planning Logic**:
+   - Content prioritization based on safety/compliance importance
+   - Optimal session division to balance learning load
+   - Activity type selection based on content characteristics
+   - Time allocation algorithms for balanced sessions
+   - Learning objective extraction and classification
+
+3. **Assessment Generation**:
+   - Multiple question type generation based on content
+   - Compliance verification item creation
+   - Practical skill evaluation criteria extraction
+   - Knowledge verification question balancing
+   - Regulatory reference maintenance
+
+## Frontend Component Overview
+
+The React frontend includes:
+- `Dashboard.jsx` - Document management overview
+- `DocumentUpload.jsx` - File upload with processing options
+- `DocumentView.jsx` - Extracted content visualization
+- `SessionPlanList.jsx` - Session plan management
+- `SessionPlanEditor.jsx` - Activity and material editing
+- `TrainingFormList.jsx` - Assessment form management
+- `TrainingFormEditor.jsx` - Question and task editing
+
+## Key APIs and Integration Points
+
+1. **Document Upload & Processing**:
+   ```
+   POST /api/documents/upload
+   Body: multipart/form-data with document file and options
+   ```
+
+2. **Material Generation**:
+   ```
+   POST /api/documents/:id/session-plans
+   POST /api/documents/:id/training-forms
+   ```
+
+3. **Material Retrieval**:
+   ```
+   GET /api/documents/:id
+   GET /api/documents/:id/session-plans
+   GET /api/documents/:id/training-forms
+   ```
+
+4. **Material Export**:
+   ```
+   GET /api/session-plans/:id/export
+   GET /api/training-forms/:id/export
+   ```
+
+## Implementation Challenges and Solutions
+
+1. **Document Structure Extraction**:
+   - Challenge: Inconsistent document formatting
+   - Solution: Multiple pattern matching approaches with fallback strategies
+
+2. **Compliance Identification**:
+   - Challenge: Recognizing regulatory content without specific keywords
+   - Solution: Context-aware pattern matching with regulatory phrase databases
+
+3. **Session Planning Balance**:
+   - Challenge: Creating logical session groups with appropriate timing
+   - Solution: Multi-pass algorithm that prioritizes safety content while balancing duration
+
+## Deployment Instructions
+
+1. **Prerequisites**:
+   - Node.js v14+
+   - PostgreSQL database
+   - Storage for document files
+
+2. **Environment Configuration**:
+   Create `.env` file with:
+   ```
+   DB_HOST=your_postgresql_host
+   DB_USER=your_db_user
+   DB_PASSWORD=your_db_password
+   DB_NAME=aviation_training
+   PORT=5000
+   ```
+
+3. **Database Setup**:
+   - Create PostgreSQL database
+   - Modify models to use Sequelize/TypeORM with PostgreSQL
+   - Update database connection code in `index.js`
+
+4. **Installation**:
+   ```bash
+   npm install        # Backend dependencies
+   cd client && npm install  # Frontend dependencies
+   ```
+
+5. **Running the Application**:
+   ```bash
+   npm run dev        # Development mode
+   npm run build      # Production build
+   npm start          # Production mode
+   ```
+
+## Customization Points
+
+1. **Regulatory Pattern Recognition**:
+   - Modify `compliancePhrasePatterns` and `safetyPhrasePatterns` in `DocumentProcessor.js`
+   - Customize for specific aviation authority requirements (FAA, EASA, etc.)
+
+2. **Assessment Types**:
+   - Extend `createKnowledgeAssessments` in `TrainingFormGenerator.js`
+   - Add new question types in the `trainingFormSchema`
+
+3. **Session Plan Structure**:
+   - Modify `createInstructorSessionPlan` in `SessionPlanGenerator.js`
+   - Customize activity types and material requirements
+
+4. **User Interface**:
+   - Extend React components in the client directory
+   - Modify Material-UI themes in `App.jsx`
+
+## Document Processing Details
+
+The system analyzes documents through:
+
+1. **Hierarchical Extraction**:
+   - Identifies document levels (chapters, sections, subsections)
+   - Extracts learning objectives and key terms
+   - Estimates time requirements for each section
+
+2. **Regulatory Content Recognition**:
+   - Identifies mandatory procedures using linguistic patterns
+   - Recognizes safety warnings and cautions
+   - Extracts procedural steps and verification requirements
+
+3. **Metadata Extraction**:
+   - Pulls document title, author, date
+   - Identifies total page count and section structure
+   - Extracts table of contents when available
+
+## Test Data and Validation
+
+The system works best with:
+- Aviation procedure manuals
+- Training handbooks
+- Regulatory compliance documents
+- Equipment operation manuals
+
+Test with documents containing:
+- Clear section headings
+- Compliance procedures
+- Safety warnings
+- Step-by-step instructions
+
+## Additional Integration Considerations
+
+1. **Authentication**:
+   - The system has no built-in authentication
+   - Integrate with your existing auth system by adding middleware to routes
+
+2. **Storage**:
+   - Currently uses local file storage
+   - Consider integration with S3 or other cloud storage
+
+3. **Performance**:
+   - Document processing is CPU-intensive
+   - Consider implementing job queuing for production use
+
+4. **Scalability**:
+   - Stateless API design supports horizontal scaling
+   - Database should be properly indexed for production use
+
+This comprehensive system transforms aviation training documentation into structured training materials while maintaining regulatory compliance and safety emphasis throughout the entire process.

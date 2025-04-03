@@ -1,0 +1,22 @@
+Project Overview (Backend Focus):
+Enhance the backend services of the Advanced Pilot Training Platform by implementing advanced features that provide enriched training content intelligence, adaptive analytics, robust compliance tracking, and gamification support. The backend is built with Modern C++ (using the Drogon framework) and Python for AI/ML tasks. The missing features include:
+1.	Training Content Intelligence & Syllabus Processing Enhancements:
+o	Extend the Document Processing microservice with context-aware parsing, knowledge graph construction from document relationships, multi-language support using NLP-based translation, cross-document reference resolution, and terminology standardization with auto-generated glossaries.
+o	Expand the Syllabus Generation engine to support pre-configured syllabus templates (e.g., JOC/MCC, Type Rating) with versioning, impact analysis for regulatory compliance, and AI-assisted evolution tracking including compliance impact visualization.
+2.	Advanced Analytics & Adaptive Learning Enhancements:
+o	Develop a predictive analytics engine that incorporates skill decay prediction using Bayesian Knowledge Tracing, fatigue risk modeling with duty cycle analysis, performance consistency assessment using variance detection, and training effectiveness forecasting via multivariate regression.
+o	Implement adaptive syllabus optimization based on machine learning–driven outcome analysis and real-time performance metrics tracking (e.g., reaction time, cognitive workload, and procedural compliance) with early intervention alerts.
+3.	Compliance, Security & Access Control Improvements:
+o	Implement comprehensive audit logging with blockchain-backed verification and automated compliance change tracking, generating regulatory compliance matrices with auto-traceability.
+o	Strengthen security measures by enforcing zero-trust policies with role-based API access control, multi-factor authentication (with biometric support), advanced encryption (AES-256 for data at rest and TLS 1.3 for transit), and a GDPR compliance framework with automated data lifecycle management.
+4.	Instructor & Management Backend Features:
+o	Enhance the Debriefing & Session Analytics service with session replay capabilities (including timestamped event tagging), automated flagging of critical performance deviations, and an API for generating customized debrief reports with AI insights.
+o	Expand the Admin Dashboard APIs to include AI-based intervention tracking, fleet-wide KPI monitoring, and automated resource utilization forecasting.
+5.	Gamification & Community Collaboration Backend:
+o	Develop APIs to support community knowledge sharing (e.g., peer learning networks with anonymized benchmarking, scenario sharing marketplaces, and best practice content tagging).
+o	Implement a gamification system API that tracks training progression milestones, delivers AI-driven personalized training challenges, and provides real-time leaderboards with role-based score normalization.
+Instructions:
+•	Build the microservices using Modern C++ (with Drogon) and Python for AI/ML pipelines.
+•	Follow the established repository structure (/core, /document, /syllabus, /assessment, /scheduler, /analytics, /compliance, /collaboration, /visualization, /integration, /security).
+•	Ensure robust API security, high-performance data processing, and scalability.
+•	Include comprehensive unit tests (Google Test for C++ and PyTest for Python), integration tests, and generate OpenAPI/Swagger documentation for all endpoints.

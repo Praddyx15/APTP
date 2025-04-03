@@ -1,0 +1,18 @@
+# List of Replit-specific packages to remove during export
+# These packages are either specific to Replit or are not needed for standard deployment environments
+
+# Replit plugins and packages
+@replit/vite-plugin-cartographer
+@replit/vite-plugin-runtime-error-modal
+@replit/vite-plugin-shadcn-theme-json
+@replit/database
+
+# Replit-specific tooling
+@replit/node-fetch
+@replit/crosis
+@replit/replit-url-parser
+
+# Other Replit-specific items that might exist in older projects
+replit-node-proxy
+replit-db
+replit-storage-api

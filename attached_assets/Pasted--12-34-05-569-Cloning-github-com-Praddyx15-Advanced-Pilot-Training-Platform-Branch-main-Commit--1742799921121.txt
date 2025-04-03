@@ -1,0 +1,50 @@
+[12:34:05.569] Cloning github.com/Praddyx15/Advanced-Pilot-Training-Platform (Branch: main, Commit: bac1c97)
+[12:34:05.768] Previous build caches not available
+[12:34:06.420] Cloning completed: 851.000ms
+[12:34:06.480] Found .vercelignore
+[12:34:06.487] Removed 50 ignored files defined in .vercelignore
+[12:34:06.625] Running build in Washington, D.C., USA (East) – iad1
+[12:34:06.807] Running "vercel build"
+[12:34:07.190] Vercel CLI 41.4.1
+[12:34:07.306] WARN! Due to `builds` existing in your configuration file, the Build and Development Settings defined in your Project Settings will not apply. Learn More: https://vercel.link/unused-build-settings
+[12:34:07.907] Installing dependencies...
+[12:34:11.365] npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+[12:34:11.884] npm warn deprecated npmlog@5.0.1: This package is no longer supported.
+[12:34:12.127] npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+[12:34:12.128] npm warn deprecated lodash.get@4.4.2: This package is deprecated. Use the optional chaining (?.) operator instead.
+[12:34:12.478] npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+[12:34:12.919] npm warn deprecated gauge@3.0.2: This package is no longer supported.
+[12:34:13.215] npm warn deprecated are-we-there-yet@2.0.0: This package is no longer supported.
+[12:34:14.151] npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+[12:34:14.194] npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+[12:34:14.402] npm warn deprecated glob@7.1.6: Glob versions prior to v9 are no longer supported
+[12:34:14.403] npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+[12:34:22.098] 
+[12:34:22.099] added 784 packages in 14s
+[12:34:22.099] 
+[12:34:22.099] 81 packages are looking for funding
+[12:34:22.099]   run `npm fund` for details
+[12:34:22.150] Running "npm run build"
+[12:34:22.289] 
+[12:34:22.290] > rest-express@1.0.0 build
+[12:34:22.290] > vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+[12:34:22.290] 
+[12:34:22.675] [36mvite v5.4.14 [32mbuilding for production...[36m[39m
+[12:34:22.731] transforming...
+[12:34:33.026] [32m✓[39m 3887 modules transformed.
+[12:34:34.020] rendering chunks...
+[12:34:34.043] computing gzip size...
+[12:34:34.082] [2m../dist/public/[22m[32mindex.html                 [39m[1m[2m    3.28 kB[22m[1m[22m[2m │ gzip:   0.93 kB[22m
+[12:34:34.083] [2m../dist/public/[22m[2massets/[22m[35mindex-DZazrP1r.css  [39m[1m[2m   89.65 kB[22m[1m[22m[2m │ gzip:  14.71 kB[22m
+[12:34:34.083] [2m../dist/public/[22m[2massets/[22m[36mindex-C_zlX5U1.js   [39m[1m[33m1,604.75 kB[39m[22m[2m │ gzip: 433.29 kB[22m
+[12:34:34.083] [33m
+[12:34:34.083] (!) Some chunks are larger than 500 kB after minification. Consider:
+[12:34:34.083] - Using dynamic import() to code-split the application
+[12:34:34.083] - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+[12:34:34.083] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[12:34:34.084] [32m✓ built in 11.39s[39m
+[12:34:34.141] ✘ [ERROR] The entry point "server/index.ts" cannot be marked as external
+[12:34:34.141] 
+[12:34:34.143] 1 error
+[12:34:34.154] Error: Command "npm run build" exited with 1
+[12:34:34.473] 

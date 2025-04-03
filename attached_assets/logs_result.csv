@@ -1,0 +1,478 @@
+"TimeUTC","timestampInMs","requestPath","requestMethod","requestQueryString","responseStatusCode","requestId","requestUserAgent","level","environment","branch","vercelCache","type","function","host","deploymentDomain","deploymentId","durationMs","region","maxMemoryUsed","memorySize","message","projectId"
+"2025-03-24 05:43:53",1742795033335,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.png","GET","",-1,"swjlq-1742795032957-20e8236812a8","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/1.6.5 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:52",1742795032991,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.png","GET","",500,"swjlq-1742795032957-20e8236812a8","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/1.6.5 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",331,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:50",1742795030856,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.png","GET","",-1,"4kn2h-1742795030480-ea2bfbf86bba","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/1.6.5 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:50",1742795030515,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.png","GET","",500,"4kn2h-1742795030480-ea2bfbf86bba","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/1.6.5 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",325,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:49",1742795029347,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.png","GET","",-1,"ttqln-1742795028956-540691180f50","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/1.6.5 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:48",1742795028993,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.png","GET","",500,"ttqln-1742795028956-540691180f50","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/1.6.5 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",338,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:48",1742795028917,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.ico","GET","",-1,"8qv7n-1742795028529-7be828e6010e","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/1.6.5 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:48",1742795028567,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.ico","GET","",500,"8qv7n-1742795028529-7be828e6010e","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/1.6.5 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",335,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:46",1742795026438,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.ico","GET","",-1,"6cbh6-1742795026048-cd2c00265d25","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/1.6.5 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:46",1742795026378,"advanced-pilot-training-platform.vercel.app/","GET","",-1,"5ktqr-1742795025269-f65c0291f992","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform.vercel.app","advanced-pilot-training-platform.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:46",1742795026082,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.ico","GET","",500,"6cbh6-1742795026048-cd2c00265d25","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/1.6.5 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",343,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:46",1742795026008,"advanced-pilot-training-platform.vercel.app/","GET","",500,"5ktqr-1742795025269-f65c0291f992","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform.vercel.app","advanced-pilot-training-platform.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",355,"iad1",89,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:44",1742795024978,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.ico","GET","",-1,"wk4fb-1742795024572-289cb0d07985","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/1.6.5 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:44",1742795024610,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.ico","GET","",500,"wk4fb-1742795024572-289cb0d07985","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/1.6.5 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",355,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:44",1742795024435,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"wrn8j-1742795024022-b31b6ede4b30","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/1.6.5 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:44",1742795024066,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"wrn8j-1742795024022-b31b6ede4b30","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/1.6.5 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",352,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:42",1742795022937,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"gnqcb-1742795022534-012f39506c2a","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/1.6.5 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:42",1742795022576,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"gnqcb-1742795022534-012f39506c2a","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/1.6.5 Chrome/124.0.6367.243 Electron/30.1.2 Safari/537.36","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",346,"iad1",89,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:22",1742795002938,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.ico","GET","",-1,"cmt6v-1742795002537-08d3d8eefe81","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:22",1742795002577,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.ico","GET","",-1,"75zlb-1742795002188-97749c145680","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:22",1742795002571,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.ico","GET","",500,"cmt6v-1742795002537-08d3d8eefe81","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",348,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:22",1742795002421,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"j8tzc-1742795002014-9cd8f07fb887","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:22",1742795002224,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.ico","GET","",500,"75zlb-1742795002188-97749c145680","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",339,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:22",1742795002110,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"wk4fb-1742795001707-846162746b85","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:22",1742795002051,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"j8tzc-1742795002014-9cd8f07fb887","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",355,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:21",1742795001893,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"r9nfw-1742795001503-bcdcb4306436","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:21",1742795001744,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"wk4fb-1742795001707-846162746b85","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",350,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:21",1742795001593,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"t29zw-1742795001207-cb3a51b4ac48","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:21",1742795001540,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"r9nfw-1742795001503-bcdcb4306436","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",340,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:21",1742795001241,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"t29zw-1742795001207-cb3a51b4ac48","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",338,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:19",1742794999838,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.ico","GET","",-1,"dtct5-1742794999445-7ce23578ff27","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:19",1742794999564,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.ico","GET","",-1,"fz2sl-1742794998940-3c91a6e52156","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.
+Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:19",1742794999481,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.ico","GET","",500,"dtct5-1742794999445-7ce23578ff27","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",340,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:19",1742794999413,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"r6pjb-1742794998547-1edb14570a74","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.
+Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:19",1742794999277,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"lmjwb-1742794998901-ef83e3c34de0","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:19",1742794999129,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"p7qhk-1742794998696-60e6808dcfda","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:18",1742794998977,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/favicon.ico","GET","",500,"fz2sl-1742794998940-3c91a6e52156","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",346,"iad1",89,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:18",1742794998936,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"lmjwb-1742794998901-ef83e3c34de0","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",325,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:18",1742794998857,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"2pwt7-1742794998463-2681af2feba8","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:18",1742794998765,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"k9jhd-1742794998358-f2b352d04968","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:18",1742794998736,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"p7qhk-1742794998696-60e6808dcfda","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",357,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:18",1742794998588,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"r6pjb-1742794998547-1edb14570a74","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",353,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:18",1742794998501,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"2pwt7-1742794998463-2681af2feba8","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",335,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:18",1742794998397,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"k9jhd-1742794998358-f2b352d04968","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",355,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:18",1742794998348,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"sndl6-1742794997946-6238648b070c","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:17",1742794997980,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"sndl6-1742794997946-6238648b070c","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",353,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:17",1742794997549,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"r297k-1742794997148-24206900d79e","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:17",1742794997403,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"dh6c9-1742794996906-10a5aae57373","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:17",1742794997190,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"r297k-1742794997148-24206900d79e","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",342,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:17",1742794997047,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"dh6c9-1742794996906-10a5aae57373","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",340,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:16",1742794996300,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"8kz6l-1742794995797-54b66b6c1c96","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:15",1742794995937,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"8kz6l-1742794995797-54b66b6c1c96","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",342,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:15",1742794995815,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"ttqln-1742794995324-769c2c8f9df3","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:15",1742794995449,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"ttqln-1742794995324-769c2c8f9df3","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",351,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:14",1742794994740,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"9s6vn-1742794993728-6672ec87b75e","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.
+Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:14",1742794994231,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",-1,"cb8ng-1742794993524-c2991af80fb7","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",-1,"iad1",-1,-1,"Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/server/routes' is not supported resolving ES modules imported from /var/task/server/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:269:11)
+    at moduleResolve (node:internal/modules/esm/resolve:866:10)
+    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:990:14)
+    at defaultResolve (node:internal/modules/esm/resolve:1033:79)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:685:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:634:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:617:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:273:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:135:49) {
+  code: 'ERR_UNSUPPORTED_DIR_IMPORT',
+  url: 'file:///var/task/server/routes'
+}
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:13",1742794993863,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"9s6vn-1742794993728-6672ec87b75e","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",378,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"
+"2025-03-24 05:43:13",1742794993836,"advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app/","GET","",500,"cb8ng-1742794993524-c2991af80fb7","vercel-screenshot/1.0","error","production","main","MISS","lambda","/server/index.ts","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","advanced-pilot-training-platform-kmnomo1c0-praddyx15s-projects.vercel.app","dpl_FGz4hBRjHoW11pQBcDrnf9aFnqbu",373,"iad1",90,1024,"","prj_3AuLaVPqIaui0FwVngv4giaouOIo"

@@ -1,0 +1,20 @@
+  const { data: documents, isLoading, error } = useQuery<Document[]>({
+    queryKey: ["/api/documents"],
+    queryFn: () => fetchDocuments(),
+  });
+  
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteDocument(id),
+    onSuccess: () => {
+      // Invalidate and refetch documents query
+      queryClient.invalidateQueries({ queryKey: ["/api/documents"] });
+    },
+  });
+  
+  const analyzeMutation = useMutation({
+    mutationFn: (request: DocumentAnalysisRequest) => analyzeDocument(request),
+    onSuccess: () => {
+      // Invalidate and refetch documents query
+      queryClient.invalidateQueries({ queryKey: ["/api/documents"] });
+    },
+  });

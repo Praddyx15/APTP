@@ -1,0 +1,52 @@
+[14:37:19.175] Cloning github.com/Praddyx15/Advanced-Pilot-Training-Platform (Branch: main, Commit: 910c7bb)
+[14:37:19.929] Previous build caches not available
+[14:37:20.431] Cloning completed: 1.255s
+[14:37:20.556] Found .vercelignore
+[14:37:20.580] Removed 50 ignored files defined in .vercelignore
+[14:37:20.718] Running build in Washington, D.C., USA (East) – iad1
+[14:37:20.875] Running "vercel build"
+[14:37:21.479] Vercel CLI 41.4.1
+[14:37:24.034] Running "install" command: `npm install`...
+[14:37:27.555] npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+[14:37:28.111] npm warn deprecated npmlog@5.0.1: This package is no longer supported.
+[14:37:28.281] npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+[14:37:28.314] npm warn deprecated lodash.get@4.4.2: This package is deprecated. Use the optional chaining (?.) operator instead.
+[14:37:28.671] npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+[14:37:29.173] npm warn deprecated gauge@3.0.2: This package is no longer supported.
+[14:37:29.563] npm warn deprecated are-we-there-yet@2.0.0: This package is no longer supported.
+[14:37:30.530] npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+[14:37:30.531] npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+[14:37:30.670] npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+[14:37:30.738] npm warn deprecated glob@7.1.6: Glob versions prior to v9 are no longer supported
+[14:37:40.022] 
+[14:37:40.022] added 796 packages, and audited 797 packages in 16s
+[14:37:40.023] 
+[14:37:40.023] 81 packages are looking for funding
+[14:37:40.023]   run `npm fund` for details
+[14:37:40.051] 
+[14:37:40.051] 9 vulnerabilities (8 moderate, 1 high)
+[14:37:40.052] 
+[14:37:40.052] To address issues that do not require attention, run:
+[14:37:40.052]   npm audit fix
+[14:37:40.052] 
+[14:37:40.053] To address all issues possible (including breaking changes), run:
+[14:37:40.053]   npm audit fix --force
+[14:37:40.056] 
+[14:37:40.057] Some issues need review, and may require choosing
+[14:37:40.057] a different dependency.
+[14:37:40.057] 
+[14:37:40.057] Run `npm audit` for details.
+[14:37:42.588] file:///vercel/path0/api/build.js:6
+[14:37:42.589] const { execSync } = require('child_process');
+[14:37:42.589]                      ^
+[14:37:42.589] 
+[14:37:42.589] ReferenceError: require is not defined in ES module scope, you can use import instead
+[14:37:42.589] This file is being treated as an ES module because it has a '.js' file extension and '/vercel/path0/package.json' contains "type": "module". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.
+[14:37:42.589]     at file:///vercel/path0/api/build.js:6:22
+[14:37:42.590]     at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+[14:37:42.590]     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+[14:37:42.590]     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+[14:37:42.590] 
+[14:37:42.590] Node.js v22.14.0
+[14:37:42.609] Error: Command "node api/build.js" exited with 1
+[14:37:43.087] 
